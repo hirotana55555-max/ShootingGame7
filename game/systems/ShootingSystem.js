@@ -1,4 +1,4 @@
-// game/systems/ShootingSystem.js
+// game/systems/ShootingSystem.js 【このコードで全文を置き換えてください】
 
 import { Controllable, InputState, Position, Rotation, Team } from '../components/index.js';
 import { createBullet } from '../core/entityFactory.js';
@@ -10,30 +10,28 @@ export class ShootingSystem {
   }
 
   update(dt) {
-    // 1. 入力状態を取得
     const inputEntities = this.world.getEntities([InputState]);
     if (inputEntities.length === 0) return;
     const inputState = this.world.getComponent(inputEntities[0], InputState);
 
-    // 2. マウスクリックされていなければ、何もしない
     if (!inputState.isMouseDown) {
       return;
     }
 
-    // 3. 射撃可能なエンティティ（プレイヤー）を探す
     const shooters = this.world.getEntities(this.query);
     for (const entityId of shooters) {
-      // 4. プレイヤーの位置、向き、チーム情報を取得
       const position = this.world.getComponent(entityId, Position);
       const rotation = this.world.getComponent(entityId, Rotation);
       const team = this.world.getComponent(entityId, Team);
 
-      // 5. 弾を生成するよう、工場に依頼する
-      createBullet(this.world, position, rotation, team.id);
+      // ★★★ 変更点：引数をオブジェクト形式で渡す ★★★
+      createBullet(this.world, {
+        ownerPosition: position,
+        ownerRotation: rotation,
+        ownerTeam: team.id
+      });
     }
 
-    // 6. 連射防止：一度処理したら、クリック状態をリセットする
-    //    これにより、クリックしっぱなしでも1発しか発射されない
     inputState.isMouseDown = false;
   }
 }
