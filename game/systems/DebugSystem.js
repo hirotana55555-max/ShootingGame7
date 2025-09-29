@@ -1,6 +1,6 @@
-// game/systems/DebugSystem.js 【このコードで全文を置き換えてください】
+// game/systems/DebugSystem.js 【最終検証形態】
 
-import { Controllable, Position, Renderable } from '../components/index.js';
+import { Controllable, Position, Renderable, Bullet, Team, Collidable } from '../components/index.js';
 
 export class DebugSystem {
   constructor(world) {
@@ -14,74 +14,69 @@ export class DebugSystem {
     const currentTime = performance.now();
     const context = this.world.context;
 
-    // --- FPS計算 ---
-    this.frames++;
-    if (this.lastFpsUpdateTime === 0) {
-        this.lastFpsUpdateTime = currentTime;
-    }
-    if (currentTime >= this.lastFpsUpdateTime + 1000) {
-        this.fps = this.frames;
-        this.frames = 0;
-        this.lastFpsUpdateTime = currentTime;
-    }
-
-    // --- 基本的なデバッグ情報描画 ---
+    // (基本的なデバッグ情報描画部分は、変更なし)
     context.fillStyle = 'white';
     context.font = '16px Arial';
     context.fillText(`FPS: ${this.fps}`, 10, 20);
     context.fillText(`DeltaTime: ${dt.toFixed(4)}`, 10, 40);
     context.fillText(`TOTAL ENTITIES: ${this.world.entities.size}`, 10, 60);
-
-    // --- CurrentTimeタイマー表示 ---
     context.fillStyle = 'yellow';
-    context.font = '16px Arial';
     context.fillText(`CurrentTime: ${currentTime.toFixed(0)}`, 10, 80);
+    context.fillStyle = 'red';
+    context.fillText(`Canvas Size: ${this.world.canvas.width} x ${this.world.canvas.height}`, 10, 100);
 
     // --- プレイヤー詳細デバッグ情報 ---
-    const controllableEntities = this.world.getEntities([Controllable]);
-    const playerCount = controllableEntities.length;
-    
     context.fillStyle = 'lime';
     context.font = '16px monospace';
-    let yOffset = 120;
-
+    let yOffset = 140;
     context.fillText(`--- PLAYER DEBUG ---`, 10, yOffset);
     yOffset += 20;
-
-    if (playerCount > 0) {
+    const controllableEntities = this.world.getEntities([Controllable]);
+    if (controllableEntities.length > 0) {
       const playerId = controllableEntities[0];
-      context.fillText(`Player ID: ${playerId}`, 10, yOffset);
-      yOffset += 20;
-
       const position = this.world.getComponent(playerId, Position);
-      if (position) {
-        context.fillText(`  Position.x = ${position.x}`, 15, yOffset);
-        yOffset += 20;
-        context.fillText(`  Position.y = ${position.y}`, 15, yOffset);
-        yOffset += 20;
-      } else {
-        context.fillText(`  Position: NOT FOUND`, 15, yOffset);
-        yOffset += 20;
-      }
-
-      const renderable = this.world.getComponent(playerId, Renderable);
-      if (renderable) {
-        context.fillText(`  Renderable.shape = ${renderable.shape}`, 15, yOffset);
-        yOffset += 20;
-      } else {
-        context.fillText(`  Renderable: NOT FOUND`, 15, yOffset);
-        yOffset += 20;
-      }
+      context.fillText(`  Position: x=${position.x.toFixed(1)}, y=${position.y.toFixed(1)}`, 15, yOffset);
+      yOffset += 20;
     } else {
-      context.fillText(`Player: NOT FOUND`, 10, yOffset);
-      yOffset += 20; // Player NOT FOUND の場合も yOffset を進めておく
+      context.fillText(`  Player: NOT FOUND`, 15, yOffset);
+      yOffset += 20;
     }
 
     // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-    // ★ ここが、NaNの源流を探るための、我々の新しい仮説検証コードだ ★
+    // ★ ここからが、弾丸のコンポーネントを検証するための新しいコードだ ★
     // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-    context.fillStyle = 'red';
-    context.font = '16px Arial';
-    context.fillText(`Canvas Size: ${this.world.canvas.width} x ${this.world.canvas.height}`, 10, yOffset);
+    context.fillStyle = 'cyan'; // 弾丸情報はシアンで表示
+    context.fillText(`--- BULLET DEBUG ---`, 10, yOffset);
+    yOffset += 20;
+
+    const bulletEntities = this.world.getEntities([Bullet]); // Bulletコンポーネントを持つものを探す
+    if (bulletEntities.length > 0) {
+      const bulletId = bulletEntities[0]; // 最初の弾丸をターゲットにする
+      context.fillText(`  Bullet ID: ${bulletId}`, 10, yOffset);
+      yOffset += 20;
+
+      // Teamコンポーネントの状態を表示
+      const team = this.world.getComponent(bulletId, Team);
+      if (team) {
+        context.fillText(`  Team.id = ${team.id}`, 15, yOffset);
+        yOffset += 20;
+      } else {
+        context.fillText(`  Team: NOT FOUND`, 15, yOffset);
+        yOffset += 20;
+      }
+
+      // Collidableコンポーネントの状態を表示
+      const collidable = this.world.getComponent(bulletId, Collidable);
+      if (collidable) {
+        context.fillText(`  Collidable.group = ${collidable.group}`, 15, yOffset);
+        yOffset += 20;
+      } else {
+        context.fillText(`  Collidable: NOT FOUND`, 15, yOffset);
+        yOffset += 20;
+      }
+
+    } else {
+      context.fillText(`  Bullet: NOT FOUND`, 10, yOffset);
+    }
   }
 }

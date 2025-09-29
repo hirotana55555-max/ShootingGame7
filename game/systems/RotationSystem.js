@@ -30,7 +30,7 @@ export class RotationSystem {
       const rot = this.world.getComponent(entityId, Rotation);
 
       // 1. X軸の速度に基づいて「目標となる角度」を計算する
-      const targetAngle = vel.x * tiltFactor;
+      const targetAngle = vel.vx * tiltFactor;
 
       // 2. 現在の角度を、目標の角度に滑らかに近づける (Lerp)
       rot.angle = lerp(rot.angle, targetAngle, easing);
