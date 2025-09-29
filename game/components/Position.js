@@ -1,12 +1,7 @@
-// game/components/Position.js 
+// game/components/Position.js 【このコードで全文を置き換えてください】
 export class Position {
-    /**
-     * @param {number} x
-     * @param {number} y
-     */
-    constructor(x = 0, y = 0) {
-      this.x = x;
-      this.y = y;
-    }
+  constructor({ x = 0, y = 0 } = {}) {
+    this.x = x;
+    this.y = y;
   }
-  
+}

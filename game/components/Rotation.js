@@ -1,15 +1,6 @@
-// game/components/Rotation.js 
-
-/**
- * エンティティの回転状態を保持するコンポーネント
- */
+// game/components/Rotation.js 【このコードで全文を置き換えてください】
 export class Rotation {
-    constructor(angle = 0) {
-      /**
-       * 現在の角度（ラジアン単位）
-       * @type {number}
-       */
-      this.angle = angle;
-    }
+  constructor({ angle = 0 } = {}) {
+    this.angle = angle;
   }
-  
+}

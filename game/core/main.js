@@ -1,7 +1,5 @@
-// game/core/main.js
-
+// game/core/main.js 【このコードで全文を置き換えてください】
 import { World } from './World.js';
-// (import文は変更なし)
 import { RenderSystem } from '../systems/RenderSystem.js';
 import { InputSystem } from '../systems/InputSystem.js';
 import { MovementSystem } from '../systems/MovementSystem.js';
@@ -20,7 +18,6 @@ let world;
 let animationFrameId;
 
 export function startGame(canvas) {
-  // (startGameのシステム追加部分は変更なし)
   console.log("ゲームを開始します...");
   const context = canvas.getContext('2d');
   world = new World();
@@ -32,36 +29,25 @@ export function startGame(canvas) {
   world.addSystem(new ShootingSystem(world));
   world.addSystem(new MovementSystem(world));
   world.addSystem(new RotationSystem(world));
-  world.addSystem(new CollisionSystem(world)); 
+  world.addSystem(new CollisionSystem(world));
   world.addSystem(new DamageSystem(world));
   world.addSystem(new DeathSystem(world));
   world.addSystem(new SpawningSystem(world));
   world.addSystem(new RenderSystem(world));
   world.addSystem(new DebugSystem(world));
 
+  // ★★★ 変更点：createPlayerは引数なしでOK ★★★
   createPlayer(world);
 
-  // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-  // ★ ゲーム開始時に、隕石を生成するためのジェネレータを1つ作成する ★
-  // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
   const meteorGenerator = world.createEntity();
   world.addComponent(meteorGenerator, new Generator({
     entityType: 'meteor',
-    trigger: {
-      interval: 2.0, // 2秒ごとに
-      initialDelay: 1.0 // 最初の1秒後から
-    }
+    trigger: { interval: 2.0, initialDelay: 1.0 }
   }));
-  // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 
-
-  // --- gameLoopの修正 ---
   let lastTime = 0;
   function gameLoop(currentTime) {
-    if (lastTime === 0) {
-        lastTime = currentTime;
-    }
-    // ★★★ dtの計算をここに集約 ★★★
+    if (lastTime === 0) lastTime = currentTime;
     const dt = (currentTime - lastTime) / 1000;
     lastTime = currentTime;
 
@@ -69,17 +55,6 @@ export function startGame(canvas) {
     context.fillStyle = 'black';
     context.fillRect(0, 0, world.canvas.width, world.canvas.height);
 
-    // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-    // ★ 原因切り分けのため、currentTimeを直接描画してみる ★
-    // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-    context.fillStyle = 'yellow';
-    context.font = '16px Arial';
-    context.fillText(`CurrentTime: ${currentTime}`, 10, 140);
-    // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-
-
-
-    // ★★★ 計算したdtをworld.updateに渡す ★★★
     world.update(dt);
 
     animationFrameId = requestAnimationFrame(gameLoop);
@@ -90,5 +65,5 @@ export function startGame(canvas) {
 
 export function stopGame() {
   console.log("ゲームを停止します。");
-  cancelAnimationFrame(animationFrameId);
+  if (animationFrameId) cancelAnimationFrame(animationFrameId);
 }

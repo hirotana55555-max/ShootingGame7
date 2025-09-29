@@ -1,5 +1,4 @@
 // game/systems/SpawningSystem.js 【このコードで全文を置き換えてください】
-
 import { Generator } from '../components/index.js';
 import { createMeteor } from '../core/entityFactory.js';
 
@@ -16,11 +15,7 @@ export class SpawningSystem {
       generator.timer -= dt;
 
       if (generator.timer <= 0) {
-        // NOTE: 現状の実装では generator.config が存在しないため、直接フォールバックする
-        const config = generator.config || { 
-          entityType: 'meteor', 
-          trigger: { interval: 2.0 } // デフォルト値
-        };
+        const config = generator.config;
 
         if (config.entityType === 'meteor') {
           const spawnX = Math.random() * this.world.canvas.width;

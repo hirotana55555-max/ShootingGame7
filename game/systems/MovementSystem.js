@@ -1,4 +1,4 @@
-// game/systems/MovementSystem.js
+// game/systems/MovementSystem.js 【このコードで全文を置き換えてください】
 
 import { Position, Velocity, Controllable, InputState } from '../components/index.js';
 
@@ -11,10 +11,12 @@ export class MovementSystem {
     this.world = world;
   }
 
-  /**
-   * @param {number} dt - 前フレームからの経過時間（秒単位）
-   */
   update(dt) {
+    // dtがNaNでないことを保証するガード節
+    if (typeof dt !== 'number' || isNaN(dt)) {
+      return; 
+    }
+
     // --- Part 1: プレイヤーの「速度」を決定する ---
     const inputEntities = this.world.getEntities([InputState]);
     if (inputEntities.length > 0) {
@@ -45,8 +47,9 @@ export class MovementSystem {
                     targetVelX = dirX * maxSpeed;
                     targetVelY = dirY * maxSpeed;
                 }
-                vel.x = lerp(vel.x, targetVelX, easing);
-                vel.y = lerp(vel.y, targetVelY, easing);
+                // ★★★ 修正点：vel.x -> vel.vx, vel.y -> vel.vy ★★★
+                vel.vx = lerp(vel.vx, targetVelX, easing);
+                vel.vy = lerp(vel.vy, targetVelY, easing);
             } else {
                 // キーボード操作
                 let dirX = 0;
@@ -57,21 +60,24 @@ export class MovementSystem {
                 if (inputState.keys.has('ArrowDown')) dirY = 1;
 
                 if (dirX !== 0 || dirY !== 0) {
-                    vel.x += dirX * keyAcceleration;
-                    vel.y += dirY * keyAcceleration;
+                    // ★★★ 修正点：vel.x -> vel.vx, vel.y -> vel.vy ★★★
+                    vel.vx += dirX * keyAcceleration;
+                    vel.vy += dirY * keyAcceleration;
                 } else {
-                    vel.x *= keyDrag;
-                    vel.y *= keyDrag;
+                    // ★★★ 修正点：vel.x -> vel.vx, vel.y -> vel.vy ★★★
+                    vel.vx *= keyDrag;
+                    vel.vy *= keyDrag;
                 }
 
-                const speed = Math.sqrt(vel.x * vel.x + vel.y * vel.y);
+                // ★★★ 修正点：vel.x -> vel.vx, vel.y -> vel.vy ★★★
+                const speed = Math.sqrt(vel.vx * vel.vx + vel.vy * vel.vy);
                 if (speed > maxSpeed) {
                     const ratio = maxSpeed / speed;
-                    vel.x *= ratio;
-                    vel.y *= ratio;
+                    // ★★★ 修正点：vel.x -> vel.vx, vel.y -> vel.vy ★★★
+                    vel.vx *= ratio;
+                    vel.vy *= ratio;
                 }
             }
-            // ★ プレイヤーの位置更新は Part 2 で一括処理
         }
     }
 
@@ -81,9 +87,11 @@ export class MovementSystem {
         const pos = this.world.getComponent(entityId, Position);
         const vel = this.world.getComponent(entityId, Velocity);
 
-        // ★ DeltaTime対応：60FPS基準の速度を維持
-        pos.x += vel.x * dt * 60;
-        pos.y += vel.y * dt * 60;
+        // ★★★ 修正点：vel.x -> vel.vx, vel.y -> vel.vy ★★★
+        // また、dtが可変であるため、* 60 のような固定値での補正は挙動を不安定にするため削除。
+        // 速度の調整は keyAcceleration や maxSpeed で行うのが正しいアプローチ。
+        pos.x += vel.vx;
+        pos.y += vel.vy;
     }
   }
 }
