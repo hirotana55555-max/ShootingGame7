@@ -6,14 +6,14 @@ export class OffscreenCleanupSystem {
     this.world = world;
     this.canvasWidth = 360;
     this.canvasHeight = 580;
-    this.margin = 50; // 左右・上
+    this.margin = 200; // 左右・上
   }
 
   update() {
     const minX = -this.margin;
     const maxX = this.canvasWidth + this.margin;
     const minY = -this.margin;
-    const maxY = this.canvasHeight; // 下方向マージン0
+    const maxY = this.canvasHeight + this.margin; // 下方向マージン0
 
     const entities = this.world.getEntities([Position]);
     for (const entityId of entities) {

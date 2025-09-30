@@ -8,6 +8,7 @@ export class DebugSystem {
     this.frames = 0;
     this.lastFpsUpdateTime = performance.now();
     this.isVisible = true;
+    this.gameStartTime = performance.now(); // ゲーム開始時刻
     this.setupMouseControls();
   }
 
@@ -37,7 +38,7 @@ export class DebugSystem {
 
     // --- 基本情報（左上） ---
     context.fillStyle = 'white';
-    context.font = '16px Arial';
+    context.font = '12px Arial';
     context.fillText(`FPS: ${this.fps}`, 10, 20);
     context.fillText(`DeltaTime: ${dt.toFixed(4)}`, 10, 40);
     context.fillText(`Canvas: ${this.world.canvas.width}x${this.world.canvas.height}`, 10, 60);
@@ -57,46 +58,15 @@ export class DebugSystem {
     context.fillText(`BULLET: ${bulletEntities.length}`, 10, 130);
     context.fillText(`METEOR: ${meteorEntities.length}`, 10, 150);
 
-    // ★★★ 新規：隕石監視パネル（右上） ★★★
+    // ★★★ 新規：ゲーム開始からの経過時間（右上） ★★★
     context.fillStyle = 'magenta';
-    context.font = '14px Arial';
-    let monitorY = 20; // 右上の開始Y座標
-    context.fillText(`--- METEOR MONITOR ---`, this.world.canvas.width - 200, monitorY);
-    monitorY += 20;
-
-    if (meteorEntities.length > 0) {
-      // 隕石の最大Y座標を取得
-      let maxY = -Infinity;
-      for (const id of meteorEntities) {
-        const pos = this.world.getComponent(id, Position);
-        if (pos.y > maxY) maxY = pos.y;
-      }
-      context.fillText(`MAX_Y: ${maxY.toFixed(1)}`, this.world.canvas.width - 200, monitorY);
-      monitorY += 20;
-
-      // 削除ライン（canvasHeight）
-      const removeLine = this.world.canvas.height;
-      context.fillText(`REMOVE_LINE: ${removeLine}`, this.world.canvas.width - 200, monitorY);
-      monitorY += 20;
-
-      // 現在削除対象か？
-      const isOver = maxY > removeLine;
-      context.fillStyle = isOver ? 'red' : 'green';
-      context.fillText(`OVER LINE? ${isOver ? 'YES' : 'NO'}`, this.world.canvas.width - 200, monitorY);
-      monitorY += 20;
-      context.fillStyle = 'magenta';
-
-      // 先頭隕石のIDと座標
-      const firstId = meteorEntities[0];
-      const firstPos = this.world.getComponent(firstId, Position);
-      context.fillText(`FIRST#: ${firstId} at (${firstPos.x.toFixed(1)}, ${firstPos.y.toFixed(1)})`, this.world.canvas.width - 200, monitorY);
-    } else {
-      context.fillText(`No meteors found`, this.world.canvas.width - 200, monitorY);
-    }
+    context.font = '12px Arial';
+    const elapsedTime = (currentTime - this.gameStartTime) / 1000; // 秒単位
+    context.fillText(`GAME TIME: ${elapsedTime.toFixed(2)}s`, this.world.canvas.width - 200, 20);
 
     // --- プレイヤー情報（左下） ---
     context.fillStyle = 'lime';
-    context.font = '16px monospace';
+    context.font = '12px monospace';
     let yOffset = this.world.canvas.height - 180;
     context.fillText(`--- PLAYER DEBUG ---`, 10, yOffset);
     yOffset += 20;
