@@ -15,7 +15,8 @@ import { Generator } from '../components/index.js';
 
 // ★★★ 開発用：DebugSystem の静的import（AI上書き後はこの行を再追加）★★★
 import { DebugConfig } from '../debug/DebugConfig.js';
-import { DebugSystem } from '../debug/DebugSystem.js';
+import { DebugSystem } from '../debug/systems/DebugSystem.js';
+import { OffscreenCleanupSystem } from '../debug/systems/OffscreenCleanupSystem.js';
 // ★★★ ここまで ★★★
 
 let world;
@@ -37,13 +38,18 @@ export function startGame(canvas) {
   world.addSystem(new DamageSystem(world));
   world.addSystem(new DeathSystem(world));
   world.addSystem(new SpawningSystem(world));
+
+  // ★★★ 開発用：ロジック段階のシステム（Renderより前に実行）★★★
+  if (DebugConfig.ENABLED) {
+    world.addSystem(new OffscreenCleanupSystem(world));
+  }
+
   world.addSystem(new RenderSystem(world));
 
-  // ★★★ 開発用デバッグシステム：同期的に登録（確実に動作）★★★
+  // ★★★ 開発用：描画段階のシステム（すべての描画の後に実行）★★★
   if (DebugConfig.ENABLED) {
     world.addSystem(new DebugSystem(world));
   }
-  // ★★★ ここまで（AI上書き後もこのブロックを再挿入）★★★
 
   createPlayer(world);
 

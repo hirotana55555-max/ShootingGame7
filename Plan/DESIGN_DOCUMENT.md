@@ -131,13 +131,14 @@ ShootingGame7
 │   │   └── main.js
 │   ├── debug
 │   │   ├── DebugConfig.js
-│   │   ├── DebugSystem.js
-│   │   └── README_debug.md
+│   │   ├── README_debug.md
+│   │   └── systems
+│   │       ├── DebugSystem.js
+│   │       └── OffscreenCleanupSystem.js
 │   └── systems
 │       ├── CollisionSystem.js
 │       ├── DamageSystem.js
 │       ├── DeathSystem.js
-│       ├── DebugSystem.txt
 │       ├── InputSystem.js
 │       ├── LifetimeSystem.js
 │       ├── MovementSystem.js
@@ -157,4 +158,4 @@ ShootingGame7
 └── tsconfig.json
 
 ---
-*最終更新日: 2025年9月30日11:12*
+*最終更新日: 2025年9月30日13:34*
