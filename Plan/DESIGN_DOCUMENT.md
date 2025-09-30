@@ -89,9 +89,14 @@
 - **`/game/utils` (★追記)**
     - **(未使用)** 複数のシステムやコンポーネントから利用される、汎用的な便利関数（ベクトル計算など）を格納する。
 
+- **`/game/debug` (★追記)**
+    - **(開発時専用)** デバッグ表示、開発支援機能、暫定措置（例：画面外エンティティ削除）を格納。
+    - このディレクトリ内のコードは、**リリースビルドでは完全に除外されるべき**。
+    - 機能の有効・無効は `DebugConfig.js` のフラグで一元管理する。
+
 ❯ npx tree-node-cli -I "node_modules"
 
-ShootingGame6
+ShootingGame7
 ├── Plan
 │   ├── DESIGN_DOCUMENT.md
 │   ├── DESIGN_DOCUMENT_ENEMY.md
@@ -120,16 +125,12 @@ ShootingGame6
 │   │   ├── Velocity.js
 │   │   └── index.js
 │   ├── core
-│   │   ├── System.js
 │   │   ├── World.js
-│   │   ├── World2509291620
 │   │   ├── entityFactory.js
 │   │   └── main.js
 │   └── systems
 │       ├── CollisionSystem.js
-│       ├── CollisionSystem2509291623
 │       ├── DamageSystem.js
-│       ├── DamageSystem2509291622
 │       ├── DeathSystem.js
 │       ├── DebugSystem.js
 │       ├── InputSystem.js
@@ -151,4 +152,4 @@ ShootingGame6
 └── tsconfig.json
 
 ---
-*最終更新日: 2025年9月29日17:48*
+*最終更新日: 2025年9月30日7:15*

@@ -1,4 +1,4 @@
-// game/core/main.js 【このコードで全文を置き換えてください】
+// game/core/main.js
 import { World } from './World.js';
 import { RenderSystem } from '../systems/RenderSystem.js';
 import { InputSystem } from '../systems/InputSystem.js';
@@ -8,11 +8,15 @@ import { ShootingSystem } from '../systems/ShootingSystem.js';
 import { LifetimeSystem } from '../systems/LifetimeSystem.js';
 import { DamageSystem } from '../systems/DamageSystem.js';
 import { DeathSystem } from '../systems/DeathSystem.js';
-import { DebugSystem } from '../systems/DebugSystem.js';
 import { SpawningSystem } from '../systems/SpawningSystem.js';
 import { CollisionSystem } from '../systems/CollisionSystem.js';
 import { createPlayer } from './entityFactory.js';
 import { Generator } from '../components/index.js';
+
+// ★★★ 開発用：DebugSystem の静的import（AI上書き後はこの行を再追加）★★★
+import { DebugConfig } from '../debug/DebugConfig.js';
+import { DebugSystem } from '../debug/DebugSystem.js';
+// ★★★ ここまで ★★★
 
 let world;
 let animationFrameId;
@@ -34,9 +38,13 @@ export function startGame(canvas) {
   world.addSystem(new DeathSystem(world));
   world.addSystem(new SpawningSystem(world));
   world.addSystem(new RenderSystem(world));
-  world.addSystem(new DebugSystem(world));
 
-  // ★★★ 変更点：createPlayerは引数なしでOK ★★★
+  // ★★★ 開発用デバッグシステム：同期的に登録（確実に動作）★★★
+  if (DebugConfig.ENABLED) {
+    world.addSystem(new DebugSystem(world));
+  }
+  // ★★★ ここまで（AI上書き後もこのブロックを再挿入）★★★
+
   createPlayer(world);
 
   const meteorGenerator = world.createEntity();
