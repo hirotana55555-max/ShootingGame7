@@ -1,4 +1,4 @@
-// game/systems/MovementSystem.js 【このコードで全文を置き換えてください】
+// game/systems/MovementSystem.js
 
 import { Position, Velocity, Controllable, InputState } from '../components/index.js';
 

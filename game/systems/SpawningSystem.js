@@ -1,4 +1,4 @@
-// game/systems/SpawningSystem.js 【このコードで全文を置き換えてください】
+// game/systems/SpawningSystem.js
 import { Generator } from '../components/index.js';
 import { createMeteor } from '../core/entityFactory.js';
 

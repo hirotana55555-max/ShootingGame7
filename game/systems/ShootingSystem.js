@@ -1,4 +1,4 @@
-// game/systems/ShootingSystem.js 【このコードで全文を置き換えてください】
+// game/systems/ShootingSystem.js
 import { Controllable, InputState, Position, Rotation, Team } from '../components/index.js';
 import { createBullet } from '../core/entityFactory.js';
 
