@@ -101,6 +101,10 @@ ShootingGame7
 │   ├── DEBUGGING_POLICY.md
 │   ├── DESIGN_DOCUMENT.md
 │   ├── DESIGN_DOCUMENT_ENEMY.md
+│   ├── GAME_FEATURES.md
+│   ├── REFACTORING
+│   │   ├── Geminiゲームリファクタリング調査.md
+│   │   └── Qwenゲームリファクタリング調査レポート.md
 │   └── REFACTORING_PLAN.md
 ├── README.md
 ├── app
@@ -158,4 +162,4 @@ ShootingGame7
 └── tsconfig.json
 
 ---
-*最終更新日: 2025年9月30日13:34*
+*最終更新日: 2025年9月30日23:23*
