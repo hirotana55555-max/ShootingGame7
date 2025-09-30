@@ -6,7 +6,7 @@ export class DebugSystem {
     this.world = world;
     this.fps = 0;
     this.frames = 0;
-    this.lastFpsUpdateTime = 0;
+    this.lastFpsUpdateTime = performance.now();
 
     // デフォルトは表示ON
     this.isVisible = true;
@@ -18,13 +18,22 @@ export class DebugSystem {
     if (typeof window === 'undefined' || !this.world.canvas) return;
 
     this.world.canvas.addEventListener('contextmenu', (e) => {
-      e.preventDefault(); // 右クリックメニューを抑制
+      e.preventDefault();
       this.isVisible = !this.isVisible;
       console.log('Debug Display:', this.isVisible ? 'ON' : 'OFF');
     });
   }
 
   update(dt) {
+    // ★★★ FPS計算を最初に行う（表示ON/OFFに関わらず正確な計測のため）★★★
+    this.frames++;
+    const now = performance.now();
+    if (now - this.lastFpsUpdateTime >= 1000) {
+      this.fps = this.frames;
+      this.frames = 0;
+      this.lastFpsUpdateTime = now;
+    }
+
     if (!this.isVisible) return;
 
     const currentTime = performance.now();

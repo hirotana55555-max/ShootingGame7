@@ -98,6 +98,7 @@
 
 ShootingGame7
 ├── Plan
+│   ├── DEBUGGING_POLICY.md
 │   ├── DESIGN_DOCUMENT.md
 │   ├── DESIGN_DOCUMENT_ENEMY.md
 │   └── REFACTORING_PLAN.md
@@ -128,11 +129,15 @@ ShootingGame7
 │   │   ├── World.js
 │   │   ├── entityFactory.js
 │   │   └── main.js
+│   ├── debug
+│   │   ├── DebugConfig.js
+│   │   ├── DebugSystem.js
+│   │   └── README_debug.md
 │   └── systems
 │       ├── CollisionSystem.js
 │       ├── DamageSystem.js
 │       ├── DeathSystem.js
-│       ├── DebugSystem.js
+│       ├── DebugSystem.txt
 │       ├── InputSystem.js
 │       ├── LifetimeSystem.js
 │       ├── MovementSystem.js
@@ -152,4 +157,4 @@ ShootingGame7
 └── tsconfig.json
 
 ---
-*最終更新日: 2025年9月30日7:15*
+*最終更新日: 2025年9月30日11:12*
