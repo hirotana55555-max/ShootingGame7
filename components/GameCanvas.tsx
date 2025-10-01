@@ -1,31 +1,100 @@
-// components/GameCanvas.tsx
+/**
+ * @file /components/GameCanvas.tsx
+ * @description ゲームを描画するためのCanvas要素を生成し、ゲームのライフサイクル（開始・停止）を管理するReactコンポーネント。
+ *              このコンポーネントが、Reactで構築されたUI（ガワ）と、JavaScriptのECS（エンティティ・コンポーネント・システム）で
+ *              構築されたゲームロジックとの「橋渡し」役を担います。
+ */
+
+// 'use client';
+// -----------------------------------------------------------------------------
+// Next.jsのディレクティブ（指示）。
+// このコンポーネントがサーバー側ではなく、ユーザーのブラウザ（クライアント側）で
+// 実行されることを明示します。
+// ユーザーの操作（マウスやタップ）に応答したり、アニメーションを行ったりする
+// コンポーネントにはこの記述が必要です。
 'use client';
 
+// 依存関係のインポート
+// -----------------------------------------------------------------------------
+// Reactの`useEffect`と`useRef`という「フック（Hook）」をインポートします。
+// フックは、コンポーネントに様々な機能を追加するための特別な関数です。
 import { useEffect, useRef } from 'react';
-import { startGame, stopGame } from '../game/core/main.js'; // 変更点
 
+// ゲームのコアロジックから`startGame`と`stopGame`関数をインポートします。
+// `../` は一つ上の階層のディレクトリを指します。
+// ここから、ゲームの心臓部である 'game/core/main.js' にアクセスし、
+// ゲームを開始・停止させるための命令を借りてきます。
+import { startGame, stopGame } from '../game/core/main.js';
+
+/**
+ * GameCanvasコンポーネント
+ * @description ゲーム画面となる<canvas>要素をレンダリングし、ゲームの初期化とクリーンアップを行います。
+ * @returns {JSX.Element} レンダリングされる<canvas>要素。
+ */
 export default function GameCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const isGameInitialized = useRef(false); //
+  // useRef: コンポーネントが再描画されても値を保持し続けるための「入れ物」を作成します。
+  // -----------------------------------------------------------------------------
 
+  // `canvasRef` は、後で作成する<canvas>要素そのものを参照（紐付け）するために使います。
+  // これにより、JavaScriptコードから直接キャンバスを操作できるようになります。
+  // 型引数 `<HTMLCanvasElement>` は、このrefがHTMLのCanvas要素であることを示しています。
+  // `null` は初期値で、まだ何も参照していない状態を表します。
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // `isGameInitialized` は、ゲームが既に初期化されたかどうかを記録するためのフラグです。
+  // これにより、意図せずゲームが二重に開始されてしまうのを防ぎます。
+  // 初期値は `false`（まだ初期化されていない）です。
+  const isGameInitialized = useRef(false);
+
+  // useEffect: コンポーネントのライフサイクル（生成、更新、消滅）に合わせて特定の処理を実行するためのフック。
+  // -----------------------------------------------------------------------------
+  // ここでは、コンポーネントが最初に画面に描画された「後」に一度だけ実行されるように設定しています。
   useEffect(() => {
-    // ★ すでに初期化済みなら、何もしない
+    // ★ ガード節：すでに初期化済みなら、何もしない
+    // 開発モードなどではコンポーネントが複数回レンダリングされることがありますが、
+    // このチェックにより、ゲームの初期化処理（startGame）が一度しか実行されないことを保証します。
     if (isGameInitialized.current) {
       return;
     }
 
+    // `canvasRef.current` を通じて、実際の<canvas>要素を取得します。
     const canvas = canvasRef.current;
+    // もし何らかの理由でcanvas要素が取得できなかった場合は、エラーを防ぐために処理を中断します。
     if (!canvas) return;
 
+    // ゲームの開始命令
+    // インポートした`startGame`関数を呼び出し、引数としてcanvas要素を渡します。
+    // これが、ゲームロジックの世界を起動する「スイッチ」となります。
     startGame(canvas);
-    isGameInitialized.current = true; // ★ 初期化が完了したことを記録
 
-    // コンポーネントが不要になった時にゲームを停止
+    // ★ 初期化が完了したことを記録
+    // ゲームが開始されたので、フラグを `true` に更新し、次回以降の不要な初期化を防ぎます。
+    isGameInitialized.current = true;
+
+    // クリーンアップ関数
+    // `useEffect`のreturnで関数を返すと、その関数はコンポーネントが不要になり
+    // 画面から取り除かれる（アンマウントされる）時に実行されます。
     return () => {
+      // ゲームの停止命令
+      // インポートした`stopGame`関数を呼び出し、ゲームループを停止させ、
+      // メモリリークなどを防ぎます。
       stopGame();
-      isGameInitialized.current = false; // ★ クリーンアップ時にフラグをリセット
-    };
-  }, []); // 依存配列は空のまま
 
-  return <canvas ref={canvasRef} width={360} height={580} style={{ border: '1px solid white' }} />;
+      // ★ クリーンアップ時にフラグをリセット
+      // コンポーネントが完全になくなるので、将来的に再度生成される可能性を考慮し、
+      // 初期化フラグを `false` に戻しておきます。
+      isGameInitialized.current = false;
+    };
+  }, []); // 第2引数の依存配列が空 `[]` の場合、このuseEffectは最初の描画後に「一度だけ」実行されます。
+
+  // return (...) の中身が、このコンポーネントが画面に表示するHTML要素です。
+  // -----------------------------------------------------------------------------
+  return (
+    <canvas
+      ref={canvasRef} // 上で作成した`canvasRef`とこの<canvas>要素を紐付けます。
+      width={360} // キャンバスの内部解像度（幅）を360ピクセルに設定。
+      height={580} // キャンバスの内部解像度（高さ）を580ピクセルに設定。
+      style={{ border: '1px solid white' }} // 見た目のスタイル。CSSで白い枠線を設定し、ゲーム領域を視覚的に分かりやすくします。
+    />
+  );
 }

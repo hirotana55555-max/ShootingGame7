@@ -1,5 +1,4 @@
-// game/debug/systems/DebugSystem.js
-import { Controllable, Position, Bullet, Team, Collidable } from '../../components/index.js';
+import { Controllable, Position, Bullet, Team, Collidable, Health } from '../../components/index.js';
 
 export class DebugSystem {
   constructor(world) {
@@ -8,7 +7,7 @@ export class DebugSystem {
     this.frames = 0;
     this.lastFpsUpdateTime = performance.now();
     this.isVisible = true;
-    this.gameStartTime = performance.now(); // ゲーム開始時刻
+    this.gameStartTime = performance.now();
     this.setupMouseControls();
   }
 
@@ -17,7 +16,6 @@ export class DebugSystem {
     this.world.canvas.addEventListener('contextmenu', (e) => {
       e.preventDefault();
       this.isVisible = !this.isVisible;
-      console.log('Debug Display:', this.isVisible ? 'ON' : 'OFF');
     });
   }
 
@@ -36,14 +34,14 @@ export class DebugSystem {
     const context = this.world.context;
     const currentTime = performance.now();
 
-    // --- 基本情報（左上） ---
+    // === 基本情報（左上） ===
     context.fillStyle = 'white';
     context.font = '12px Arial';
     context.fillText(`FPS: ${this.fps}`, 10, 20);
     context.fillText(`DeltaTime: ${dt.toFixed(4)}`, 10, 40);
     context.fillText(`Canvas: ${this.world.canvas.width}x${this.world.canvas.height}`, 10, 60);
 
-    // --- エンティティ数分析（左上） ---
+    // === エンティティ数分析（左上） ===
     const allEntities = Array.from(this.world.entities.keys());
     const positionEntities = allEntities.filter(id => this.world.hasComponent(id, Position));
     const bulletEntities = allEntities.filter(id => this.world.hasComponent(id, Bullet));
@@ -58,58 +56,125 @@ export class DebugSystem {
     context.fillText(`BULLET: ${bulletEntities.length}`, 10, 130);
     context.fillText(`METEOR: ${meteorEntities.length}`, 10, 150);
 
-    // ★★★ 新規：ゲーム開始からの経過時間（右上） ★★★
+    // === ゲーム開始からの経過時間（右上） ===
     context.fillStyle = 'magenta';
     context.font = '12px Arial';
-    const elapsedTime = (currentTime - this.gameStartTime) / 1000; // 秒単位
+    const elapsedTime = (currentTime - this.gameStartTime) / 1000;
     context.fillText(`GAME TIME: ${elapsedTime.toFixed(2)}s`, this.world.canvas.width - 200, 20);
 
-    // --- プレイヤー情報（左下） ---
+    // === プレイヤー情報（左下） ===
     context.fillStyle = 'lime';
     context.font = '12px monospace';
-    let yOffset = this.world.canvas.height - 180;
+    let yOffset = this.world.canvas.height - 120;
     context.fillText(`--- PLAYER DEBUG ---`, 10, yOffset);
     yOffset += 20;
     const controllableEntities = allEntities.filter(id => this.world.hasComponent(id, Controllable));
     if (controllableEntities.length > 0) {
       const playerId = controllableEntities[0];
       const position = this.world.getComponent(playerId, Position);
-      context.fillText(`  Position: x=${position.x.toFixed(1)}, y=${position.y.toFixed(1)}`, 15, yOffset);
+      context.fillText(`Position: x=${position.x.toFixed(1)}, y=${position.y.toFixed(1)}`, 15, yOffset);
       yOffset += 20;
+      
+      const health = this.world.getComponent(playerId, Health);
+      if (health) {
+        context.fillText(`Health: ${health.current}/${health.max}`, 15, yOffset);
+        yOffset += 20;
+      }
     } else {
-      context.fillText(`  Player: NOT FOUND`, 15, yOffset);
+      context.fillText(`Player: NOT FOUND`, 15, yOffset);
       yOffset += 20;
     }
 
-    // --- 弾丸デバッグ情報（左下） ---
+    // === バレットデバッグ情報 ===
     context.fillStyle = 'cyan';
     context.fillText(`--- BULLET DEBUG ---`, 10, yOffset);
     yOffset += 20;
 
     if (bulletEntities.length > 0) {
       const bulletId = bulletEntities[0];
-      context.fillText(`  Bullet ID: ${bulletId}`, 10, yOffset);
+      context.fillText(`Bullet ID: ${bulletId}`, 10, yOffset);
       yOffset += 20;
 
       const team = this.world.getComponent(bulletId, Team);
       if (team) {
-        context.fillText(`  Team.id = ${team.id}`, 15, yOffset);
-        yOffset += 20;
-      } else {
-        context.fillText(`  Team: NOT FOUND`, 15, yOffset);
+        context.fillText(`Team.id = ${team.id}`, 15, yOffset);
         yOffset += 20;
       }
 
       const collidable = this.world.getComponent(bulletId, Collidable);
       if (collidable) {
-        context.fillText(`  Collidable.group = ${collidable.group}`, 15, yOffset);
-        yOffset += 20;
-      } else {
-        context.fillText(`  Collidable: NOT FOUND`, 15, yOffset);
+        context.fillText(`Collidable.group = ${collidable.group}`, 15, yOffset);
         yOffset += 20;
       }
     } else {
-      context.fillText(`  Bullet: NOT FOUND`, 10, yOffset);
+      context.fillText(`Bullet: NOT FOUND`, 10, yOffset);
+    }
+    
+    // === Lifetimeコンポーネントの旧形式使用警告（中央右側） ===
+    this._renderLifetimeWarnings(context);
+  }
+
+  /**
+   * Lifetimeコンポーネントの旧形式使用警告を表示
+   */
+  _renderLifetimeWarnings(context) {
+    if (typeof window === 'undefined' || !window.LIFETIME_LEGACY_DETECTED) {
+      return;
+    }
+
+    const warnings = window.LIFETIME_LEGACY_DETECTED;
+    
+    const startX = this.world.canvas.width - 380;
+    let yOffset = 150;
+
+    // 背景
+    context.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    context.fillRect(startX - 10, yOffset - 30, 370, 180);
+
+    // ヘッダー
+    context.fillStyle = warnings.warnings.length > 0 ? '#ff6666' : '#66ff66';
+    context.font = 'bold 14px Arial';
+    context.fillText(`🔧 LIFETIME COMPONENT STATUS`, startX, yOffset);
+    yOffset += 25;
+
+    // 統計
+    context.fillStyle = '#ffff99';
+    context.font = '12px Arial';
+    context.fillText(`旧形式警告総数: ${warnings.totalWarnings}`, startX, yOffset);
+    yOffset += 25;
+
+    if (warnings.warnings.length > 0) {
+      context.fillStyle = '#ff6666';
+      context.font = 'bold 13px Arial';
+      context.fillText(`⚠️ 検出された旧形式の使用:`, startX, yOffset);
+      yOffset += 20;
+
+      context.fillStyle = '#ff9966';
+      context.font = '11px Arial';
+      
+      const recentWarnings = warnings.warnings.slice(-3).reverse();
+      recentWarnings.forEach((warning) => {
+        const timeAgo = ((Date.now() - warning.timestamp) / 1000).toFixed(1);
+        const warningText = `🚫 ${warning.details}`;
+        const fileInfo = `📁 ${warning.caller}`;
+
+        context.fillText(warningText, startX, yOffset);
+        yOffset += 14;
+        context.fillText(`${fileInfo} (${timeAgo}秒前)`, startX + 10, yOffset);
+        yOffset += 18;
+      });
+
+      yOffset += 10;
+      context.fillStyle = '#ffff66';
+      context.font = 'bold 12px Arial';
+      context.fillText(`💡 上記ファイルを new Lifetime({duration: ...})`, startX, yOffset);
+      yOffset += 16;
+      context.fillText(`   形式に修正してください。`, startX, yOffset);
+
+    } else {
+      context.fillStyle = '#66ff66';
+      context.font = 'bold 13px Arial';
+      context.fillText(`✅ 旧形式の使用は検出されていません`, startX, yOffset);
     }
   }
 }

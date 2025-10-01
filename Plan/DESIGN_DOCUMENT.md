@@ -93,6 +93,11 @@
     - **(開発時専用)** デバッグ表示、開発支援機能、暫定措置（例：画面外エンティティ削除）を格納。
     - このディレクトリ内のコードは、**リリースビルドでは完全に除外されるべき**。
     - 機能の有効・無効は `DebugConfig.js` のフラグで一元管理する。
+    
+- **`/game/debug/systems`**
+    - デバッグ専用のシステムを格納。
+    - 例: `DebugSystem`（HUD表示）、`OffscreenCleanupSystem`（開発時のみ有効な機能）。
+    - これらのシステムは、`/game/systems/` とは分離し、リリース時に除外しやすくする。
 
 ❯ npx tree-node-cli -I "node_modules"
 
@@ -101,11 +106,13 @@ ShootingGame7
 │   ├── DEBUGGING_POLICY.md
 │   ├── DESIGN_DOCUMENT.md
 │   ├── DESIGN_DOCUMENT_ENEMY.md
+│   ├── DESIGN_DOCUMENT_ENEMY2.md
 │   ├── GAME_FEATURES.md
 │   ├── REFACTORING
 │   │   ├── Geminiゲームリファクタリング調査.md
 │   │   └── Qwenゲームリファクタリング調査レポート.md
-│   └── REFACTORING_PLAN.md
+│   ├── REFACTORING_PLAN.md
+│   └── REFACTORING_PLAN2.md
 ├── README.md
 ├── app
 │   ├── favicon.ico
@@ -118,26 +125,32 @@ ShootingGame7
 │   ├── components
 │   │   ├── Bullet.js
 │   │   ├── Collidable.js
+│   │   ├── Collidable2510012156
 │   │   ├── Controllable.js
 │   │   ├── Generator.js
 │   │   ├── Health.js
+│   │   ├── Health2510012108
 │   │   ├── InputState.js
 │   │   ├── Lifetime.js
+│   │   ├── Lifetime2510012312
 │   │   ├── Position.js
 │   │   ├── Renderable.js
 │   │   ├── Rotation.js
 │   │   ├── Team.js
+│   │   ├── Team2510012241
 │   │   ├── Velocity.js
 │   │   └── index.js
 │   ├── core
 │   │   ├── World.js
 │   │   ├── entityFactory.js
+│   │   ├── entityFactory2510012145
 │   │   └── main.js
 │   ├── debug
 │   │   ├── DebugConfig.js
 │   │   ├── README_debug.md
 │   │   └── systems
 │   │       ├── DebugSystem.js
+│   │       ├── DebugSystem2510012107
 │   │       └── OffscreenCleanupSystem.js
 │   └── systems
 │       ├── CollisionSystem.js
@@ -162,4 +175,4 @@ ShootingGame7
 └── tsconfig.json
 
 ---
-*最終更新日: 2025年9月30日23:23*
+*最終更新日: 2025年10月01日23:28*
