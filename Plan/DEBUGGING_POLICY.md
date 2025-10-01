@@ -65,28 +65,51 @@ export const DebugConfig = {
 - 通常のシステムと同様のECS構造（`update()` メソッドを持つクラス）
 - `DebugConfig` をインポートして、内部で個別フラグを参照可能
 
-### 4.3. main.js への登録方法
+
+### 4.3. main.js への登録方法 (2025-10-02 改訂版)
+
+デバッグシステムは、その役割に応じて**実行順序を厳密に制御する**必要がある。そのため、`main.js` 内で複数のグループに分けて登録する。
+
+**【重要】** 以下の構造は、ポーズ＆コマ送り機能の正常動作に不可欠である。AIによる安易な変更を禁ずる。
+
+#### 現在の実装 (静的インポート)
 
 ```js
-// game/core/main.js の末尾近くに以下を追加（AI上書き対策）
+// game/core/main.js
 
-// ★★★ 開発用システムの条件付き登録（このブロックは削除しないこと）★★★
+// --- 1. ファイル先頭で静的にインポート ---
 import { DebugConfig } from '../debug/DebugConfig.js';
+import { DebugControlSystem } from '../debug/systems/DebugControlSystem.js';
 import { DebugSystem } from '../debug/systems/DebugSystem.js';
 import { OffscreenCleanupSystem } from '../debug/systems/OffscreenCleanupSystem.js';
 
-// ...他の開発用システムも必要に応じて追加
 
-if (DebugConfig.ENABLED) {
-  world.addSystem(new OffscreenCleanupSystem(world));
-  world.addSystem(new DebugSystem(world));
+// --- 2. startGame関数内で、役割に応じて分離登録 ---
+export function startGame(canvas) {
+  // ...
+
+  // グループA: 常に更新 (入力・制御)
+  if (DebugConfig.ENABLED) {
+    alwaysUpdateSystems.push(new DebugControlSystem(world));
+  }
+
+  // グループB: ポーズ中に停止 (ゲームロジック)
+  if (DebugConfig.ENABLED) {
+    gameLogicSystems.push(new OffscreenCleanupSystem(world));
+  }
+
+  // グループC: 描画の最後 (デバッグ表示)
+  if (DebugConfig.ENABLED) {
+    debugSystem = new DebugSystem(world);
+  }
+
+  // ... (ゲームループ内の分離実行ロジック) ...
 }
-// ★★★ ここまで ★★★
-
 ```
 
-> ✅ このブロックは、AIが `main.js` を再生成しても**手動で再挿入が容易**  
-> ✅ `typeof` チェックにより、`DebugConfig.js` が存在しない場合もクラッシュしない
+#### 理想形 (将来の課題：動的インポート)
+
+現状は実装の容易さから静的インポートを採用しているが、リリースビルドのパフォーマンスを完全に最適化するため、将来的には**動的インポート (`await import(...)`)** への移行を目指す。これにより、`ENABLED: false` の際にデバッグ用ファイルがメモリに一切ロードされなくなる。この課題は `REFACTORING_PLAN2.md` に記載済み。
 
 ---
 
@@ -100,14 +123,13 @@ if (DebugConfig.ENABLED) {
 ---
 
 ## 6. 注意事項
-
 - **開発用コードを本体ファイルにコピペしないこと**
-- **`main.js` の条件ブロックは、AI生成後も必ず確認・復元すること**
-- 新しい開発機能を追加する際は、必ずこのポリシーに従い `/game/debug` に配置すること
+- **`main.js` のシステム登録ロジックは、ポーズ機能の根幹であるため、その構造を維持すること**
+- 新しい開発機能を追加する際は、必ずこのポリシーに従い `/game/debug` に配置し、適切な実行グループに登録すること
 
 ---
 
-> 最終更新日: 2025年9月30日  
-> 作成者: 開発者（非エンジニア）  
+> 最終更新日: 2025年10月02日
+> 作成者: 開発者, Manus
 > 環境: BlitzIDE + Galaxy Fold 6 (DeX)
 ```

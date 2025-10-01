@@ -1,16 +1,18 @@
 # 実際のディレクトリ構造 (DIRECTORY_STRUCTURE.md)
 
-*最終更新日: 2025年10月02日2:42*
+*最終更新日: 2025年10月02日5:34*
 
 # AI支援リクエスト
 ## 現在取り組んでいる課題
-- リファクタリングしエンティティ中央集権データ構造の構築
+- リファクタリング：自機弾の速度計算責任分担
+- デバッグ支援：弾改良のためのポーズコマ送り機能追加（完了）
+- リファクタリング：エンティティ中央集権データ構造の構築
 - 敵、味方、エフェクト等多彩な機能実装に備え基盤を洗練
 - REFACTORING_PLAN.md参照
 
 ## 必要な支援タイプ
 - [ ] コードレビュー
-- [ ] 設計書改善
+- [●] 設計書改善
 - [ ] バグ修正提案
 - [ ] 新機能実装のアプローチ
 - [ ] パフォーマンス改善
@@ -24,7 +26,10 @@ ShootingGame7
 │   ├── DESIGN_DOCUMENT.md
 │   ├── DESIGN_DOCUMENT_ENEMY.md
 │   ├── DESIGN_DOCUMENT_ENEMY2.md
-│   ├── GAME_FEATURES.md
+│   ├── DIRECTORY_STRUCTURE.md
+│   ├── REFACTORING
+│   │   ├── Geminiゲームリファクタリング調査.md
+│   │   └── Qwenゲームリファクタリング調査レポート.md
 │   ├── REFACTORING_PLAN.md
 │   └── REFACTORING_PLAN2.md
 ├── README.md
@@ -34,7 +39,8 @@ ShootingGame7
 │   ├── layout.tsx
 │   └── page.tsx
 ├── components
-│   └── GameCanvas.tsx
+│   ├── GameCanvas.tsx
+│   └── GameCanvas2510020453
 ├── game
 │   ├── components
 │   │   ├── Bullet.js
@@ -53,11 +59,16 @@ ShootingGame7
 │   ├── core
 │   │   ├── World.js
 │   │   ├── entityFactory.js
-│   │   └── main.js
+│   │   ├── entityFactory2510020334
+│   │   ├── main.js
+│   │   └── main2510020423
 │   ├── debug
 │   │   ├── DebugConfig.js
 │   │   ├── README_debug.md
+│   │   ├── components
+│   │   │   └── DebugVector.js
 │   │   └── systems
+│   │       ├── DebugControlSystem.js
 │   │       ├── DebugSystem.js
 │   │       └── OffscreenCleanupSystem.js
 │   └── systems
@@ -65,6 +76,7 @@ ShootingGame7
 │       ├── DamageSystem.js
 │       ├── DeathSystem.js
 │       ├── InputSystem.js
+│       ├── InputSystem2510020421
 │       ├── LifetimeSystem.js
 │       ├── MovementSystem.js
 │       ├── RenderSystem.js
@@ -107,4 +119,5 @@ ShootingGame7
 - 敵チームは閾値外で消滅（開発中暫定仕様、エンティティ無限増でのRAM圧迫を抑止）
 - デバッグ用数値を表示（マウス右クリックで表示ONとOFF切替）
 - デバッグ機能はフラグ設定オフで全てオフに（現時点ではコリジョン範囲表示のみ例外、要整理）
-
+- デバッグ用ポーズ（F8）コマ送り（F9）但しポーズ中は描画を重ねる副作用を許容
+- デバッグ用検出された入力キーをKEYs:[]内に表示
