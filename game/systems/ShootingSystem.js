@@ -1,6 +1,7 @@
-// game/systems/ShootingSystem.js
 import { Controllable, InputState, Position, Rotation, Team } from '../components/index.js';
 import { createBullet } from '../core/entityFactory.js';
+// import { DebugVector } from '../debug/components/DebugVector.js'; // 不要になった
+import { DebugConfig } from '../debug/DebugConfig.js';
 
 export class ShootingSystem {
   constructor(world) {
@@ -21,12 +22,20 @@ export class ShootingSystem {
       const rotation = this.world.getComponent(entityId, Rotation);
       const team = this.world.getComponent(entityId, Team);
 
-      // ★★★ 呼び出し方は既にモダン形式で正しい ★★★
+      const speed = 10.0;
+      const angle = rotation ? rotation.angle : 0;
+      const vx = Math.sin(angle) * speed;
+      const vy = -Math.cos(angle) * speed;
+
+      // createBulletを呼び出すだけで、責務は完了
       createBullet(this.world, {
         ownerPosition: position,
-        ownerRotation: rotation,
-        ownerTeam: team.id
+        ownerTeam: team.id,
+        vx: vx,
+        vy: vy
       });
+
+      // ★★★ 検証用のデバッグコードは削除済み ★★★
     }
 
     inputState.isMouseDown = false;

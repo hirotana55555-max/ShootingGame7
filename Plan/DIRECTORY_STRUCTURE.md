@@ -1,6 +1,6 @@
 # 実際のディレクトリ構造 (DIRECTORY_STRUCTURE.md)
 
-*最終更新日: 2025年10月02日5:34*
+*最終更新日: 2025年10月02日7:42*
 
 # AI支援リクエスト
 ## 現在取り組んでいる課題
@@ -12,7 +12,7 @@
 
 ## 必要な支援タイプ
 - [ ] コードレビュー
-- [●] 設計書改善
+- [ ] 設計書改善
 - [ ] バグ修正提案
 - [ ] 新機能実装のアプローチ
 - [ ] パフォーマンス改善
@@ -27,9 +27,6 @@ ShootingGame7
 │   ├── DESIGN_DOCUMENT_ENEMY.md
 │   ├── DESIGN_DOCUMENT_ENEMY2.md
 │   ├── DIRECTORY_STRUCTURE.md
-│   ├── REFACTORING
-│   │   ├── Geminiゲームリファクタリング調査.md
-│   │   └── Qwenゲームリファクタリング調査レポート.md
 │   ├── REFACTORING_PLAN.md
 │   └── REFACTORING_PLAN2.md
 ├── README.md
@@ -39,8 +36,7 @@ ShootingGame7
 │   ├── layout.tsx
 │   └── page.tsx
 ├── components
-│   ├── GameCanvas.tsx
-│   └── GameCanvas2510020453
+│   └── GameCanvas.tsx
 ├── game
 │   ├── components
 │   │   ├── Bullet.js
@@ -59,9 +55,7 @@ ShootingGame7
 │   ├── core
 │   │   ├── World.js
 │   │   ├── entityFactory.js
-│   │   ├── entityFactory2510020334
-│   │   ├── main.js
-│   │   └── main2510020423
+│   │   └── main.js
 │   ├── debug
 │   │   ├── DebugConfig.js
 │   │   ├── README_debug.md
@@ -76,7 +70,6 @@ ShootingGame7
 │       ├── DamageSystem.js
 │       ├── DeathSystem.js
 │       ├── InputSystem.js
-│       ├── InputSystem2510020421
 │       ├── LifetimeSystem.js
 │       ├── MovementSystem.js
 │       ├── RenderSystem.js

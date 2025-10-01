@@ -145,7 +145,7 @@ export class DebugSystem {
     // this._renderLifetimeWarnings(context);
 
     // === DebugVectorコンポーネントの描画処理 ===
-    const debugVectorEntities = this.world.getEntities([Position, DebugVector]);
+    /*const debugVectorEntities = this.world.getEntities([Position, DebugVector]);
     if (debugVectorEntities.length > 0) {
       context.font = '11px monospace';
       
@@ -157,7 +157,7 @@ export class DebugSystem {
         const text = `[${debugInfo.label}] vx:${debugInfo.vx.toFixed(2)}, vy:${debugInfo.vy.toFixed(2)}`;
         context.fillText(text, pos.x + 10, pos.y - 10);
       }
-    }
+    }*/
   }
 
   // _renderLifetimeWarnings(context) {

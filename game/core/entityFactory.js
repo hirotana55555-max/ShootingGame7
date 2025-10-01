@@ -1,5 +1,4 @@
 import { Position, Renderable, Velocity, Controllable, Rotation, Team, Bullet, Lifetime, Health, Collidable } from '../components/index.js';
-import { DebugVector } from '../debug/components/DebugVector.js'; // ★★★ デバッグ用コンポーネントをインポート ★★★
 
 export function createPlayer(world) {
   const canvas = world.canvas;
@@ -17,28 +16,24 @@ export function createPlayer(world) {
   return player;
 }
 
-export function createBullet(world, { ownerPosition, ownerRotation, ownerTeam }) {
+// ★★★ ここからが変更ブロック ★★★
+export function createBullet(world, { ownerPosition, ownerTeam, vx, vy }) {
   const bullet = world.createEntity();
-  const speed = 10.0;
-  const angle = ownerRotation ? ownerRotation.angle : 0;
-  const vx = Math.sin(angle) * speed;
-  const vy = -Math.cos(angle) * speed;
 
+  // 速度計算ロジックは削除され、引数で受け取るようになった
   world.addComponent(bullet, new Position({ x: ownerPosition.x, y: ownerPosition.y }));
-  world.addComponent(bullet, new Velocity({ vx, vy }));
+  world.addComponent(bullet, new Velocity({ vx, vy })); // 引数の値をそのまま使用
   world.addComponent(bullet, new Renderable({ color: 'yellow', width: 5, height: 10, shape: 'rectangle' }));
   world.addComponent(bullet, new Team({ id: ownerTeam }));
   world.addComponent(bullet, new Collidable({ group: 'player_bullet', radius: 5 }));
   world.addComponent(bullet, new Lifetime({ duration: 0.8 }));
   world.addComponent(bullet, new Bullet({}));
 
-  // ★★★ ここからが追加ブロック ★★★
-  // デバッグ表示機能の動作確認のため、旧ロジックの計算結果をDebugVectorとして追加する
-  world.addComponent(bullet, new DebugVector({ vx: vx, vy: vy, label: 'OLD' }));
-  // ★★★ 追加ブロックここまで ★★★
+  // 検証用のDebugVector追加コードは不要になったため削除
 
   return bullet;
 }
+// ★★★ 変更ブロックここまで ★★★
 
 export function createMeteor(world, { x, y }) {
   const meteor = world.createEntity();
