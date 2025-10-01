@@ -1,5 +1,4 @@
 import { Position, Renderable, Velocity, Controllable, Rotation, Team, Bullet, Lifetime, Health, Collidable } from '../components/index.js';
-import { DebugVector } from '../debug/components/DebugVector.js'; // ★★★ デバッグ用コンポーネントをインポート ★★★
 
 export function createPlayer(world) {
   const canvas = world.canvas;
@@ -12,7 +11,9 @@ export function createPlayer(world) {
   world.addComponent(player, new Velocity({ vx: 0, vy: 0 }));
   world.addComponent(player, new Rotation({ angle: 0 }));
   world.addComponent(player, new Team({ id: 'player' }));
-  world.addComponent(player, new Controllable({}));
+
+  // === Controllableコンポーネントを新しい形式に修正 ===
+  world.addComponent(player, new Controllable({})); // ★★★ 修正済み ★★★
 
   return player;
 }
@@ -30,12 +31,9 @@ export function createBullet(world, { ownerPosition, ownerRotation, ownerTeam })
   world.addComponent(bullet, new Team({ id: ownerTeam }));
   world.addComponent(bullet, new Collidable({ group: 'player_bullet', radius: 5 }));
   world.addComponent(bullet, new Lifetime({ duration: 0.8 }));
-  world.addComponent(bullet, new Bullet({}));
 
-  // ★★★ ここからが追加ブロック ★★★
-  // デバッグ表示機能の動作確認のため、旧ロジックの計算結果をDebugVectorとして追加する
-  world.addComponent(bullet, new DebugVector({ vx: vx, vy: vy, label: 'OLD' }));
-  // ★★★ 追加ブロックここまで ★★★
+  // === Bulletコンポーネントを新しい形式に修正 ===
+  world.addComponent(bullet, new Bullet({})); // ★★★ 修正済み ★★★
 
   return bullet;
 }

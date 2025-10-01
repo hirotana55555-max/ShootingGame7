@@ -1,7 +1,5 @@
 // game/systems/InputSystem.js
 import { InputState } from '../components/InputState.js';
-// ★★★ 1. DebugConfigをインポート ★★★
-import { DebugConfig } from '../debug/DebugConfig.js';
 
 export class InputSystem {
   constructor(world) {
@@ -9,10 +7,6 @@ export class InputSystem {
     const inputEntity = world.createEntity();
     world.addComponent(inputEntity, new InputState());
     this.inputState = world.getComponent(inputEntity, InputState);
-    
-    // ★★★ 2. デバッグキーのリストを先に作っておく ★★★
-    this.debugKeys = new Set(Object.values(DebugConfig.KEYS));
-
     this.registerEventListeners();
   }
 
@@ -21,52 +15,47 @@ export class InputSystem {
     if (!canvas) return;
 
     // --- キーボード ---
-    // ★★★ 3. keydownリスナーを改修 ★★★
-    document.addEventListener('keydown', (e) => {
-      const key = e.key.toLowerCase();
-      this.inputState.keys.add(key);
+    document.addEventListener('keydown', (e) => this.inputState.keys.add(e.key));
+    document.addEventListener('keyup', (e) => this.inputState.keys.delete(e.key));
 
-      // もし押されたキーがデバッグ用キーなら、ブラウザのデフォルト動作をキャンセル
-      if (this.debugKeys.has(key)) {
-        e.preventDefault();
-      }
-    });
-
-    document.addEventListener('keyup', (e) => {
-      const key = e.key.toLowerCase();
-      this.inputState.keys.delete(key);
-    });
-
-    // --- マウス/タッチ座標 (変更なし) ---
+    // --- マウス/タッチ座標 ---
     const updateTarget = (clientX, clientY) => {
       const rect = canvas.getBoundingClientRect();
       this.inputState.target.x = clientX - rect.left;
       this.inputState.target.y = clientY - rect.top;
     };
+
     const clearTarget = () => {
       this.inputState.target.x = null;
       this.inputState.target.y = null;
     };
+
     canvas.addEventListener('mousemove', (e) => updateTarget(e.clientX, e.clientY));
     canvas.addEventListener('mouseleave', clearTarget);
     canvas.addEventListener('touchmove', (e) => {
       e.preventDefault();
       updateTarget(e.touches[0].clientX, e.touches[0].clientY);
     }, { passive: false });
+    // touchendでは座標のみクリアする
     canvas.addEventListener('touchend', clearTarget);
 
-    // --- マウスクリック/タッチ (変更なし) ---
+    // ★★★ ここからが改造部分 ★★★
+    // --- マウスクリック/タッチ ---
     const handleMouseDown = (e) => {
-      e.preventDefault();
+      e.preventDefault(); // ダブルタップでのズームなどを防ぐ
       this.inputState.isMouseDown = true;
     };
+
     const handleMouseUp = () => {
       this.inputState.isMouseDown = false;
     };
+
     canvas.addEventListener('mousedown', handleMouseDown);
     canvas.addEventListener('mouseup', handleMouseUp);
     canvas.addEventListener('touchstart', handleMouseDown, { passive: false });
+    // touchendは座標クリアのリスナーが既にあるので、mouseupの処理を共通化
     canvas.addEventListener('touchend', handleMouseUp);
+    // ★★★ ここまでが改造部分 ★★★
   }
 
   update(dt) {
