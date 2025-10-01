@@ -1,4 +1,13 @@
+/**
+ * @file /game/debug/systems/DebugSystem.js
+ * @description 開発中にゲームの状態を可視化するためのデバッグ用システム。
+ *              FPS、エンティティ数、コンポーネントの状態などを画面に描画する。
+ *              右クリックで表示/非表示を切り替え可能。
+ */
+
+// 依存関係のインポート
 import { Controllable, Position, Bullet, Team, Collidable, Health } from '../../components/index.js';
+import { DebugVector } from '../components/DebugVector.js'; // ★★★ DebugVectorをインポート ★★★
 
 export class DebugSystem {
   constructor(world) {
@@ -112,6 +121,27 @@ export class DebugSystem {
     
     // === Lifetimeコンポーネントの旧形式使用警告（中央右側） ===
     this._renderLifetimeWarnings(context);
+
+    // ★★★ ここからが追加ブロック ★★★
+    // === DebugVectorコンポーネントの描画処理 ===
+    const debugVectorEntities = this.world.getEntities([Position, DebugVector]);
+    if (debugVectorEntities.length > 0) {
+      context.font = '11px monospace';
+      
+      for (const entityId of debugVectorEntities) {
+        const pos = this.world.getComponent(entityId, Position);
+        const debugInfo = this.world.getComponent(entityId, DebugVector);
+
+        // ラベルによって色を変更
+        context.fillStyle = debugInfo.label === 'OLD' ? '#FF8C00' : '#00FFFF'; // OLD: オレンジ, NEW: シアン
+
+        const text = `[${debugInfo.label}] vx:${debugInfo.vx.toFixed(2)}, vy:${debugInfo.vy.toFixed(2)}`;
+        
+        // エンティティの少し右上にテキストを描画
+        context.fillText(text, pos.x + 10, pos.y - 10);
+      }
+    }
+    // ★★★ 追加ブロックここまで ★★★
   }
 
   /**
