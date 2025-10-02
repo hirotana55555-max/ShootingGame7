@@ -1,5 +1,3 @@
-// game/systems/MovementSystem.js
-
 import { Position, Velocity, Controllable, InputState } from '../components/index.js';
 
 function lerp(start, end, amount) {
@@ -17,7 +15,7 @@ export class MovementSystem {
       return; 
     }
 
-    // --- Part 1: プレイヤーの「速度」を決定する ---
+    // --- Part 1: プレイヤーの「目標速度」を決定する ---
     const inputEntities = this.world.getEntities([InputState]);
     if (inputEntities.length > 0) {
         const inputState = this.world.getComponent(inputEntities[0], InputState);
@@ -33,50 +31,49 @@ export class MovementSystem {
             const pos = this.world.getComponent(entityId, Position);
             const vel = this.world.getComponent(entityId, Velocity);
 
+            // 1. まず、キーボード入力に基づいて速度を計算する
+            let keyDirX = 0;
+            let keyDirY = 0;
+            if (inputState.keys.has('arrowleft') || inputState.keys.has('a')) keyDirX = -1;
+            if (inputState.keys.has('arrowright') || inputState.keys.has('d')) keyDirX = 1;
+            if (inputState.keys.has('arrowup') || inputState.keys.has('w')) keyDirY = -1;
+            if (inputState.keys.has('arrowdown') || inputState.keys.has('s')) keyDirY = 1;
+
+            if (keyDirX !== 0 || keyDirY !== 0) {
+                vel.vx += keyDirX * keyAcceleration;
+                vel.vy += keyDirY * keyAcceleration;
+            } else {
+                // キー入力がない場合は、既存の速度を減速させる
+                vel.vx *= keyDrag;
+                vel.vy *= keyDrag;
+            }
+
+            // 2. 次に、マウス/タッチ入力が存在する場合、その情報で目標速度を「上書き」する
             if (inputState.target.x !== null) {
-                // マウス操作
                 let targetVelX = 0;
                 let targetVelY = 0;
                 const dx = inputState.target.x - pos.x;
                 const dy = inputState.target.y - pos.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
+                // ターゲット地点から一定距離以上離れている場合のみ、移動する
                 if (dist > stopRadius) {
                     const dirX = dx / dist;
                     const dirY = dy / dist;
                     targetVelX = dirX * maxSpeed;
                     targetVelY = dirY * maxSpeed;
                 }
-                // ★★★ 修正点：vel.x -> vel.vx, vel.y -> vel.vy ★★★
+                // lerpを使用してスムーズに目標速度に近づける
                 vel.vx = lerp(vel.vx, targetVelX, easing);
                 vel.vy = lerp(vel.vy, targetVelY, easing);
-            } else {
-                // キーボード操作
-                let dirX = 0;
-                let dirY = 0;
-                if (inputState.keys.has('ArrowLeft')) dirX = -1;
-                if (inputState.keys.has('ArrowRight')) dirX = 1;
-                if (inputState.keys.has('ArrowUp')) dirY = -1;
-                if (inputState.keys.has('ArrowDown')) dirY = 1;
+            }
 
-                if (dirX !== 0 || dirY !== 0) {
-                    // ★★★ 修正点：vel.x -> vel.vx, vel.y -> vel.vy ★★★
-                    vel.vx += dirX * keyAcceleration;
-                    vel.vy += dirY * keyAcceleration;
-                } else {
-                    // ★★★ 修正点：vel.x -> vel.vx, vel.y -> vel.vy ★★★
-                    vel.vx *= keyDrag;
-                    vel.vy *= keyDrag;
-                }
-
-                // ★★★ 修正点：vel.x -> vel.vx, vel.y -> vel.vy ★★★
-                const speed = Math.sqrt(vel.vx * vel.vx + vel.vy * vel.vy);
-                if (speed > maxSpeed) {
-                    const ratio = maxSpeed / speed;
-                    // ★★★ 修正点：vel.x -> vel.vx, vel.y -> vel.vy ★★★
-                    vel.vx *= ratio;
-                    vel.vy *= ratio;
-                }
+            // 3. 最後に、最大速度を超えないように速度を制限する
+            const speed = Math.sqrt(vel.vx * vel.vx + vel.vy * vel.vy);
+            if (speed > maxSpeed) {
+                const ratio = maxSpeed / speed;
+                vel.vx *= ratio;
+                vel.vy *= ratio;
             }
         }
     }
@@ -87,11 +84,9 @@ export class MovementSystem {
         const pos = this.world.getComponent(entityId, Position);
         const vel = this.world.getComponent(entityId, Velocity);
 
-        // ★★★ 修正点：vel.x -> vel.vx, vel.y -> vel.vy ★★★
-        // また、dtが可変であるため、* 60 のような固定値での補正は挙動を不安定にするため削除。
-        // 速度の調整は keyAcceleration や maxSpeed で行うのが正しいアプローチ。
-        pos.x += vel.vx;
-        pos.y += vel.vy;
+        // 速度に時間(dt)を掛けることで、フレームレートに依存しない移動を実現する。
+        pos.x += vel.vx * dt * 60; // * 60 は速度のスケール調整
+        pos.y += vel.vy * dt * 60; // * 60 は速度のスケール調整
     }
   }
 }

@@ -7,5 +7,5 @@ OffscreenCleanupSystem.js　←暫定開発用：画面外マージン座標外�
 ※RenderSystem.js内にコリジョン可視化コードが内包されているので、分離する必要アリ
 
 
-参照：ShootingGame7/Plan/DEBUGGING_POLICY.md
+参照：ShootingGame7/Plan/DEBUGGING_POLICY2.md
 

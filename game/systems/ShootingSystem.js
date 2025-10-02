@@ -14,7 +14,11 @@ export class ShootingSystem {
     if (inputEntities.length === 0) return;
     const inputState = this.world.getComponent(inputEntities[0], InputState);
 
-    if (!inputState.isMouseDown) return;
+    // --- ▼▼▼ 変更箇所 ▼▼▼ ---
+    // マウスが押されているか、またはスペースバーが押されているかを確認
+    const isShooting = inputState.isMouseDown || inputState.keys.has(' ');
+    if (!isShooting) return;
+    // --- ▲▲▲ 変更ここまで ▲▲▲ ---
 
     const shooters = this.world.getEntities(this.query);
     for (const entityId of shooters) {
@@ -27,17 +31,20 @@ export class ShootingSystem {
       const vx = Math.sin(angle) * speed;
       const vy = -Math.cos(angle) * speed;
 
-      // createBulletを呼び出すだけで、責務は完了
       createBullet(this.world, {
         ownerPosition: position,
         ownerTeam: team.id,
         vx: vx,
         vy: vy
       });
-
-      // ★★★ 検証用のデバッグコードは削除済み ★★★
     }
 
-    inputState.isMouseDown = false;
+    // 処理済みの入力状態をクリアする
+    if (inputState.isMouseDown) {
+      inputState.isMouseDown = false;
+    }
+    if (inputState.keys.has(' ')) {
+      inputState.keys.delete(' ');
+    }
   }
 }

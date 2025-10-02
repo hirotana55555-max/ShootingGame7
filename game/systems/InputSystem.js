@@ -1,7 +1,4 @@
-// game/systems/InputSystem.js
 import { InputState } from '../components/InputState.js';
-// ★★★ 1. DebugConfigをインポート ★★★
-import { DebugConfig } from '../debug/DebugConfig.js';
 
 export class InputSystem {
   constructor(world) {
@@ -9,10 +6,6 @@ export class InputSystem {
     const inputEntity = world.createEntity();
     world.addComponent(inputEntity, new InputState());
     this.inputState = world.getComponent(inputEntity, InputState);
-    
-    // ★★★ 2. デバッグキーのリストを先に作っておく ★★★
-    this.debugKeys = new Set(Object.values(DebugConfig.KEYS));
-
     this.registerEventListeners();
   }
 
@@ -20,22 +13,18 @@ export class InputSystem {
     const canvas = this.world.canvas;
     if (!canvas) return;
 
-    // --- キーボード ---
-    // ★★★ 3. keydownリスナーを改修 ★★★
-    document.addEventListener('keydown', (e) => {
-      const key = e.key.toLowerCase();
-      this.inputState.keys.add(key);
-
-      // もし押されたキーがデバッグ用キーなら、ブラウザのデフォルト動作をキャンセル
-      if (this.debugKeys.has(key)) {
-        e.preventDefault();
-      }
+    // ★★★ ここが唯一かつ最後の修正点！ ★★★
+    // イベントリスナーの登録対象を 'document' から 'canvas' に変更する。
+    // これにより、canvasにフォーカスが当たっている時のキー入力を確実に捕捉する。
+    canvas.addEventListener('keydown', (e) => {
+      e.preventDefault(); // 矢印キーによる画面スクロールなどを防ぐ
+      this.inputState.keys.add(e.key.toLowerCase());
     });
-
-    document.addEventListener('keyup', (e) => {
-      const key = e.key.toLowerCase();
-      this.inputState.keys.delete(key);
+    canvas.addEventListener('keyup', (e) => {
+      e.preventDefault();
+      this.inputState.keys.delete(e.key.toLowerCase());
     });
+    // ★★★ 修正ここまで ★★★
 
     // --- マウス/タッチ座標 (変更なし) ---
     const updateTarget = (clientX, clientY) => {

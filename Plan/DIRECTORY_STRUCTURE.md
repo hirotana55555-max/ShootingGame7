@@ -1,34 +1,42 @@
 # 実際のディレクトリ構造 (DIRECTORY_STRUCTURE.md)
 
-*最終更新日: 2025年10月02日7:42*
+*最終更新日: 2025年10月02日16:36*
 
 # AI支援リクエスト
 ## 現在取り組んでいる課題
-- リファクタリング：自機弾の速度計算責任分担
+- リファクタリング：自機弾の速度計算責任分担（完了）
 - デバッグ支援：弾改良のためのポーズコマ送り機能追加（完了）
+- キーボードで自機が操縦できなくなったバグ原因の調査（完了）
+- ECS構造に即したファイルになっているかコードレビュー
 - リファクタリング：エンティティ中央集権データ構造の構築
 - 敵、味方、エフェクト等多彩な機能実装に備え基盤を洗練
 - REFACTORING_PLAN.md参照
 
 ## 必要な支援タイプ
-- [ ] コードレビュー
-- [ ] 設計書改善
-- [ ] バグ修正提案
-- [ ] 新機能実装のアプローチ
-- [ ] パフォーマンス改善
+- [　] コードレビュー
+- [１] 設計書改善
+- [　] バグ修正提案
+- [　] 新機能実装のアプローチ
+- [　] パフォーマンス改善
 
 
 ❯ npx tree-node-cli -I "node_modules"
 
 ShootingGame7
 ├── Plan
-│   ├── DEBUGGING_POLICY.md
+│   ├── DEBUGGING_POLICY2.md
 │   ├── DESIGN_DOCUMENT.md
 │   ├── DESIGN_DOCUMENT_ENEMY.md
 │   ├── DESIGN_DOCUMENT_ENEMY2.md
 │   ├── DIRECTORY_STRUCTURE.md
-│   ├── REFACTORING_PLAN.md
-│   └── REFACTORING_PLAN2.md
+│   ├── README_debug.md
+│   ├── REFACTORING
+│   │   ├── DEBUGGING_POLICY.md
+│   │   ├── Geminiゲームリファクタリング調査.md
+│   │   ├── Qwenゲームリファクタリング調査レポート.md
+│   │   ├── REFACTORING_PLAN.md
+│   │   └── REFACTORING_PLAN2.md
+│   └── REFACTORING_PLAN3.md
 ├── README.md
 ├── app
 │   ├── favicon.ico
@@ -58,7 +66,6 @@ ShootingGame7
 │   │   └── main.js
 │   ├── debug
 │   │   ├── DebugConfig.js
-│   │   ├── README_debug.md
 │   │   ├── components
 │   │   │   └── DebugVector.js
 │   │   └── systems
@@ -97,12 +104,12 @@ ShootingGame7
 - ゲームフィールド枠を描画表示
 - 自機を描画表示
 - 自機はマウス位置とタップスワイプ位置を目指し加減速移動
-- 自機はキーボードでも操作可能なはずだが不具合で機能不全
+- 自機はキーボードでも操作可能
 - 自機は左右移動に伴い傾く
-- 自機はマウス左クリック又はタップで自機の傾き方向に弾を発射
-- 弾は一定時間後に消滅。
-- 敵ジェネレータは１種類のみ。
-- 敵は現在1種類、隕石のみ。
+- 自機はマウス左クリック又はタップ又はスペースバー押下(連射制限未搭載)で自機の傾き方向に弾を発射
+- 弾は一定時間後に消滅
+- 敵ジェネレータは１種類のみ
+- 敵は現在1種類、隕石のみ
 - 隕石は画面上方から一定時間毎に出現
 - 隕石は画面出現後、下方に向いた方向に移動
 - 弾の当たり判定が隕石に衝突すると弾消滅
