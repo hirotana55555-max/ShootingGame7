@@ -13,7 +13,7 @@ const { parse } = require('@babel/parser'); // JavaScriptを解析するツー�
 const projectRoot = path.resolve(__dirname, '..'); // プロジェクトのルートディレクトリ（このファイルの一つ上の階層）
 const targetDirs = ['app', 'components', 'game', 'pages']; // 解析対象のフォルダ
 const targetExtensions = ['.js', '.jsx', '.ts', '.tsx']; // 解析対象のファイルの拡張子
-const outputFilePath = path.join(projectRoot, 'ai_workspace/outputs/static_index.jsonl'); // 出力先のファイルパス
+const outputFilePath = path.join(projectRoot, 'Project_Cognize/workspace/outputs/static_index.jsonl'); // 出力先のファイルパス
 
 /**
  * 指定されたディレクトリを再帰的に探索し、対象となるファイルのリストを返す関数
