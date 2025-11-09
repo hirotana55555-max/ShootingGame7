@@ -10,8 +10,8 @@ const path = require('path'); // ファイルのパスを扱うツール
 const { parse } = require('@babel/parser'); // JavaScriptを解析するツール
 
 // --- 設定項目 ---
-const projectRoot = path.resolve(__dirname, '..'); // プロジェクトのルートディレクトリ（このファイルの一つ上の階層）
-const targetDirs = ['app', 'components', 'game', 'pages']; // 解析対象のフォルダ
+const projectRoot = path.resolve(__dirname, '../../..'); // プロジェクトのルートディレクトリ
+const targetDirs = ['app', 'components', 'game', 'pages', 'scripts']; // 解析対象のフォルダ (既存のscriptsも対象に含める)
 const targetExtensions = ['.js', '.jsx', '.ts', '.tsx']; // 解析対象のファイルの拡張子
 const outputFilePath = path.join(projectRoot, 'Project_Cognize/workspace/outputs/static_index.jsonl'); // 出力先のファイルパス
 
@@ -75,8 +75,6 @@ async function main() {
         const fileInfo = {
             file_path: path.relative(projectRoot, filePath), // プロジェクトルートからの相対パス
             last_modified: fs.statSync(filePath).mtime.toISOString(), // 最終更新日時
-            // ここに、ASTから抽出した詳細情報（例: exportされている関数名など）を追加していく
-            // MVPではまずファイルパスと更新日時のみ
         };
 
         return JSON.stringify(fileInfo); // オブジェクトをJSON文字列に変換
@@ -90,4 +88,3 @@ async function main() {
 
 // メイン処理を実行
 main().catch(console.error);
-
