@@ -45,7 +45,7 @@ export function createMeteor(world, { x, y }) {
   world.addComponent(meteor, new Position({ x, y }));
   world.addComponent(meteor, new Velocity({ vx, vy }));
   world.addComponent(meteor, new Renderable({ color: 'gray', width: 20, height: 20, shape: 'rectangle' }));
-  world.addComponent(meteor, new Health({value: 3}));
+  world.addComponent(meteor, new Health({current: 3}));
   world.addComponent(meteor, new Team({ id: 'enemy' }));
   world.addComponent(meteor, new Collidable({ group: 'enemy', radius: 20 }));
 
