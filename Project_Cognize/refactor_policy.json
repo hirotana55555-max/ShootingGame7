@@ -1,0 +1,56 @@
+{
+  "policy_version": "1.1",
+  "last_updated": "2025-11-11",
+  "description": "ShootingGame7プロジェクト - AIリファクタリングポリシー",
+  
+  "rules": [
+    {
+      "id": "preserve-game-logic",
+      "description": "ゲームロジック（game/core）は慎重に扱う",
+      "pattern": "game/core/**",
+      "action": "require_approval"
+    },
+    {
+      "id": "preserve-tests",
+      "description": "テストファイルは変更禁止",
+      "pattern": "**/*.test.{js,ts,jsx,tsx}",
+      "action": "skip"
+    },
+    {
+      "id": "small-prs",
+      "description": "1PRあたり5ファイル以下を推奨",
+      "max_files": 5,
+      "action": "warn"
+    }
+  ],
+
+  "allowed_refactors": [
+    "rename_variable",
+    "extract_function",
+    "inline_helper",
+    "add_types",
+    "split_component"
+  ],
+
+  "forbidden_refactors": [
+    "rewrite_core_engine",
+    "change_public_api",
+    "modify_state_structure"
+  ],
+
+  "ai_integration": {
+    "summary_format": "safe_metadata_only",
+    "include_source_code": false,
+    "include_import_graph": true,
+    "include_symbol_list": true
+  },
+
+  "project_context": {
+    "framework": "Next.js 14",
+    "language": "TypeScript",
+    "critical_paths": [
+      "game/core/",
+      "game/systems/"
+    ]
+  }
+}
