@@ -62,7 +62,7 @@ jobs:
           if [ "${{ github.event.inputs.full_scan }}" == "true" ]; then
             ARGS="$ARGS --full-scan"
           fi
-          node Project_Cognize/scripts/indexer_v1.1.js $ARGS
+          node Project_Cognize/scripts/indexer.js $ARGS
 
       - name: インデクサー実行（本番）
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.inputs.mode != 'dry-run'
@@ -71,7 +71,7 @@ jobs:
           if [ "${{ github.event.inputs.full_scan }}" == "true" ]; then
             ARGS="$ARGS --full-scan"
           fi
-          node Project_Cognize/scripts/indexer_v1.1.js $ARGS
+          node Project_Cognize/scripts/indexer.js $ARGS
 
       - name: JSONL検証
         run: |

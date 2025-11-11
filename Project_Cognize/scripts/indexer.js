@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
- * Cognize Indexer v1.1 - ShootingGame7専用
- * 
+ * Cognize Indexer v1.2 - ShootingGame7専用 (Claude's Review 반영)
+ *
  * 機能:
  * - 差分スキャン対応（git diffベース）
- * - SQLite依存グラフ構築
+ * - SQLite依存グラフ構築 (import/re-exportを区別)
  * - JSONLローテーション検知
  * - Dry-run/Safe-run両対応
- * 
+ *
  * 実行:
  *   node Project_Cognize/scripts/indexer_v1.1.js [--dry-run] [--full-scan]
  */
@@ -68,9 +68,9 @@ function getFileHash(filePath) {
 
 function getCurrentCommit() {
   try {
-    return execSync('git rev-parse --short HEAD', { 
-      cwd: PROJECT_ROOT, 
-      encoding: 'utf8' 
+    return execSync('git rev-parse --short HEAD', {
+      cwd: PROJECT_ROOT,
+      encoding: 'utf8'
     }).trim();
   } catch {
     return 'unknown';
@@ -90,7 +90,7 @@ function getChangedFiles() {
         '.git/**',
         '.next/**',
         'Project_Cognize/**',
-        'scripts/**'  // 元のscriptsは除外
+        'scripts/**'
       ]
     });
   }
@@ -126,7 +126,7 @@ function getChangedFiles() {
 function initDatabase() {
   ensureDir(path.dirname(DB_PATH));
   const db = new Database(DB_PATH);
-  
+
   db.pragma('journal_mode = WAL');
   db.pragma('synchronous = NORMAL');
   db.pragma('busy_timeout = 5000');
@@ -162,7 +162,7 @@ function initDatabase() {
 }
 
 // ====================
-// AST解析
+// AST解析 (Claude's Review 반영)
 // ====================
 function analyzeFile(filePath) {
   const fullPath = path.join(PROJECT_ROOT, filePath);
@@ -183,8 +183,10 @@ function analyzeFile(filePath) {
   const symbols = [];
   const imports = [];
   const exports = [];
+  const reexports = []; // 再エクスポート専用配列
 
   traverse(ast, {
+    // ===== Import処理 =====
     ImportDeclaration(p) {
       const source = p.node.source.value;
       const specifiers = p.node.specifiers.map(spec => {
@@ -193,27 +195,78 @@ function analyzeFile(filePath) {
         } else if (spec.type === 'ImportNamespaceSpecifier') {
           return { type: 'namespace', name: spec.local.name };
         } else {
-          return { type: 'named', name: spec.local.name };
+          return {
+            type: 'named',
+            name: spec.local.name,
+            imported: spec.imported ? spec.imported.name : spec.local.name
+          };
         }
       });
       imports.push({ module: source, specifiers });
     },
 
+    // ===== Export * from処理 =====
+    ExportAllDeclaration(p) {
+      const source = p.node.source.value;
+      reexports.push({
+        type: 'all',
+        module: source,
+        exported_name: p.node.exported ? p.node.exported.name : null
+      });
+      imports.push({
+        module: source,
+        specifiers: [{ type: 'reexport-all', name: '*' }],
+        is_reexport: true
+      });
+    },
+
+    // ===== Named Export処理 =====
     ExportNamedDeclaration(p) {
+      if (p.node.source) {
+        const source = p.node.source.value;
+        const specifiers = p.node.specifiers.map(spec => ({
+          type: 'reexport-named',
+          exported: spec.exported.name,
+          imported: spec.local.name
+        }));
+        reexports.push({
+          type: 'named',
+          module: source,
+          specifiers
+        });
+        imports.push({
+          module: source,
+          specifiers,
+          is_reexport: true
+        });
+      }
       if (p.node.declaration) {
         if (p.node.declaration.id) {
           exports.push({ name: p.node.declaration.id.name, type: 'named' });
         } else if (p.node.declaration.declarations) {
           p.node.declaration.declarations.forEach(d => {
-            if (d.id.name) exports.push({ name: d.id.name, type: 'named' });
+            if (d.id && d.id.name) {
+              exports.push({ name: d.id.name, type: 'named' });
+            }
           });
         }
+      } else if (p.node.specifiers.length > 0) {
+        p.node.specifiers.forEach(spec => {
+          exports.push({
+            name: spec.exported.name,
+            type: 'named',
+            local: spec.local.name
+          });
+        });
       }
     },
 
+    // ===== Default Export処理 =====
     ExportDefaultDeclaration(p) {
       let name = 'default';
-      if (p.node.declaration.id) name = p.node.declaration.id.name;
+      if (p.node.declaration && p.node.declaration.id) {
+        name = p.node.declaration.id.name;
+      }
       exports.push({ name, type: 'default' });
     },
 
@@ -253,6 +306,7 @@ function analyzeFile(filePath) {
     symbols,
     imports,
     exports,
+    reexports,
     loc: code.split('\n').length
   };
 }
@@ -273,7 +327,7 @@ function checkRotation() {
     const archivePath = path.join(ARCHIVE_DIR, `static_index_${timestamp}.jsonl.gz`);
 
     log(`⚠ JSONLが${MAX_JSONL_SIZE_MB}MB超過 → ローテーション開始`, 'warn');
-    
+
     try {
       execSync(`gzip -c "${JSONL_PATH}" > "${archivePath}"`, { cwd: PROJECT_ROOT });
       fs.writeFileSync(JSONL_PATH, '');
@@ -289,8 +343,8 @@ function checkRotation() {
 // ====================
 function main() {
   const startTime = Date.now();
-  
-  log('=== Cognize Indexer v1.1 開始 ===');
+
+  log('=== Cognize Indexer v1.2 開始 ===');
   log(`モード: ${DRY_RUN ? 'DRY-RUN（書き込みなし）' : '本番実行'}`);
   log(`スキャン: ${FULL_SCAN ? 'フルスキャン' : '差分スキャン'}`);
 
@@ -338,10 +392,10 @@ function main() {
 
       const record = {
         record_id: crypto.randomUUID(),
-        schema_version: '1.1',
+        schema_version: '1.2',
         provider: {
           name: 'cognize-indexer',
-          version: '1.1',
+          version: '1.2',
           mode: DRY_RUN ? 'dry-run' : 'production'
         },
         commit: commitSha,
@@ -354,11 +408,13 @@ function main() {
           symbols: analysis.symbols,
           imports: analysis.imports,
           exports: analysis.exports,
+          reexports: analysis.reexports, // 追加
           stats: {
             loc: analysis.loc,
             symbol_count: analysis.symbols.length,
             import_count: analysis.imports.length,
-            export_count: analysis.exports.length
+            export_count: analysis.exports.length,
+            reexport_count: analysis.reexports.length // 追加
           }
         }
       };
@@ -379,12 +435,13 @@ function main() {
           commitSha
         );
 
-        // 依存関係更新
+        // 依存関係更新 (Claude's Review 반영)
         deleteDeps.run(relPath);
         for (const imp of analysis.imports) {
-          for (const spec of imp.specifiers) {
-            insertDep.run(relPath, imp.module, spec.type);
-          }
+          // is_reexportフラグを見て、import_typeを区別
+          const importType = imp.is_reexport ? 'reexport' : 'import';
+          // 依存関係テーブルには、純粋なimportもre-exportも、どちらも依存として記録する
+          insertDep.run(relPath, imp.module, importType);
         }
       }
 
