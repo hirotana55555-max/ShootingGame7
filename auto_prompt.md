@@ -20,46 +20,60 @@ LANGUAGE: TypeScript
 CRITICAL: game/core/,game/systems/
 
 [CONTEXT]
-DEPS:target=game/components/Collidable.js|imports=|used_by=
+DEPS:target=game/components/Generator.js|imports=game/systems/SpawningSystem.js[POTENTIAL_ECS_DEPENDENCY]|used_by=
 
-[SOURCE CODE: game/components/Collidable.js]
+[TARGET SOURCE CODE: game/components/Generator.js]
 ```javascript
 /**
- * 物理的な当たり判定を持つことを示すコンポーネント。
+ * 新しいエンティティを動的に生成する「スポナー」の定義を持つコンポーネント。 
  */
-export class Collidable {
-  /**
-   * @param {object} config - コンポーネントの設定
-   * @param {string} config.group - 衝突判定のグループ ('enemy', 'player_bullet'など)
-   * @param {number} config.radius - 円形の当たり判定の半径
-   */
-  constructor({ group, radius }) {
-    if (group === undefined || radius === undefined) {
-      console.error("Collidableコンポーネントの生成に失敗: 'group'と'radius'プロパティは必須です。");
-      this.group = 'unknown';
-      this.radius = 0;
-      return;
+export class Generator {
+    /**
+     * @param {object} config - 生成設定
+     */
+    constructor(config) {
+      this.config = config;
+      this.timer = config.trigger.initialDelay || 0; // 生成までのタイマー
     }
+  }
+  
+```
 
-    /**
-     * 衝突判定のグループ
-     * @type {string}
-     */
-    this.group = group;
+[RELATED SYSTEM CODES]
+以下は、対象Componentに関連する可能性のあるSystemファイルです:
 
-    /**
-     * 円形の当たり判定の半径
-     * @type {number}
-     */
-    this.radius = radius;
+[SYSTEM CODE: game/systems/SpawningSystem.js]
+```javascript
+// game/systems/SpawningSystem.js
+import { Generator } from '../components/index.js';
+import { createMeteor } from '../core/entityFactory.js';
+
+export class SpawningSystem {
+  constructor(world) {
+    this.world = world;
   }
 
-  /**
-   * デバッグ用の文字列表現
-   * @returns {string}
-   */
-  toString() {
-    return `Collidable(group=${this.group}, radius=${this.radius})`;
+  update(dt) {
+    const generators = this.world.getEntities([Generator]);
+
+    for (const entityId of generators) {
+      const generator = this.world.getComponent(entityId, Generator);
+      generator.timer -= dt;
+
+      if (generator.timer <= 0) {
+        const config = generator.config;
+
+        if (config.entityType === 'meteor') {
+          const spawnX = Math.random() * this.world.canvas.width;
+          const spawnY = -50;
+          
+          // ★★★ 変更点：引数をオブジェクト形式で渡す ★★★
+          createMeteor(this.world, { x: spawnX, y: spawnY });
+        }
+
+        generator.timer = config.trigger.interval;
+      }
+    }
   }
 }
 
@@ -70,6 +84,7 @@ Analyze the target file and output a JSON object with this exact structure:
 
 \`\`\`json
 {
+  "ai_model": "この提案を生成したAIモデル名 (例: Qwen, DeepSeek)",
   "file": "ファイルパス",
   "analysis": {
     "current_structure": "現在の構造の簡潔な説明（50文字以内）",
