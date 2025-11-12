@@ -20,68 +20,82 @@ LANGUAGE: TypeScript
 CRITICAL: game/core/,game/systems/
 
 [CONTEXT]
-DEPS:target=game/core/entityFactory.js|imports=../components/index.js[import]|used_by=
+DEPS:target=game/components/Lifetime.ts|imports=game/systems/LifetimeSystem.js[POTENTIAL_ECS_DEPENDENCY]|used_by=
 
-[TARGET SOURCE CODE: game/core/entityFactory.js]
-```javascript
-import { Position, Renderable, Velocity, Controllable, Rotation, Team, Bullet, Lifetime, Health, Collidable } from '../components/index.js';
+[TARGET SOURCE CODE: game/components/Lifetime.ts]
+```typescript
+// game/components/Lifetime.ts
 
-export function createPlayer(world) {
-  const canvas = world.canvas;
-  if (!canvas) throw new Error('Worldにcanvasが設定されていません。');
-  
-  const player = world.createEntity();
+/**
+ * エンティティの寿命を管理するコンポーネント。
+ */
+export class Lifetime {
+  /**
+   * 残りの寿命（秒）。システムによって毎フレーム減算される。
+   * @type {number}
+   */
+  public remainingTime: number;
 
-  world.addComponent(player, new Position({ x: canvas.width / 2, y: canvas.height - 100 }));
-  world.addComponent(player, new Renderable({ color: 'white', width: 20, height: 30, shape: 'triangle' }));
-  world.addComponent(player, new Velocity({ vx: 0, vy: 0 }));
-  world.addComponent(player, new Rotation({ angle: 0 }));
-  world.addComponent(player, new Team({ id: 'player' }));
-  world.addComponent(player, new Controllable({}));
+  /**
+   * @param {object} config - コンポーネントの設定
+   * @param {number} config.duration - エンティティが存在する秒数
+   */
+  constructor({ duration }: { duration: number }) {
+    if (duration === undefined || duration < 0) {
+      console.error("Lifetimeコンポーネント: 不正な'duration'が指定されたため、デフォルト値0を使用します。");
+      this.remainingTime = 0;
+      return;
+    }
+    this.remainingTime = duration;
+  }
 
-  return player;
-}
-
-// ★★★ ここからが変更ブロック ★★★
-export function createBullet(world, { ownerPosition, ownerTeam, vx, vy }) {
-  const bullet = world.createEntity();
-
-  // 速度計算ロジックは削除され、引数で受け取るようになった
-  world.addComponent(bullet, new Position({ x: ownerPosition.x, y: ownerPosition.y }));
-  world.addComponent(bullet, new Velocity({ vx, vy })); // 引数の値をそのまま使用
-  world.addComponent(bullet, new Renderable({ color: 'yellow', width: 5, height: 10, shape: 'rectangle' }));
-  world.addComponent(bullet, new Team({ id: ownerTeam }));
-  world.addComponent(bullet, new Collidable({ group: 'player_bullet', radius: 5 }));
-  world.addComponent(bullet, new Lifetime({ duration: 0.8 }));
-  world.addComponent(bullet, new Bullet({}));
-
-  // 検証用のDebugVector追加コードは不要になったため削除
-
-  return bullet;
-}
-// ★★★ 変更ブロックここまで ★★★
-
-export function createMeteor(world, { x, y }) {
-  const meteor = world.createEntity();
-  const speed = 1.0 + Math.random() * 0.5;
-  const angle = (Math.random() - 0.5) * Math.PI / 4;
-  const vx = Math.sin(angle) * speed;
-  const vy = Math.cos(angle) * speed;
-
-  world.addComponent(meteor, new Position({ x, y }));
-  world.addComponent(meteor, new Velocity({ vx, vy }));
-  world.addComponent(meteor, new Renderable({ color: 'gray', width: 20, height: 20, shape: 'rectangle' }));
-  world.addComponent(meteor, new Health({current: 3}));
-  world.addComponent(meteor, new Team({ id: 'enemy' }));
-  world.addComponent(meteor, new Collidable({ group: 'enemy', radius: 20 }));
-
-  return meteor;
+  /**
+   * デバッグ用の文字列表現
+   * @returns {string}
+   */
+  toString(): string {
+    return `Lifetime(remainingTime=${this.remainingTime.toFixed(2)})`;
+  }
 }
 
 ```
 
+[TSC CHECK RESULT: PASSED]
+TypeScriptの型チェックは成功しました。コードベースは現在、型安全な状態です。
+
 [RELATED SYSTEM CODES]
-対象がComponentではないため、System依存関係の分析は省略されました。
+以下は、対象Componentに関連する可能性のあるSystemファイルです:
+
+[SYSTEM CODE: game/systems/LifetimeSystem.js]
+```javascript
+// game/systems/LifetimeSystem.js 
+
+import { Lifetime } from '../components/index.js';
+
+export class LifetimeSystem {
+  constructor(world) {
+    this.world = world;
+    this.query = [Lifetime];
+  }
+
+  update(dt) {
+    const entities = this.world.getEntities(this.query);
+
+    for (const entityId of entities) {
+      const lifetime = this.world.getComponent(entityId, Lifetime);
+
+      // ▼▼▼ ここが新しいプロパティ名に変わっています ▼▼▼
+      lifetime.remainingTime -= dt;
+
+      if (lifetime.remainingTime <= 0) {
+      // ▲▲▲ ここまで ▲▲▲
+        this.world.markForRemoval(entityId);
+      }
+    }
+  }
+}
+
+```
 
 [TASK]
 Analyze the target file and output a JSON object with this exact structure:
