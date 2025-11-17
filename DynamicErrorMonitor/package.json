@@ -1,0 +1,32 @@
+{
+  "name": "dynamic-error-monitor",
+  "version": "1.0.0",
+  "description": "Unit2: Dynamic Error Monitoring with LLM-first design",
+  "main": "src/collector/index.js",
+  "scripts": {
+    "start": "node src/collector/index.js",
+    "dev": "nodemon src/collector/index.js",
+    "setup:db": "sqlite3 database/errors.db < database/schema.sql",
+    "setup:glitchtip": "cd infra/glitchtip && docker-compose up -d",
+    "stop:glitchtip": "cd infra/glitchtip && docker-compose down",
+    "logs:glitchtip": "cd infra/glitchtip && docker-compose logs -f",
+    "test": "jest --coverage",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "@sentry/node": "^7.100.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "node-cron": "^3.0.3",
+    "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

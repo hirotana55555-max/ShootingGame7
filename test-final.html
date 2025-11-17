@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Final Test</title>
+    <script>
+        console.log('Final test page loaded');
+        
+        function sendTestError() {
+            const testData = {
+                message: 'Final test error with proper message',
+                stack: 'Error: Final test error with proper message\n    at sendTestError (test-final.html:15:19)',
+                browser: {
+                    ua: navigator.userAgent,
+                    url: window.location.href,
+                    viewport: {
+                        width: window.innerWidth,
+                        height: window.innerHeight
+                    }
+                },
+                timestamp: new Date().toISOString()
+            };
+            
+            console.log('Sending test data:', testData);
+            
+            fetch('http://localhost:3001/api/collect', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(testData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('✅ SUCCESS: Error saved with ID:', data.id);
+                alert('✅ テスト成功！エラーID: ' + data.id);
+            })
+            .catch(error => {
+                console.error('❌ FAILED:', error);
+                alert('❌ テスト失敗: ' + error.message);
+            });
+        }
+        
+        // 3秒後に自動テスト
+        setTimeout(() => {
+            console.log('Starting auto-test...');
+            sendTestError();
+        }, 3000);
+    </script>
+</head>
+<body style="font-family: Arial; padding: 20px;">
+    <h1>✅ DynamicErrorMonitor 最終テスト</h1>
+    <p>このページは自動テスト用です。</p>
+    <p>3秒後に自動でテストが実行されます。</p>
+    <button onclick="sendTestError()" style="padding: 10px; font-size: 16px; margin: 10px;">
+        手動テスト実行
+    </button>
+    <div id="result" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;"></div>
+</body>
+</html>
