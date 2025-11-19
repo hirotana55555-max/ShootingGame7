@@ -1,0 +1,489 @@
+{
+  "TOON_HEADER": {
+    "version": "1.0",
+    "generated_at": "2025-11-19T16:20:00.088Z",
+    "scanner_version": "6.0_toon",
+    "node_version": "v20.19.5",
+    "project_root": "/home/hiro/development/shooting_game/ShootingGame7",
+    "hash": "b3064a354711940630a192a22e0ec192c24a6a31e79719723f56d77b647f89a7",
+    "flags": 0,
+    "database_used": true,
+    "db_column_detected": "path",
+    "db_errors_count": 0,
+    "max_depth_limit": 20
+  },
+  "statistics": {
+    "totalFiles": 33,
+    "totalDirectories": 17,
+    "filesByExtension": {
+      ".js": 29,
+      ".json": 4
+    },
+    "totalSize": 373757,
+    "dbIndexedFiles": 28,
+    "dbErrorFiles": 0,
+    "maxDepth": 4
+  },
+  "db_errors": [],
+  "structure": {
+    "n": "ShootingGame7",
+    "t": "directory",
+    "p": "/",
+    "lvl": 0,
+    "nodes": [
+      {
+        "n": "DynamicErrorMonitor",
+        "t": "directory",
+        "p": "/DynamicErrorMonitor",
+        "lvl": 1,
+        "nodes": [
+          {
+            "n": "client",
+            "t": "directory",
+            "p": "/DynamicErrorMonitor/client",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "error-snippet.js",
+                "t": "file",
+                "p": "/DynamicErrorMonitor/client/error-snippet.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 1875,
+                "mdf": "2025-11-18T12:40:21.553Z",
+                "dbi": true
+              }
+            ]
+          },
+          {
+            "n": "src",
+            "t": "directory",
+            "p": "/DynamicErrorMonitor/src",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "collector",
+                "t": "directory",
+                "p": "/DynamicErrorMonitor/src/collector",
+                "lvl": 3,
+                "nodes": [
+                  {
+                    "n": "index.js",
+                    "t": "file",
+                    "p": "/DynamicErrorMonitor/src/collector/index.js",
+                    "lvl": 4,
+                    "ext": ".js",
+                    "sz": 1491,
+                    "mdf": "2025-11-18T12:40:21.553Z",
+                    "dbi": true
+                  },
+                  {
+                    "n": "parser.js",
+                    "t": "file",
+                    "p": "/DynamicErrorMonitor/src/collector/parser.js",
+                    "lvl": 4,
+                    "ext": ".js",
+                    "sz": 1545,
+                    "mdf": "2025-11-18T12:40:21.553Z",
+                    "dbi": true
+                  },
+                  {
+                    "n": "sync.js",
+                    "t": "file",
+                    "p": "/DynamicErrorMonitor/src/collector/sync.js",
+                    "lvl": 4,
+                    "ext": ".js",
+                    "sz": 3453,
+                    "mdf": "2025-11-18T12:40:21.557Z",
+                    "dbi": true
+                  }
+                ]
+              },
+              {
+                "n": "llm-api",
+                "t": "directory",
+                "p": "/DynamicErrorMonitor/src/llm-api",
+                "lvl": 3,
+                "nodes": [
+                  {
+                    "n": "index.js",
+                    "t": "file",
+                    "p": "/DynamicErrorMonitor/src/llm-api/index.js",
+                    "lvl": 4,
+                    "ext": ".js",
+                    "sz": 5408,
+                    "mdf": "2025-11-18T12:40:21.557Z",
+                    "dbi": true
+                  }
+                ]
+              },
+              {
+                "n": "reverse-lookup",
+                "t": "directory",
+                "p": "/DynamicErrorMonitor/src/reverse-lookup",
+                "lvl": 3,
+                "nodes": [
+                  {
+                    "n": "resolver.js",
+                    "t": "file",
+                    "p": "/DynamicErrorMonitor/src/reverse-lookup/resolver.js",
+                    "lvl": 4,
+                    "ext": ".js",
+                    "sz": 3526,
+                    "mdf": "2025-11-18T12:40:21.557Z",
+                    "dbi": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "n": "baseline_summary.json",
+            "t": "file",
+            "p": "/DynamicErrorMonitor/baseline_summary.json",
+            "lvl": 2,
+            "ext": ".json",
+            "sz": 116,
+            "mdf": "2025-11-18T12:40:21.553Z"
+          },
+          {
+            "n": "package-lock.json",
+            "t": "file",
+            "p": "/DynamicErrorMonitor/package-lock.json",
+            "lvl": 2,
+            "ext": ".json",
+            "sz": 250040,
+            "mdf": "2025-11-18T13:13:10.128Z"
+          },
+          {
+            "n": "package.json",
+            "t": "file",
+            "p": "/DynamicErrorMonitor/package.json",
+            "lvl": 2,
+            "ext": ".json",
+            "sz": 934,
+            "mdf": "2025-11-18T12:40:21.553Z"
+          }
+        ]
+      },
+      {
+        "n": "game",
+        "t": "directory",
+        "p": "/game",
+        "lvl": 1,
+        "nodes": [
+          {
+            "n": "components",
+            "t": "directory",
+            "p": "/game/components",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "index.js",
+                "t": "file",
+                "p": "/game/components/index.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 368,
+                "mdf": "2025-11-18T12:40:21.561Z",
+                "dbi": true
+              }
+            ]
+          },
+          {
+            "n": "core",
+            "t": "directory",
+            "p": "/game/core",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "entityFactory.js",
+                "t": "file",
+                "p": "/game/core/entityFactory.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 2379,
+                "mdf": "2025-11-18T12:40:21.561Z",
+                "dbi": true
+              },
+              {
+                "n": "main.js",
+                "t": "file",
+                "p": "/game/core/main.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 4372,
+                "mdf": "2025-11-18T12:40:21.561Z",
+                "dbi": true
+              },
+              {
+                "n": "World.js",
+                "t": "file",
+                "p": "/game/core/World.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 4074,
+                "mdf": "2025-11-18T12:40:21.561Z",
+                "dbi": true
+              }
+            ]
+          },
+          {
+            "n": "debug",
+            "t": "directory",
+            "p": "/game/debug",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "components",
+                "t": "directory",
+                "p": "/game/debug/components",
+                "lvl": 3,
+                "nodes": [
+                  {
+                    "n": "DebugVector.js",
+                    "t": "file",
+                    "p": "/game/debug/components/DebugVector.js",
+                    "lvl": 4,
+                    "ext": ".js",
+                    "sz": 984,
+                    "mdf": "2025-11-18T12:40:21.561Z",
+                    "dbi": true
+                  }
+                ]
+              },
+              {
+                "n": "systems",
+                "t": "directory",
+                "p": "/game/debug/systems",
+                "lvl": 3,
+                "nodes": [
+                  {
+                    "n": "DebugControlSystem.js",
+                    "t": "file",
+                    "p": "/game/debug/systems/DebugControlSystem.js",
+                    "lvl": 4,
+                    "ext": ".js",
+                    "sz": 2226,
+                    "mdf": "2025-11-18T12:40:21.561Z",
+                    "dbi": true
+                  },
+                  {
+                    "n": "DebugSystem.js",
+                    "t": "file",
+                    "p": "/game/debug/systems/DebugSystem.js",
+                    "lvl": 4,
+                    "ext": ".js",
+                    "sz": 6508,
+                    "mdf": "2025-11-18T12:40:21.561Z",
+                    "dbi": true
+                  },
+                  {
+                    "n": "OffscreenCleanupSystem.js",
+                    "t": "file",
+                    "p": "/game/debug/systems/OffscreenCleanupSystem.js",
+                    "lvl": 4,
+                    "ext": ".js",
+                    "sz": 1167,
+                    "mdf": "2025-11-18T12:40:21.561Z",
+                    "dbi": true
+                  }
+                ]
+              },
+              {
+                "n": "DebugConfig.js",
+                "t": "file",
+                "p": "/game/debug/DebugConfig.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 942,
+                "mdf": "2025-11-18T12:40:21.561Z",
+                "dbi": true
+              }
+            ]
+          },
+          {
+            "n": "systems",
+            "t": "directory",
+            "p": "/game/systems",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "CollisionSystem.js",
+                "t": "file",
+                "p": "/game/systems/CollisionSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 1753,
+                "mdf": "2025-11-18T12:40:21.561Z",
+                "dbi": true
+              },
+              {
+                "n": "DamageSystem.js",
+                "t": "file",
+                "p": "/game/systems/DamageSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 2209,
+                "mdf": "2025-11-18T12:40:21.561Z",
+                "dbi": true
+              },
+              {
+                "n": "DeathSystem.js",
+                "t": "file",
+                "p": "/game/systems/DeathSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 707,
+                "mdf": "2025-11-18T12:40:21.561Z",
+                "dbi": true
+              },
+              {
+                "n": "InputSystem.js",
+                "t": "file",
+                "p": "/game/systems/InputSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 2503,
+                "mdf": "2025-11-18T12:40:21.561Z",
+                "dbi": true
+              },
+              {
+                "n": "LifetimeSystem.js",
+                "t": "file",
+                "p": "/game/systems/LifetimeSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 655,
+                "mdf": "2025-11-18T12:40:21.561Z",
+                "dbi": true
+              },
+              {
+                "n": "MovementSystem.js",
+                "t": "file",
+                "p": "/game/systems/MovementSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 3979,
+                "mdf": "2025-11-18T12:40:21.561Z",
+                "dbi": true
+              },
+              {
+                "n": "RenderSystem.js",
+                "t": "file",
+                "p": "/game/systems/RenderSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 2420,
+                "mdf": "2025-11-18T12:40:21.561Z",
+                "dbi": true
+              },
+              {
+                "n": "RotationSystem.js",
+                "t": "file",
+                "p": "/game/systems/RotationSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 1324,
+                "mdf": "2025-11-18T12:40:21.561Z",
+                "dbi": true
+              },
+              {
+                "n": "ShootingSystem.js",
+                "t": "file",
+                "p": "/game/systems/ShootingSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 1810,
+                "mdf": "2025-11-18T12:40:21.561Z",
+                "dbi": true
+              },
+              {
+                "n": "SpawningSystem.js",
+                "t": "file",
+                "p": "/game/systems/SpawningSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 904,
+                "mdf": "2025-11-18T12:40:21.561Z",
+                "dbi": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "n": "Project_Cognize",
+        "t": "directory",
+        "p": "/Project_Cognize",
+        "lvl": 1,
+        "nodes": [
+          {
+            "n": "scripts",
+            "t": "directory",
+            "p": "/Project_Cognize/scripts",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "generate_prompt.js",
+                "t": "file",
+                "p": "/Project_Cognize/scripts/generate_prompt.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 26113,
+                "mdf": "2025-11-18T12:40:21.557Z",
+                "dbi": true
+              },
+              {
+                "n": "indexer_v1.3.js",
+                "t": "file",
+                "p": "/Project_Cognize/scripts/indexer_v1.3.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 16724,
+                "mdf": "2025-11-18T12:40:21.561Z",
+                "dbi": true
+              },
+              {
+                "n": "query_index.js",
+                "t": "file",
+                "p": "/Project_Cognize/scripts/query_index.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 8197,
+                "mdf": "2025-11-18T12:40:21.561Z",
+                "dbi": true
+              }
+            ]
+          },
+          {
+            "n": "refactor_policy.json",
+            "t": "file",
+            "p": "/Project_Cognize/refactor_policy.json",
+            "lvl": 2,
+            "ext": ".json",
+            "sz": 1277,
+            "mdf": "2025-11-18T12:40:21.557Z"
+          }
+        ]
+      },
+      {
+        "n": "Project_scanner",
+        "t": "directory",
+        "p": "/Project_scanner",
+        "lvl": 1,
+        "nodes": [
+          {
+            "n": "project_scanner_toon_v6.js",
+            "t": "file",
+            "p": "/Project_scanner/project_scanner_toon_v6.js",
+            "lvl": 2,
+            "ext": ".js",
+            "sz": 11774,
+            "mdf": "2025-11-19T16:19:56.033Z"
+          }
+        ]
+      }
+    ]
+  }
+}

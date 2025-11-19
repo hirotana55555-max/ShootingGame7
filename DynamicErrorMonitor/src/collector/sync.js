@@ -1,6 +1,7 @@
 /**
  * Static Index Synchronization (s2 strategy)
  * ChatGPT指摘対応：stale判定 + 定期再解決
+ * 【改良】開発環境向けにリアルタイム性向上（1分/10分間隔）
  */
 
 const cron = require('node-cron');
@@ -99,15 +100,15 @@ class SyncManager {
   }
 
   _startCron() {
-    // Check for index updates every hour
-    cron.schedule('0 * * * *', () => {
-      console.log('[Sync] Hourly index check');
+    // 【改良】開発環境向け: 1分ごとにチェック (元は1時間)
+    cron.schedule('*/1 * * * *', () => {
+      console.log('[Sync] Development mode: 1-minute index check');
       this._updateIndexTime();
     });
 
-    // Re-resolve stale errors every 6 hours
-    cron.schedule('0 */6 * * *', async () => {
-      console.log('[Sync] Stale re-resolution job');
+    // 【改良】開発環境向け: 10分ごとに再解決 (元は6時間)
+    cron.schedule('*/10 * * * *', async () => {
+      console.log('[Sync] Development mode: 10-minute stale re-resolution');
       try {
         const count = await this.reResolveStale();
         console.log(`[Sync] Re-resolved ${count} errors`);
