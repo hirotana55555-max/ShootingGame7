@@ -1,0 +1,4 @@
+1|Final test error with proper message|2025-11-17T09:49:48.559Z|Error: Final test error with proper message
+    at sendTestError (test-final.html:15:19)
+2|Final test error with proper message|2025-11-17T09:50:40.903Z|Error: Final test error with proper message
+    at sendTestError (test-final.html:15:19)

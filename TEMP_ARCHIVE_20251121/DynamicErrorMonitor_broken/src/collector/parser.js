@@ -6,17 +6,17 @@
 function parseStack(stack) {
   if (!stack || typeof stack !== 'string') return [];
   
-  const lines = stack.split('\\n');
+  const lines = stack.split('\n');
   const frames = [];
   
   // Multiple regex patterns for different stack formats
   const patterns = [
     // Chrome/Node: at funcName (file:line:col)
-    /at\\s+(.+?)\\s+\\((.+?):(\\d+):(\\d+)\\)/,
+    /at\s+(.+?)\s+\((.+?):(\d+):(\d+)\)/,
     // Chrome/Node: at file:line:col
-    /at\\s+(.+?):(\\d+):(\\d+)/,
+    /at\s+(.+?):(\d+):(\d+)/,
     // Firefox: funcName@file:line:col
-    /(.+?)@(.+?):(\\d+):(\\d+)/
+    /(.+?)@(.+?):(\d+):(\d+)/
   ];
   
   for (const line of lines) {
@@ -41,16 +41,15 @@ function parseStack(stack) {
 function normalizeFilePath(path) {
   if (!path) return '';
   
-// Remove protocol
-path = path.replace(/^file:\/\/\//, '');
-path = path.replace(/^https?:\/\/[^\/]+\//, '' );
-
-// Remove query strings and fragments
-path = path.split('?')[0].split('#')[0];
-
-// Normalize separators
-path = path.replace(/\\/g, '/');
-
+  // Remove protocol
+  path = path.replace(/^file:\/\/\//, '');
+  path = path.replace(/^https?:\/\/[^\/]+\//, '');
+  
+  // Remove query strings and fragments
+  path = path.split('?')[0].split('#')[0];
+  
+  // Normalize separators
+  path = path.replace(/\\/g, '/');
   
   return path;
 }

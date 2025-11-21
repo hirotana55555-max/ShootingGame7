@@ -41,7 +41,7 @@ class ReverseLookupResolver {
   }
 
   _normalizePath(filePath) {
-    return filePath.replace(/\\/g, '/').replace(/^\/+/, '');
+    return filePath.replace(/\\/g, '/').replace(/^\//, '');
   }
 
   _tryFullPath(filePath, lineNum, callback) {
