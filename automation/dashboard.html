@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ShootingGame7 健全化ダッシュボード</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #2c3e50; }
+        .card {
+            background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 4px solid #3498db;
+        }
+        .card.pc { border-left-color: #27ae60; }
+        .card.dem { border-left-color: #e74c3c; }
+        .card.scanner { border-left-color: #9b59b6; }
+        .status { font-weight: bold; margin: 10px 0; }
+        .status.ok { color: #27ae60; }
+        .links { margin-top: 15px; }
+        .links a { color: #3498db; text-decoration: none; margin-right: 15px; }
+        .links a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 ShootingGame7 健全化ダッシュボード</h1>
+            <p>各開発補助システムの状態を確認</p>
+        </div>
+        
+        <div class="card pc">
+            <h2>🎮 Project_Cognize</h2>
+            <div class="status ok">✅ ポート 3000 で正常稼働</div>
+            <div class="links">
+                <a href="http://localhost:3000" target="_blank">ゲームアクセス</a>
+                <a href="http://localhost:3000/api/status" target="_blank">ステータス確認</a>
+            </div>
+            <p>役割: ソースコードのAST解析とDB構築</p>
+        </div>
+        
+        <div class="card dem">
+            <h2>🔍 DynamicErrorMonitor (DEM)</h2>
+            <div class="status ok">✅ ポート 3002 で正常稼働</div>
+            <div class="links">
+                <a href="http://localhost:3002/api/events" target="_blank">イベントAPI</a>
+            </div>
+            <p>役割: 動的エラー監視と記録（ポート: 3002）</p>
+        </div>
+        
+        <div class="card scanner">
+            <h2>📊 ProjectScanner</h2>
+            <div class="status ok">✅ 手動実行可能</div>
+            <div class="links">
+                <a href="#" onclick="runScanner(); return false;">スキャン実行</a>
+            </div>
+            <p>役割: LLM向けプロジェクト俯瞰情報の提供</p>
+            <p>実行方法: ボタンクリックで1回のみスキャン</p>
+        </div>
+        
+        <div class="card">
+            <h2>🎯 本来の目的</h2>
+            <p>このダッシュボードは、以下の最小限の目的のみを提供します:</p>
+            <ul>
+                <li>各システムの稼働状態の確認</li>
+                <li>直接アクセスリンクの提供</li>
+                <li>各システムの本来の役割の明示</li>
+            </ul>
+            <p>⚠️ 自動スキャンやAIワークフロー自動化機能は削除されました</p>
+        </div>
+    </div>
+
+    <script>
+        function runScanner() {
+            fetch('/run-scanner', { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        alert('✅ ProjectScannerを実行しました\n出力: Project_scanner/output/');
+                    } else {
+                        alert('❌ 実行に失敗しました');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('❌ 通信エラーが発生しました');
+                });
+        }
+    </script>
+</body>
+</html>

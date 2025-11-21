@@ -1,13 +1,11 @@
 #!/usr/bin/env node
 /**
- * Cognize Indexer v1.3 - ShootingGame7専用
- *
- * 新機能:
- * - クラスインスタンス化の追跡（new Expression）
- * - 引数情報の記録
- *
- * 実行:
- *   node Project_Cognize/scripts/indexer_v1.3.js [--dry-run] [--full-scan]
+ * Cognize Indexer v1.4 - 全自作コード対応版
+ * 
+ * 改善点:
+ * - 開発補助システム自身を含む全自作コードを対象
+ * - JSONファイルの安全な処理
+ * - 未使用ファイル検出の基盤を構築
  */
 
 const fs = require('fs');
@@ -59,6 +57,9 @@ function ensureFile(filePath) {
 }
 
 function getFileHash(filePath) {
+  if (!fs.existsSync(filePath)) {
+    throw new Error(`ファイルが存在しません: ${filePath}`);
+  }
   const data = fs.readFileSync(filePath);
   return 'sha256:' + crypto.createHash('sha256').update(data).digest('hex');
 }
@@ -75,17 +76,42 @@ function getCurrentCommit() {
 }
 
 function getChangedFiles() {
+  // ★ 全自作コード対応: 開発補助システム自身を含む
+  const SCAN_PATTERNS = [
+    // ゲーム本体
+    'game/**/*.{js,json,html,css}',
+    
+    // Project_Cognize (AI依存開発の聖域)
+    'Project_Cognize/**/*.{js,json,ts}',
+    '!Project_Cognize/workspace/outputs/**', // 生成物は除外
+    '!Project_Cognize/database/**',          // DBは除外
+    
+    // DynamicErrorMonitor (動的エラー監視)
+    'DynamicErrorMonitor/**/*.{js,json,ts}',
+    '!DynamicErrorMonitor/node_modules/**',  // 依存関係は除外
+    
+    // Project_scanner (プロジェクトスキャナー)
+    'Project_scanner/**/*.{js,json,ts}',
+    '!Project_scanner/output/**'             // 生成物は除外
+  ];
+  
+  const IGNORE_PATTERNS = [
+    '**/node_modules/**',
+    '**/dist/**',
+    '**/build/**',
+    '**/.git/**',
+    '**/.next/**',
+    '**/*.log',
+    '**/*.jsonl',
+    '**/TEMP_ARCHIVE_*/**'
+  ];
+
   if (FULL_SCAN) {
-    log('フルスキャンモード', 'verbose');
-    return glob.sync('**/*.{js,jsx,ts,tsx}', {
+    log('フルスキャンモード（全自作コード対応）', 'verbose');
+    return glob.sync(SCAN_PATTERNS, {
       cwd: PROJECT_ROOT,
-      ignore: [
-        'node_modules/**',
-        '.git/**',
-        '.next/**',
-        'Project_Cognize/**',
-        'scripts/**'
-      ]
+      ignore: IGNORE_PATTERNS,
+      nodir: true
     });
   }
 
@@ -97,8 +123,15 @@ function getChangedFiles() {
     });
     const changed = diff
       .split('\n')
-      .filter(f => f && f.match(/\.(js|jsx|ts|tsx)$/))
-      .filter(f => !f.includes('node_modules') && !f.includes('Project_Cognize'));
+      .filter(f => f && f.trim() !== '')
+      .filter(f => 
+        f.includes('game/') || 
+        f.includes('Project_Cognize/') || 
+        f.includes('DynamicErrorMonitor/') || 
+        f.includes('Project_scanner/')
+      )
+      .filter(f => !IGNORE_PATTERNS.some(pattern => 
+        f.includes(pattern.replace('**/', ''))));
 
     if (changed.length > 0) {
       log(`差分検出: ${changed.length}ファイル`, 'verbose');
@@ -108,14 +141,66 @@ function getChangedFiles() {
     log(`差分取得失敗: ${err.message}`, 'debug');
   }
 
-  log('フォールバック: 主要ディレクトリをスキャン', 'verbose');
-  return glob.sync('{app,components,game}/**/*.{js,jsx,ts,tsx}', {
-    cwd: PROJECT_ROOT
+  log('フォールバック: 全自作コードパターンでスキャン', 'verbose');
+  return glob.sync(SCAN_PATTERNS, {
+    cwd: PROJECT_ROOT,
+    ignore: IGNORE_PATTERNS,
+    nodir: true
   });
 }
 
 // ====================
-// SQLite初期化（v1.3スキーマ）
+// JSON専用処理
+// ====================
+function analyzeJSONFile(filePath) {
+  const fullPath = path.join(PROJECT_ROOT, filePath);
+  const stats = fs.statSync(fullPath);
+  const content = fs.readFileSync(fullPath, 'utf8');
+  
+  // JSON構造の簡易検証
+  let jsonMeta = {
+    type: 'json',
+    file_size: stats.size,
+    last_accessed: stats.atimeMs,
+    last_modified: stats.mtimeMs,
+    is_critical: false
+  };
+  
+  try {
+    const parsed = JSON.parse(content);
+    const keys = Object.keys(parsed);
+    jsonMeta = {
+      ...jsonMeta,
+      keys_count: keys.length,
+      has_array: Array.isArray(parsed),
+      sample_keys: keys.slice(0, 5),
+      // クリティカルファイルの判定
+      is_critical: filePath.includes('refactor_policy.json') || 
+                  filePath.includes('baseline_summary.json')
+    };
+  } catch (e) {
+    jsonMeta = {
+      ...jsonMeta,
+      type: 'invalid_json',
+      parse_error: e.message.substring(0, 100)
+    };
+  }
+
+  return {
+    language: 'json',
+    symbols: [],
+    imports: [],
+    exports: [],
+    reexports: [],
+    instances: [],
+    loc: content.split('\n').length,
+    json_meta: JSON.stringify(jsonMeta),
+    is_critical: jsonMeta.is_critical
+  };
+}
+
+// ====================
+// SQLite初期化（拡張スキーマ）
 // ====================
 function initDatabase() {
   ensureDir(path.dirname(DB_PATH));
@@ -125,6 +210,7 @@ function initDatabase() {
   db.pragma('synchronous = NORMAL');
   db.pragma('busy_timeout = 5000');
 
+  // 拡張スキーマ: JSONメタ情報とクリティカルフラグを追加
   db.exec(`
     CREATE TABLE IF NOT EXISTS file_index (
       path TEXT PRIMARY KEY,
@@ -135,7 +221,10 @@ function initDatabase() {
       exports_json TEXT,
       loc INTEGER,
       updated_at TEXT NOT NULL,
-      commit_sha TEXT
+      commit_sha TEXT,
+      json_meta TEXT,
+      is_critical BOOLEAN DEFAULT 0,
+      last_accessed REAL DEFAULT 0
     );
 
     CREATE TABLE IF NOT EXISTS file_dependencies (
@@ -145,7 +234,6 @@ function initDatabase() {
       FOREIGN KEY (source_path) REFERENCES file_index(path)
     );
 
-    -- ★ 新規テーブル: クラスインスタンス追跡
     CREATE TABLE IF NOT EXISTS class_instances (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       class_name TEXT NOT NULL,
@@ -159,23 +247,23 @@ function initDatabase() {
 
     CREATE INDEX IF NOT EXISTS idx_file_hash ON file_index(file_hash);
     CREATE INDEX IF NOT EXISTS idx_updated_at ON file_index(updated_at DESC);
-    CREATE INDEX IF NOT EXISTS idx_deps_source ON file_dependencies(source_path);
-    CREATE INDEX IF NOT EXISTS idx_deps_target ON file_dependencies(target_module);
-    
-    -- ★ 新規インデックス
-    CREATE INDEX IF NOT EXISTS idx_class_name ON class_instances(class_name);
-    CREATE INDEX IF NOT EXISTS idx_instance_file ON class_instances(file_path);
+    CREATE INDEX IF NOT EXISTS idx_critical ON file_index(is_critical);
+    CREATE INDEX IF NOT EXISTS idx_last_accessed ON file_index(last_accessed);
   `);
 
-  log('SQLiteデータベース初期化完了（v1.3スキーマ）', 'debug');
+  log('SQLiteデータベース初期化完了（全自作コード対応スキーマ）', 'debug');
   return db;
 }
 
 // ====================
-// AST解析（v1.3: NewExpression追加）
+// AST解析
 // ====================
 function analyzeFile(filePath) {
   const fullPath = path.join(PROJECT_ROOT, filePath);
+  if (!fs.existsSync(fullPath)) {
+    throw new Error(`ファイルが存在しません: ${filePath}`);
+  }
+  
   const code = fs.readFileSync(fullPath, 'utf8');
   const ext = path.extname(filePath);
   const language = ext.match(/\.tsx?$/) ? 'typescript' : 'javascript';
@@ -194,7 +282,7 @@ function analyzeFile(filePath) {
   const imports = [];
   const exports = [];
   const reexports = [];
-  const instances = [];  // ★ 新規: インスタンス情報
+  const instances = [];
 
   const lines = code.split('\n');
 
@@ -309,16 +397,13 @@ function analyzeFile(filePath) {
       }
     },
 
-    // ===== ★ 新規: NewExpression（クラスインスタンス化）の検出 =====
     NewExpression(p) {
       const node = p.node;
       let className = null;
 
-      // クラス名の抽出
       if (node.callee.type === 'Identifier') {
         className = node.callee.name;
       } else if (node.callee.type === 'MemberExpression') {
-        // new Foo.Bar() のようなケース
         if (node.callee.property && node.callee.property.name) {
           className = node.callee.property.name;
         }
@@ -326,10 +411,8 @@ function analyzeFile(filePath) {
 
       if (!className) return;
 
-      // 引数の解析
       const args = node.arguments.map(arg => {
         if (arg.type === 'ObjectExpression') {
-          // {value: 3} のようなオブジェクトリテラル
           return {
             type: 'object',
             properties: arg.properties.map(prop => {
@@ -353,7 +436,6 @@ function analyzeFile(filePath) {
         }
       });
 
-      // コードスニペットの抽出（前後の行も含める）
       const lineIndex = node.loc.start.line - 1;
       const startLine = Math.max(0, lineIndex - 1);
       const endLine = Math.min(lines.length - 1, node.loc.end.line);
@@ -375,7 +457,7 @@ function analyzeFile(filePath) {
     imports,
     exports,
     reexports,
-    instances,  // ★ 追加
+    instances,
     loc: code.split('\n').length
   };
 }
@@ -410,9 +492,10 @@ function checkRotation() {
 function main() {
   const startTime = Date.now();
 
-  log('=== Cognize Indexer v1.3 開始 ===');
+  log('=== Cognize Indexer v1.4 開始 ===');
   log(`モード: ${DRY_RUN ? 'DRY-RUN（書き込みなし）' : '本番実行'}`);
   log(`スキャン: ${FULL_SCAN ? 'フルスキャン' : '差分スキャン'}`);
+  log('スキャン範囲: 全自作コード（ゲーム＋3開発補助システム）');
 
   ensureFile(JSONL_PATH);
   checkRotation();
@@ -435,8 +518,8 @@ function main() {
   const insertFile = db.prepare(`
     INSERT OR REPLACE INTO file_index (
       path, file_hash, language, symbols_json, imports_json, exports_json,
-      loc, updated_at, commit_sha
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), ?)
+      loc, updated_at, commit_sha, json_meta, is_critical, last_accessed
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?, ?, ?)
   `);
 
   const insertDep = db.prepare(`
@@ -448,7 +531,6 @@ function main() {
     DELETE FROM file_dependencies WHERE source_path = ?
   `);
 
-  // ★ 新規: インスタンス情報の挿入
   const insertInstance = db.prepare(`
     INSERT INTO class_instances (
       class_name, file_path, line_number, code_snippet, 
@@ -460,19 +542,51 @@ function main() {
     DELETE FROM class_instances WHERE file_path = ?
   `);
 
-  // ファイル処理ループ
   for (const relPath of files) {
     try {
       const fullPath = path.join(PROJECT_ROOT, relPath);
+      if (!fs.existsSync(fullPath)) {
+        throw new Error(`ファイルが存在しません: ${relPath}`);
+      }
+      
       const fileHash = getFileHash(fullPath);
-      const analysis = analyzeFile(relPath);
+      let analysis;
+      
+      // ファイルタイプによる処理分岐
+      if (relPath.endsWith('.json')) {
+        analysis = analyzeJSONFile(relPath);
+      } else if (relPath.endsWith('.js') || relPath.endsWith('.ts')) {
+        analysis = analyzeFile(relPath);
+      } else {
+        // その他のファイルはメタ情報のみ
+        const stats = fs.statSync(fullPath);
+        analysis = {
+          language: path.extname(relPath).replace('.', '') || 'unknown',
+          symbols: [],
+          imports: [],
+          exports: [],
+          reexports: [],
+          instances: [],
+          loc: 0,
+          json_meta: JSON.stringify({
+            file_size: stats.size,
+            last_accessed: stats.atimeMs,
+            last_modified: stats.mtimeMs
+          }),
+          is_critical: false
+        };
+      }
+
+      // アクセス日時の取得
+      const stats = fs.statSync(fullPath);
+      const lastAccessed = stats.atimeMs;
 
       const record = {
         record_id: crypto.randomUUID(),
-        schema_version: '1.3',
+        schema_version: '1.4',
         provider: {
           name: 'cognize-indexer',
-          version: '1.3',
+          version: '1.4',
           mode: DRY_RUN ? 'dry-run' : 'production'
         },
         commit: commitSha,
@@ -486,23 +600,24 @@ function main() {
           imports: analysis.imports,
           exports: analysis.exports,
           reexports: analysis.reexports,
-          instances: analysis.instances,  // ★ 追加
+          instances: analysis.instances || [],
           stats: {
             loc: analysis.loc,
             symbol_count: analysis.symbols.length,
             import_count: analysis.imports.length,
             export_count: analysis.exports.length,
             reexport_count: analysis.reexports.length,
-            instance_count: analysis.instances.length  // ★ 追加
-          }
+            instance_count: (analysis.instances || []).length,
+            last_accessed: lastAccessed
+          },
+          json_meta: analysis.json_meta,
+          is_critical: analysis.is_critical
         }
       };
 
       if (!DRY_RUN) {
-        // JSONL追記
         fs.appendFileSync(JSONL_PATH, JSON.stringify(record) + '\n', 'utf8');
 
-        // SQLite更新
         insertFile.run(
           relPath,
           fileHash,
@@ -511,34 +626,38 @@ function main() {
           JSON.stringify(analysis.imports),
           JSON.stringify(analysis.exports),
           analysis.loc,
-          commitSha
+          commitSha,
+          analysis.json_meta || null,
+          analysis.is_critical ? 1 : 0,
+          lastAccessed
         );
 
-        // 依存関係更新
         deleteDeps.run(relPath);
-        for (const imp of analysis.imports) {
+        for (const imp of analysis.imports || []) {
           const importType = imp.is_reexport ? 'reexport' : 'import';
           insertDep.run(relPath, imp.module, importType);
         }
 
-        // ★ インスタンス情報の更新
-        deleteInstances.run(relPath);
-        for (const inst of analysis.instances) {
-          insertInstance.run(
-            inst.class_name,
-            relPath,
-            inst.line,
-            inst.snippet,
-            JSON.stringify(inst.arguments),
-            commitSha
-          );
+        if (analysis.instances) {
+          deleteInstances.run(relPath);
+          for (const inst of analysis.instances) {
+            insertInstance.run(
+              inst.class_name,
+              relPath,
+              inst.line,
+              inst.snippet,
+              JSON.stringify(inst.arguments),
+              commitSha
+            );
+          }
         }
       }
 
       successCount++;
-      const instCount = analysis.instances.length;
+      const typeLog = relPath.endsWith('.json') ? 'JSON' : 'JS/TS';
+      const instCount = analysis.instances ? analysis.instances.length : 0;
       const instLog = instCount > 0 ? `, ${instCount}インスタンス` : '';
-      log(`処理完了: ${relPath} (${analysis.symbols.length}シンボル${instLog})`, 'verbose');
+      log(`処理完了: ${relPath} (${typeLog}${instLog})`, 'verbose');
 
     } catch (err) {
       errorCount++;
@@ -546,19 +665,18 @@ function main() {
     }
   }
 
-  // 最適化
   if (!DRY_RUN) {
     db.exec('PRAGMA wal_checkpoint;');
     db.exec('ANALYZE;');
   }
   db.close();
 
-  // 統計出力
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
   log('=== 処理完了 ===');
   log(`成功: ${successCount}ファイル`);
   log(`失敗: ${errorCount}ファイル`);
   log(`実行時間: ${elapsed}秒`);
+  log(`対象範囲: ゲーム本体＋3開発補助システム`);
 }
 
 try {

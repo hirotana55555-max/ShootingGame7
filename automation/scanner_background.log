@@ -1,0 +1,78 @@
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+🔄 ProjectScanner 自動定期実行開始
+   間隔: 5分
+   出力: /home/hiro/development/shooting_game/ShootingGame7/automation/Project_scanner/output/
+   ログ: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log
+========================================
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:09:44] 📊 ProjectScanner 実行中...
+./auto_scanner.sh: 19 行: cd: /home/hiro/development/shooting_game/ShootingGame7/automation/Project_scanner: そのようなファイルやディレクトリはありません
+./auto_scanner.sh: 行 20: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:09:44] ❌ スキャンエラー - 次回再試行
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:09:44] ⏰ 次回実行まで待機 (5分)...
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:14:44] 📊 ProjectScanner 実行中...
+./auto_scanner.sh: 19 行: cd: /home/hiro/development/shooting_game/ShootingGame7/automation/Project_scanner: そのようなファイルやディレクトリはありません
+./auto_scanner.sh: 行 20: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:14:44] ❌ スキャンエラー - 次回再試行
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:14:44] ⏰ 次回実行まで待機 (5分)...
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:19:44] 📊 ProjectScanner 実行中...
+./auto_scanner.sh: 19 行: cd: /home/hiro/development/shooting_game/ShootingGame7/automation/Project_scanner: そのようなファイルやディレクトリはありません
+./auto_scanner.sh: 行 20: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:19:44] ❌ スキャンエラー - 次回再試行
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:19:44] ⏰ 次回実行まで待機 (5分)...
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:24:44] 📊 ProjectScanner 実行中...
+./auto_scanner.sh: 19 行: cd: /home/hiro/development/shooting_game/ShootingGame7/automation/Project_scanner: そのようなファイルやディレクトリはありません
+./auto_scanner.sh: 行 20: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:24:44] ❌ スキャンエラー - 次回再試行
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:24:44] ⏰ 次回実行まで待機 (5分)...
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:29:44] 📊 ProjectScanner 実行中...
+./auto_scanner.sh: 19 行: cd: /home/hiro/development/shooting_game/ShootingGame7/automation/Project_scanner: そのようなファイルやディレクトリはありません
+./auto_scanner.sh: 行 20: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:29:44] ❌ スキャンエラー - 次回再試行
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:29:44] ⏰ 次回実行まで待機 (5分)...
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:34:44] 📊 ProjectScanner 実行中...
+./auto_scanner.sh: 19 行: cd: /home/hiro/development/shooting_game/ShootingGame7/automation/Project_scanner: そのようなファイルやディレクトリはありません
+./auto_scanner.sh: 行 20: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:34:44] ❌ スキャンエラー - 次回再試行
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:34:44] ⏰ 次回実行まで待機 (5分)...
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:39:44] 📊 ProjectScanner 実行中...
+./auto_scanner.sh: 19 行: cd: /home/hiro/development/shooting_game/ShootingGame7/automation/Project_scanner: そのようなファイルやディレクトリはありません
+./auto_scanner.sh: 行 20: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:39:44] ❌ スキャンエラー - 次回再試行
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:39:44] ⏰ 次回実行まで待機 (5分)...
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:44:44] 📊 ProjectScanner 実行中...
+./auto_scanner.sh: 19 行: cd: /home/hiro/development/shooting_game/ShootingGame7/automation/Project_scanner: そのようなファイルやディレクトリはありません
+./auto_scanner.sh: 行 20: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:44:44] ❌ スキャンエラー - 次回再試行
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:44:44] ⏰ 次回実行まで待機 (5分)...
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:49:44] 📊 ProjectScanner 実行中...
+./auto_scanner.sh: 19 行: cd: /home/hiro/development/shooting_game/ShootingGame7/automation/Project_scanner: そのようなファイルやディレクトリはありません
+./auto_scanner.sh: 行 20: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:49:44] ❌ スキャンエラー - 次回再試行
+tee: /home/hiro/development/shooting_game/ShootingGame7/automation/automation/scanner.log: そのようなファイルやディレクトリはありません
+[2025-11-21 14:49:44] ⏰ 次回実行まで待機 (5分)...

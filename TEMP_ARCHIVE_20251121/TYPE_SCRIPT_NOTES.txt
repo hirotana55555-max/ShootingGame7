@@ -1,0 +1,1 @@
+将来のTypeScript対応のため、現状はJavaScript版を使用します

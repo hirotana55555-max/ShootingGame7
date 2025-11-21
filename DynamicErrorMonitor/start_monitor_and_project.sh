@@ -7,10 +7,8 @@ set -e
 BASE_DIR=~/development/shooting_game/ShootingGame7
 
 echo "1️⃣ Collector 環境変数読み込み"
-set -a
-source $BASE_DIR/DynamicErrorMonitor/.env
-set +a
 
+export DISABLE_SYNC="false"
 echo "2️⃣ Collector ディレクトリ移動"
 cd $BASE_DIR/DynamicErrorMonitor
 

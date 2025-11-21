@@ -52,3 +52,17 @@ app.post('/api/events', (req, res) => {
 app.listen(PORT, () => {
   console.log(`[Collector] Running on port ${PORT}`);
 });
+// GET /api/events - 保存されたイベントを取得
+app.get('/api/events', (req, res) => {
+  db.all('SELECT id, timestamp, message as name, payload FROM errors ORDER BY timestamp DESC LIMIT 100', (err, rows) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: err.message });
+    }
+    const result = rows.map(row => ({
+      ...row,
+      payload: row.payload ? JSON.parse(row.payload) : null
+    }));
+    res.json(result);
+  });
+});
