@@ -6,13 +6,13 @@
 (function() {
   'use strict';
   
-  const COLLECTOR_URL = 'http://localhost:3001/api/collect';
+  const COLLECTOR_URL = '/api/collect';
   const MAX_STACK_LENGTH = 5000; // Prevent huge payloads
   
   function send(payload) {
     // Truncate stack if too long
     if (payload.stack && payload.stack.length > MAX_STACK_LENGTH) {
-      payload.stack = payload.stack.substring(0, MAX_STACK_LENGTH) + '\n... [truncated]';
+      payload.stack = payload.stack.substring(0, MAX_STACK_LENGTH) + '\\n... [truncated]';
     }
     
     const body = JSON.stringify(payload);
@@ -64,6 +64,19 @@
     
     captureError(message, stack, 'unhandledrejection');
   });
+  
+  // Network errors (optional enhancement)
+  const originalFetch = window.fetch;
+  window.fetch = function(...args) {
+    return originalFetch.apply(this, args).catch(err => {
+      captureError(
+        `Fetch failed: ${args[0]}`,
+        err.stack,
+        'fetch.error'
+      );
+      throw err; // Re-throw to maintain original behavior
+    });
+  };
   
   console.log('[ErrorSnippet] Initialized');
 })();

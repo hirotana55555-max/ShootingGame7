@@ -21,7 +21,6 @@ Browser → error-snippet.js → Collector → errors.db (SOT)
 Glitchtip (View)
 ↓
 LLM Query API
-text
 
 
 ## クイックスタート
@@ -52,8 +51,6 @@ npm run setup:glitchtip
 npm start
 
 詳細は docs/SETUP.md を参照。
-ディレクトリ構造
-text
 
 DynamicErrorMonitor/
 ├── src/           # Collector, LLM API, 逆引きロジック
@@ -66,37 +63,22 @@ API
 Collector
 
     POST /api/collect - エラー受信
-
     GET /api/errors/recent - 最近のエラー取得
 
 LLM Query API
 
     GET /api/llm/summary - エラーサマリー
-
     GET /api/llm/context/:id - 個別エラーコンテキスト
-
     POST /api/llm/query - 自然言語クエリ
 
 詳細は docs/API.md を参照。
-テスト
-bash
 
+テスト
 npm test
 
 詳細は docs/TESTING.md を参照。
 ライセンス
-
 MIT
+
 貢献
-
 Claude + ChatGPT による相互査読設計
-EOF
-text
-
-
-## 確認
-
-すべてのファイルを作成したら、以下のコマンドでファイルの存在を確認してください。
-
-```bash
-find DynamicErrorMonitor -type f -name "*.js" -o -name "*.json" -o -name "*.sql" -o -name "*.yml" -o -name "*.md" | sort
