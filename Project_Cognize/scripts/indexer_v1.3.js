@@ -6,6 +6,7 @@
  * - 開発補助システム自身を含む全自作コードを対象
  * - JSONファイルの安全な処理
  * - 未使用ファイル検出の基盤を構築
+ * - ★ --full-scan時にDBを自動削除する機能を追加
  */
 
 const fs = require('fs');
@@ -496,6 +497,22 @@ function main() {
   log(`モード: ${DRY_RUN ? 'DRY-RUN（書き込みなし）' : '本番実行'}`);
   log(`スキャン: ${FULL_SCAN ? 'フルスキャン' : '差分スキャン'}`);
   log('スキャン範囲: 全自作コード（ゲーム＋3開発補助システム）');
+
+  // ★★★★★ 改変箇所 ★★★★★
+  // --full-scanの場合、書き込み前にDBを削除してクリーンな状態にする
+  if (FULL_SCAN && !DRY_RUN) {
+    if (fs.existsSync(DB_PATH)) {
+      try {
+        fs.unlinkSync(DB_PATH);
+        log('⚠ フルスキャンモードのため、既存のデータベースを削除しました。', 'warn');
+      } catch (err) {
+        log(`データベースの削除に失敗しました: ${err.message}`, 'error');
+        // エラーが発生した場合は、続行せずに終了する
+        process.exit(1);
+      }
+    }
+  }
+  // ★★★★★ 改変ここまで ★★★★★
 
   ensureFile(JSONL_PATH);
   checkRotation();
