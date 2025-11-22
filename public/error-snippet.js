@@ -1,82 +1,73 @@
-/**
- * Browser Error Capture Snippet
- * Production-ready minimal implementation
- */
-
 (function() {
-  'use strict';
-  
-  const COLLECTOR_URL = '/api/collect';
-  const MAX_STACK_LENGTH = 5000; // Prevent huge payloads
-  
-  function send(payload) {
-    // Truncate stack if too long
-    if (payload.stack && payload.stack.length > MAX_STACK_LENGTH) {
-      payload.stack = payload.stack.substring(0, MAX_STACK_LENGTH) + '\\n... [truncated]';
-    }
-    
-    const body = JSON.stringify(payload);
-    
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon(COLLECTOR_URL, body);
-    } else {
-      fetch(COLLECTOR_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: body,
-        keepalive: true
-      }).catch(e => {
-        console.error('[ErrorSnippet] Failed to send:', e);
-      });
-    }
+  console.log('[ErrorSnippet] 初期化を開始します。');
+
+  if (window.dem) {
+    console.log('[ErrorSnippet] すでに初期化済みです。');
+    return;
   }
-  
-  function captureError(message, stack, source) {
-    send({
-      message: message,
-      stack: stack,
-      browser: {
-        ua: navigator.userAgent,
-        url: window.location.href,
-        viewport: {
-          width: window.innerWidth,
-          height: window.innerHeight
+
+  window.dem = {
+    collect: function(error, context) {
+      console.log('[DEM/collect] エラー収集プロセスを開始します。');
+      console.log('[DEM/collect] 受信したエラー:', error);
+      console.log('[DEM/collect] 受信したコンテキスト:', context);
+
+      try {
+        const dsn = "{{GLITCHTIP_DSN}}";
+        console.log('[DEM/collect] DSNを読み込みました:', dsn);
+
+        if (!dsn || dsn.startsWith("{{")) {
+          console.error('[DEM/collect] 致命的エラー: DSNが設定されていません。送信を中止します。');
+          return;
         }
-      },
-      timestamp: new Date().toISOString(),
-      source: source
-    });
-  }
-  
-  // Global error handler
-  window.addEventListener('error', function(ev) {
-    const message = ev.message || 'Unknown error';
-    const stack = ev.error ? ev.error.stack : null;
-    
-    captureError(message, stack, 'window.error');
-  }, true);
-  
-  // Unhandled promise rejection
-  window.addEventListener('unhandledrejection', function(ev) {
-    const reason = ev.reason;
-    const message = reason?.message || String(reason) || 'Unhandled Promise Rejection';
-    const stack = reason?.stack || null;
-    
-    captureError(message, stack, 'unhandledrejection');
-  });
-  
-  // Network errors (optional enhancement)
-  const originalFetch = window.fetch;
-  window.fetch = function(...args) {
-    return originalFetch.apply(this, args).catch(err => {
-      captureError(
-        `Fetch failed: ${args[0]}`,
-        err.stack,
-        'fetch.error'
-      );
-      throw err; // Re-throw to maintain original behavior
-    });
+
+        const payload = {
+          type: error.name || 'Error',
+          value: error.message || 'No message',
+          stacktrace: {
+            frames: [], // 本来はここでスタックトレースを解析する
+          },
+          extra: context || {},
+        };
+        console.log('[DEM/collect] 送信ペイロードを作成しました:', payload);
+
+        console.log('[DEM/collect] fetchを使用してGlitchTipに送信を試みます...');
+        fetch(dsn, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+          mode: 'cors',
+        })
+        .then(response => {
+          console.log('[DEM/collect] fetchからの応答を受信しました:', response);
+          if (response.ok) {
+            console.log('[DEM/collect] 成功: GlitchTipへの送信に成功しました。ステータス:', response.status);
+          } else {
+            console.error('[DEM/collect] 失敗: GlitchTipへの送信に失敗しました。ステータス:', response.status);
+            response.text().then(text => console.error('[DEM/collect] サーバーからの応答:', text));
+          }
+        })
+        .catch(err => {
+          console.error('[DEM/collect] 致命的エラー: fetch自体が失敗しました。ネットワークエラーの可能性があります。', err);
+        });
+
+      } catch (e) {
+        console.error('[DEM/collect] 致命的エラー: collect関数内部で予期せぬエラーが発生しました。', e);
+      }
+    }
   };
-  
-  console.log('[ErrorSnippet] Initialized');
+
+  window.addEventListener('error', function(event) {
+    console.log('[ErrorSnippet] window.errorイベントを捕捉しました。');
+    window.dem.collect(event.error, { source: 'window.error' });
+  });
+
+  window.addEventListener('unhandledrejection', function(event) {
+    console.log('[ErrorSnippet] unhandledrejectionイベントを捕捉しました。');
+    window.dem.collect(event.reason, { source: 'unhandledrejection' });
+  });
+
+  console.log('[ErrorSnippet] イベントリスナーの登録が完了しました。');
 })();
