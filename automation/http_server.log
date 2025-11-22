@@ -1,7 +1,0 @@
-127.0.0.1 - - [21/Nov/2025 14:24:52] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [21/Nov/2025 14:24:52] code 404, message File not found
-127.0.0.1 - - [21/Nov/2025 14:24:52] "GET /favicon.ico HTTP/1.1" 404 -
-127.0.0.1 - - [21/Nov/2025 14:25:57] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [21/Nov/2025 14:28:30] "GET /ai_workflow.sh HTTP/1.1" 200 -
-127.0.0.1 - - [21/Nov/2025 14:28:37] "GET /auto_scanner.sh HTTP/1.1" 200 -
-127.0.0.1 - - [21/Nov/2025 14:28:43] "GET /dashboard.html HTTP/1.1" 200 -
