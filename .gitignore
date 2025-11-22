@@ -60,3 +60,6 @@ DynamicErrorMonitor/.env
 
 # Ignore dependency folders.
 DynamicErrorMonitor/node_modules/
+
+# Sentry Config File
+.env.sentry-build-plugin
