@@ -8,19 +8,19 @@
   },
   "phases": [
     {
-      "phase_id": 5,
-      "name": "【聖遺物の、活用研究】",
+      "phase_id": 6,
+      "name": "【現存資産の、活用研究】",
       "priority": 1,
       "status": "PENDING_ANALYSIS",
-      "objective": "relic/20251112_typescript-migration の内容を調査し、将来のTypeScript化への知見を得る。",
+      "objective": "現在のmainブランチに存在する各種ツール（Project_Cognize, DynamicErrorMonitor）を正式に整備し、開発ワークフローに組み込む。",
       "action_plan": [
         {
-          "step": 5.1,
-          "description": "relicブランチをチェックアウトし、ファイル構造とコードの変更点を分析する。"
+          "step": 6.1,
+          "description": "各ツールのReadmeを最新化し、役割と使い方を明確にする。"
         },
         {
-          "step": 5.2,
-          "description": "TypeScript化の、メリット、デメリット、そして、現在の、mainブランチに、適用する際の、課題を、まとめる。"
+          "step": 6.2,
+          "description": "ツール間の連携（例：DEMがCognizeのDBを参照する等）の可能性を検討し、具体的な改修計画を立てる。"
         }
       ]
     },
@@ -30,10 +30,6 @@
       "priority": 2,
       "status": "PENDING_REFACTOR",
       "objective": "GitHub Actionsの、dry-run時に、発生する、エラーの、根本原因を、解決し、CI/CDを、完全に、安定させる。",
-      "problem_analysis": {
-        "symptom": "GitHub Actionsの、手動実行（dry-run）時に、`query_index.js`が、`TypeError: Cannot read properties of null`で、失敗する。",
-        "root_cause": "リモート環境では、`dry-run`時に、DBファイルが、生成されないため、統計情報表示スクリプトが、空の、DBを、読んで、エラーとなる。"
-      },
       "action_plan": [
         {
           "step": 4.1,
