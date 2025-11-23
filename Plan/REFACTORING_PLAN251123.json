@@ -64,3 +64,26 @@
     }
   ]
 }
+// phases配列の、一番最後に、この、ブロックを、追加
+    {
+      "phase_id": 4,
+      "name": "【防衛システムの、課題記録】GitHub Actionsの、安定化",
+      "status": "PENDING_REFACTOR",
+      "objective": "GitHub Actionsの、`dry-run`時に、発生する、エラーの、根本原因を、解決し、CI/CDを、完全に、安定させる。",
+      "problem_analysis": {
+        "symptom": "GitHub Actionsの、手動実行（dry-run）時に、`query_index.js`が、`TypeError: Cannot read properties of null`で、失敗する。",
+        "root_cause": "リモート環境では、`dry-run`時に、DBファイルが、生成されないため、統計情報表示スクリプトが、空の、DBを、読んで、エラーとなる。",
+        "local_vs_remote": "ローカルでは、既存の、DBファイルが、存在するため、この、問題は、発生しない。この、環境差が、問題の、発見を、遅らせた。"
+      },
+      "action_plan": [
+        {
+          "step": 4.1,
+          "description": "【要リファクタリング】`indexer.js`を、改造し、`--dry-run`時には、インメモリDBを、使用し、統計情報も、自己完結で、表示するように、変更する。",
+          "note": "この、改修は、`indexer.js`が、複雑化しているため、リスクが、高い。事前に、`indexer.js`自体の、リファクタリング（機能分割など）を、検討することが、望ましい。"
+        },
+        {
+          "step": 4.2,
+          "description": "【要リファクタリング】`cognize_indexer.yml`を、改造し、`dry-run`時には、`query_index.js`を、呼び出す、ステップを、実行しないように、変更する。"
+        }
+      ]
+    }
