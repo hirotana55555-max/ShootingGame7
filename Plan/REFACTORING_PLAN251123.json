@@ -1,0 +1,77 @@
+{
+  "plan_id": "PROJECT_CLEANUP_20251123_PHASE_1",
+  "plan_name": "プロジェクトの大掃除作戦（改訂版）",
+  "objective": "不要なファイルを安全に整理・保管し、プロジェクトの健全性を取り戻す。同時に、Project_Cognizeのスキャン精度を向上させる。",
+  "general_policies": {
+    "disposal_method": "即時削除ではなく、一時保管ディレクトリへの隔離を原則とする。",
+    "archive_directory": "TEMP_ARCHIVE_20251123",
+    "progression": "各フェーズ完了後に、次のフェーズの計画を再検討・確定する。"
+  },
+  "phases": [
+    {
+      "phase_id": 1,
+      "name": "【考古学】遺物の、発掘と、鑑定",
+      "status": "PENDING_EXECUTION",
+      "objective": "グループ2（automation/）とグループ3（ルート直下の残骸）のスクリプト群の価値を鑑定する。",
+      "action_plan": [
+        {
+          "step": 1.1,
+          "description": "automation/ ディレクトリ内のスクリプトファイルの中身を`cat`で表示し、内容を精査する。",
+          "command_template": "cat automation/ai_workflow.sh"
+        },
+        {
+          "step": 1.2,
+          "description": "ルートディレクトリ直下のスクリプトファイル（.sh, .html, .log）の中身を`cat`で表示し、内容を精査する。",
+          "command_template": "cat REALITY_CHECK.sh"
+        },
+        {
+          "step": 1.3,
+          "description": "ひろし様の鑑定に基づき、各ファイルを『要再利用』『要保管（隔離）』『即時削除』に分類する。"
+        }
+      ]
+    },
+    {
+      "phase_id": 2,
+      "name": "【文献学】失われた、記憶の、解読",
+      "status": "WAITING",
+      "objective": "グループ4のtemplates/ディレクトリの謎を解き明かす。",
+      "action_plan": [
+        {
+          "step": 2.1,
+          "description": "templates/ ディレクトリ内の2つの.txtファイルの中身を`cat`で表示し、内容を精査する。",
+          "command_template": "cat Project_Cognize/templates/system_prompt_template.txt"
+        },
+        {
+          "step": 2.2,
+          "description": "Project_Cognizeのスクリプト群（特に `generate_prompt.ts`）に対し、テンプレートファイル名で`grep`を実行し、参照箇所を特定する。",
+          "command_template": "grep -r 'system_prompt_template.txt' Project_Cognize/scripts/"
+        },
+        {
+          "step": 2.3,
+          "description": "調査結果に基づき、テンプレートの役割と要不要を判断する。"
+        }
+      ]
+    },
+    {
+      "phase_id": 3,
+      "name": "【聖域の、拡張】indexerの、自己改革",
+      "status": "ON_HOLD_FOR_REVIEW",
+      "objective": "グループ5の問題を解決し、indexerがプロジェクトの真の姿を認識できるようにする。",
+      "note": "フェーズ2完了後に再検討"
+    },
+    {
+      "phase_id": 4,
+      "name": "【正規化】愚行の、是正",
+      "status": "ON_HOLD_FOR_REVIEW",
+      "objective": "ファイル名からバージョン表記を排除し、命名規則を統一する。",
+      "note": "フェーズ2完了後に再検討"
+    },
+    {
+      "phase_id": 5,
+      "name": "【埋葬】歴史への、敬意と、未来への、船出",
+      "status": "ON_HOLD_FOR_REVIEW",
+      "objective": "不要と判断された全ファイルをTEMP_ARCHIVE_20251123へ隔離し、コミットする。",
+      "note": "フェーズ2完了後に再検討"
+    }
+  ]
+}

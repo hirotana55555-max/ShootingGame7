@@ -1,12 +1,12 @@
 {
   "TOON_HEADER": {
     "version": "1.1-integrated-fixed",
-    "generated_at": "2025-11-21T14:06:32.954Z",
+    "generated_at": "2025-11-23T03:07:18.047Z",
     "source": "Project_Cognize (Internal)",
     "db_source": "static_index.db"
   },
   "statistics": {
-    "totalFiles": 42,
+    "totalFiles": 44,
     "generated_by": "generate_toon.js"
   },
   "structure": {
@@ -22,41 +22,13 @@
         "lvl": 1,
         "nodes": [
           {
-            "n": "baseline_summary.json",
-            "t": "file",
-            "p": "/DynamicErrorMonitor/baseline_summary.json",
-            "lvl": 2,
-            "ext": ".json",
-            "sz": 1,
-            "mdf": "2025-11-21 14:05:35",
-            "dbi": true
-          },
-          {
-            "n": "client",
-            "t": "directory",
-            "p": "/DynamicErrorMonitor/client",
-            "lvl": 2,
-            "nodes": [
-              {
-                "n": "error-snippet.js",
-                "t": "file",
-                "p": "/DynamicErrorMonitor/client/error-snippet.js",
-                "lvl": 3,
-                "ext": ".js",
-                "sz": 69,
-                "mdf": "2025-11-21 14:05:35",
-                "dbi": false
-              }
-            ]
-          },
-          {
             "n": "package-lock.json",
             "t": "file",
             "p": "/DynamicErrorMonitor/package-lock.json",
             "lvl": 2,
             "ext": ".json",
-            "sz": 6953,
-            "mdf": "2025-11-21 14:05:35",
+            "sz": 6930,
+            "mdf": "2025-11-23 03:07:17",
             "dbi": false
           },
           {
@@ -65,8 +37,8 @@
             "p": "/DynamicErrorMonitor/package.json",
             "lvl": 2,
             "ext": ".json",
-            "sz": 33,
-            "mdf": "2025-11-21 14:05:35",
+            "sz": 32,
+            "mdf": "2025-11-23 03:07:17",
             "dbi": false
           },
           {
@@ -87,18 +59,8 @@
                     "p": "/DynamicErrorMonitor/src/collector/index.js",
                     "lvl": 4,
                     "ext": ".js",
-                    "sz": 69,
-                    "mdf": "2025-11-21 14:05:35",
-                    "dbi": false
-                  },
-                  {
-                    "n": "parser.js",
-                    "t": "file",
-                    "p": "/DynamicErrorMonitor/src/collector/parser.js",
-                    "lvl": 4,
-                    "ext": ".js",
-                    "sz": 57,
-                    "mdf": "2025-11-21 14:05:35",
+                    "sz": 166,
+                    "mdf": "2025-11-23 03:07:17",
                     "dbi": false
                   },
                   {
@@ -107,8 +69,8 @@
                     "p": "/DynamicErrorMonitor/src/collector/sync.js",
                     "lvl": 4,
                     "ext": ".js",
-                    "sz": 121,
-                    "mdf": "2025-11-21 14:05:35",
+                    "sz": 122,
+                    "mdf": "2025-11-23 03:07:17",
                     "dbi": false
                   }
                 ]
@@ -125,26 +87,8 @@
                     "p": "/DynamicErrorMonitor/src/llm-api/index.js",
                     "lvl": 4,
                     "ext": ".js",
-                    "sz": 186,
-                    "mdf": "2025-11-21 14:05:35",
-                    "dbi": false
-                  }
-                ]
-              },
-              {
-                "n": "reverse-lookup",
-                "t": "directory",
-                "p": "/DynamicErrorMonitor/src/reverse-lookup",
-                "lvl": 3,
-                "nodes": [
-                  {
-                    "n": "resolver.js",
-                    "t": "file",
-                    "p": "/DynamicErrorMonitor/src/reverse-lookup/resolver.js",
-                    "lvl": 4,
-                    "ext": ".js",
-                    "sz": 113,
-                    "mdf": "2025-11-21 14:05:35",
+                    "sz": 187,
+                    "mdf": "2025-11-23 03:07:17",
                     "dbi": false
                   }
                 ]
@@ -172,7 +116,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 83,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               }
             ]
@@ -184,13 +128,33 @@
             "lvl": 2,
             "nodes": [
               {
+                "n": "config.js",
+                "t": "file",
+                "p": "/Project_Cognize/lib/config.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 23,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
                 "n": "config.ts",
                 "t": "file",
                 "p": "/Project_Cognize/lib/config.ts",
                 "lvl": 3,
                 "ext": ".ts",
                 "sz": 27,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "contracts.js",
+                "t": "file",
+                "p": "/Project_Cognize/lib/contracts.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 4,
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -200,7 +164,17 @@
                 "lvl": 3,
                 "ext": ".ts",
                 "sz": 49,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "information_provider.js",
+                "t": "file",
+                "p": "/Project_Cognize/lib/information_provider.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 264,
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -210,7 +184,17 @@
                 "lvl": 3,
                 "ext": ".ts",
                 "sz": 208,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "main.js",
+                "t": "file",
+                "p": "/Project_Cognize/lib/main.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 67,
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -220,7 +204,17 @@
                 "lvl": 3,
                 "ext": ".ts",
                 "sz": 25,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "prompt_strategist.js",
+                "t": "file",
+                "p": "/Project_Cognize/lib/prompt_strategist.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 84,
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -230,7 +224,17 @@
                 "lvl": 3,
                 "ext": ".ts",
                 "sz": 77,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "system_interface.js",
+                "t": "file",
+                "p": "/Project_Cognize/lib/system_interface.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 45,
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -240,7 +244,7 @@
                 "lvl": 3,
                 "ext": ".ts",
                 "sz": 33,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               }
             ]
@@ -264,7 +268,7 @@
                     "lvl": 4,
                     "ext": ".js",
                     "sz": 10,
-                    "mdf": "2025-11-21 14:05:35",
+                    "mdf": "2025-11-23 03:07:17",
                     "dbi": false
                   }
                 ]
@@ -278,7 +282,7 @@
             "lvl": 2,
             "ext": ".json",
             "sz": 57,
-            "mdf": "2025-11-21 14:05:35",
+            "mdf": "2025-11-23 03:07:17",
             "dbi": true
           },
           {
@@ -294,7 +298,7 @@
                 "lvl": 3,
                 "ext": ".ts",
                 "sz": 595,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -304,7 +308,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 113,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -313,8 +317,8 @@
                 "p": "/Project_Cognize/scripts/indexer_v1.3.js",
                 "lvl": 3,
                 "ext": ".js",
-                "sz": 688,
-                "mdf": "2025-11-21 14:05:35",
+                "sz": 706,
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -324,18 +328,34 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 277,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
-              },
+              }
+            ]
+          },
+          {
+            "n": "workspace",
+            "t": "directory",
+            "p": "/Project_Cognize/workspace",
+            "lvl": 2,
+            "nodes": [
               {
-                "n": "query_index.ts",
-                "t": "file",
-                "p": "/Project_Cognize/scripts/query_index.ts",
+                "n": "outputs",
+                "t": "directory",
+                "p": "/Project_Cognize/workspace/outputs",
                 "lvl": 3,
-                "ext": ".ts",
-                "sz": 277,
-                "mdf": "2025-11-21 12:59:57",
-                "dbi": false
+                "nodes": [
+                  {
+                    "n": "project_structure_toon.json",
+                    "t": "file",
+                    "p": "/Project_Cognize/workspace/outputs/project_structure_toon.json",
+                    "lvl": 4,
+                    "ext": ".json",
+                    "sz": 592,
+                    "mdf": "2025-11-23 03:07:17",
+                    "dbi": false
+                  }
+                ]
               }
             ]
           }
@@ -360,7 +380,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 14,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               }
             ]
@@ -378,7 +398,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 129,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -388,7 +408,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 56,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -398,7 +418,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 124,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               }
             ]
@@ -416,7 +436,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 30,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -432,7 +452,7 @@
                     "lvl": 4,
                     "ext": ".js",
                     "sz": 23,
-                    "mdf": "2025-11-21 14:05:35",
+                    "mdf": "2025-11-23 03:07:17",
                     "dbi": false
                   }
                 ]
@@ -450,7 +470,7 @@
                     "lvl": 4,
                     "ext": ".js",
                     "sz": 53,
-                    "mdf": "2025-11-21 14:05:35",
+                    "mdf": "2025-11-23 03:07:17",
                     "dbi": false
                   },
                   {
@@ -460,7 +480,7 @@
                     "lvl": 4,
                     "ext": ".js",
                     "sz": 167,
-                    "mdf": "2025-11-21 14:05:35",
+                    "mdf": "2025-11-23 03:07:17",
                     "dbi": false
                   },
                   {
@@ -470,7 +490,7 @@
                     "lvl": 4,
                     "ext": ".js",
                     "sz": 35,
-                    "mdf": "2025-11-21 14:05:35",
+                    "mdf": "2025-11-23 03:07:17",
                     "dbi": false
                   }
                 ]
@@ -490,7 +510,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 52,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -500,7 +520,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 59,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -510,7 +530,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 24,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -520,7 +540,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 71,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -530,7 +550,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 27,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -540,7 +560,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 95,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -550,7 +570,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 70,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -560,7 +580,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 40,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -570,7 +590,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 53,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               },
               {
@@ -580,7 +600,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 33,
-                "mdf": "2025-11-21 14:05:35",
+                "mdf": "2025-11-23 03:07:17",
                 "dbi": false
               }
             ]
