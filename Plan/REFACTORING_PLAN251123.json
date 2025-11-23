@@ -10,7 +10,7 @@
     {
       "phase_id": 1,
       "name": "【聖遺物の、封印】`develop`ブランチの、リネーム",
-      "status": "PENDING_EXECUTION",
+      "status": "COMPLETED",
       "objective": "`develop`ブランチを、歴史的遺産として、安全に、別室保管する。",
       "action_plan": [
         {
@@ -33,7 +33,7 @@
     {
       "phase_id": 2,
       "name": "【正史の、編纂】`main`ブランチの、現代化",
-      "status": "WAITING",
+      "status": "COMPLETED",
       "objective": "現在の、全ての、成果を、`main`ブランチに、安全に、統合する。",
       "action_plan": [
         {
@@ -49,7 +49,7 @@
     {
       "phase_id": 3,
       "name": "【歴史書の、整理】不要ブランチの、クリーンアップ",
-      "status": "WAITING",
+      "status": "COMPLETED",
       "objective": "役目を終えたブランチを整理し、ブランチリストを最新の状態に保つ。",
       "action_plan": [
         {
