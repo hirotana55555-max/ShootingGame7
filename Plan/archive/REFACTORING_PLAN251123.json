@@ -87,3 +87,12 @@
         }
       ]
     }
+,
+{
+  "phase_id": 5,
+  "name": "【聖遺物の、鑑定調査】",
+  "priority": 99,
+  "status": "FROZEN",
+  "objective": "旧develop（relic/20251112_typescript-migration）の歴史的価値を判断する。",
+  "summary": "【最終結論：2025/11/24】現mainブランチに、TypeScript化の成果が含まれていることを確認。relicブランチの価値は限定的であり、調査は困難と判断。コストに見合わないため、これ以上の調査を『凍結』する。"
+}
