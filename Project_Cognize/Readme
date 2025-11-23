@@ -232,3 +232,19 @@
     }
   ]
 }
+    {
+      "id": 5,
+      "summary": "自動化とCI/CD (GitHub Actions)",
+      "details": "このプロジェクトは、`.github/workflows/cognize_indexer.yml` に定義されたGitHub Actionsによって、高度に自動化されています。このワークフローは、`main`ブランチへの `push` または `pull_request` をトリガーとして、以下の処理を自動実行します。",
+      "sub_details": [
+        {
+          "trigger": "Pull Request時",
+          "action": "変更内容をシミュレーション（`indexer`を`--dry-run`で実行）し、プロジェクト構造への影響（統計情報）をPRコメントに投稿します。これにより、マージ前に変更の妥当性を客観的に評価できます。"
+        },
+        {
+          "trigger": "Push時 (mainブランチ)",
+          "action": "プロジェクト全体をスキャンし、`static_index.db`を最新の状態に更新します。更新があった場合、このワークフロー自身がコミットとプッシュを行い、データベースを自己修正します。"
+        }
+      ],
+      "llm_instruction": "【最重要】`Project_Cognize`、特に`indexer`スクリプトや、このGitHub Actions (`cognize_indexer.yml`) に変更を加える際は、この自動化ワークフロー全体が破綻しないよう、細心の注意を払ってください。`indexer`のファイル名やパス、コマンドオプションの変更は、必ず`.github/workflows/cognize_indexer.yml`の修正と同時に行う必要があります。"
+    }
