@@ -1,3 +1,5 @@
+// game/systems/MovementSystem.js
+
 import { Position, Velocity, Controllable, InputState } from '../components/index.js';
 
 function lerp(start, end, amount) {
@@ -49,11 +51,11 @@ export class MovementSystem {
             }
 
             // 2. 次に、マウス/タッチ入力が存在する場合、その情報で目標速度を「上書き」する
-            if (inputState.target.x !== null) {
+            if (inputState.pointerPosition.x !== null) {
                 let targetVelX = 0;
                 let targetVelY = 0;
-                const dx = inputState.target.x - pos.x;
-                const dy = inputState.target.y - pos.y;
+                const dx = inputState.pointerPosition.x - pos.x;
+                const dy = inputState.pointerPosition.y - pos.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
                 // ターゲット地点から一定距離以上離れている場合のみ、移動する

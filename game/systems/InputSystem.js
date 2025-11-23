@@ -1,4 +1,6 @@
-import { InputState } from '../components/InputState.js';
+// game/systems/InputSystem.js
+
+import { InputState } from '../components/index.js'; // 注: このインポートパスは後で修正されます
 
 export class InputSystem {
   constructor(world) {
@@ -13,28 +15,28 @@ export class InputSystem {
     const canvas = this.world.canvas;
     if (!canvas) return;
 
-    // ★★★ ここが唯一かつ最後の修正点！ ★★★
-    // イベントリスナーの登録対象を 'document' から 'canvas' に変更する。
-    // これにより、canvasにフォーカスが当たっている時のキー入力を確実に捕捉する。
     canvas.addEventListener('keydown', (e) => {
-      e.preventDefault(); // 矢印キーによる画面スクロールなどを防ぐ
+      e.preventDefault();
       this.inputState.keys.add(e.key.toLowerCase());
     });
     canvas.addEventListener('keyup', (e) => {
       e.preventDefault();
       this.inputState.keys.delete(e.key.toLowerCase());
     });
-    // ★★★ 修正ここまで ★★★
 
-    // --- マウス/タッチ座標 (変更なし) ---
+    // --- マウス/タッチ座標 ---
     const updateTarget = (clientX, clientY) => {
       const rect = canvas.getBoundingClientRect();
-      this.inputState.target.x = clientX - rect.left;
-      this.inputState.target.y = clientY - rect.top;
+      // ▼▼▼ ここを変更 ▼▼▼
+      this.inputState.pointerPosition.x = clientX - rect.left;
+      this.inputState.pointerPosition.y = clientY - rect.top;
+      // ▲▲▲ ここまで ▲▲▲
     };
     const clearTarget = () => {
-      this.inputState.target.x = null;
-      this.inputState.target.y = null;
+      // ▼▼▼ ここを変更 ▼▼▼
+      this.inputState.pointerPosition.x = null;
+      this.inputState.pointerPosition.y = null;
+      // ▲▲▲ ここまで ▲▲▲
     };
     canvas.addEventListener('mousemove', (e) => updateTarget(e.clientX, e.clientY));
     canvas.addEventListener('mouseleave', clearTarget);
@@ -44,13 +46,17 @@ export class InputSystem {
     }, { passive: false });
     canvas.addEventListener('touchend', clearTarget);
 
-    // --- マウスクリック/タッチ (変更なし) ---
+    // --- マウスクリック/タッチ ---
     const handleMouseDown = (e) => {
       e.preventDefault();
-      this.inputState.isMouseDown = true;
+      // ▼▼▼ ここを変更 ▼▼▼
+      this.inputState.isPointerDown = true;
+      // ▲▲▲ ここまで ▲▲▲
     };
     const handleMouseUp = () => {
-      this.inputState.isMouseDown = false;
+      // ▼▼▼ ここを変更 ▼▼▼
+      this.inputState.isPointerDown = false;
+      // ▲▲▲ ここまで ▲▲▲
     };
     canvas.addEventListener('mousedown', handleMouseDown);
     canvas.addEventListener('mouseup', handleMouseUp);

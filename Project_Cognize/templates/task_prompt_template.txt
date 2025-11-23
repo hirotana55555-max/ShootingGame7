@@ -1,0 +1,39 @@
+[TASK]
+Analyze the target file and output a JSON object with this exact structure:
+
+\`\`\`json
+{
+  "ai_model": "この提案を生成したAIモデル名 (例: Qwen, DeepSeek)",
+  "file": "ファイルパス",
+  "analysis": {
+    "current_structure": "現在の構造の簡潔な説明（50文字以内）",
+    "complexity": "low/medium/high"
+  },
+  "suggested_changes": [
+    {
+      "type": "ALLOWED値のみ (例: extract_function, rename_variable)",
+      "target": "変更対象の具体的な箇所（行番号または関数名）",
+      "description": "変更内容の説明（80文字以内）",
+      "reason": "変更理由（POLICY RULESのIDを引用、例: preserve-game-logic）",
+      "risk_level": "low/medium/high",
+      "estimated_effort": "変更に必要な時間（分単位）"
+    }
+  ],
+  "warnings": [
+    "CRITICAL PATHSに該当する場合は必ず記載",
+    "FORBIDDEN違反の可能性がある場合も記載"
+  ],
+  "policy_compliance": {
+    "max_files_rule": "small-prsルール (max=5) に準拠しているか: yes/no",
+    "forbidden_check": "FORBIDDEN違反がないか: confirmed",
+    "critical_path_check": "CRITICAL PATHSに該当するか: yes/no"
+  }
+}
+\`\`\`
+
+CONSTRAINTS:
+- suggested_changes: 最大5件まで（small-prsルール）
+- description: 各80文字以内
+- warnings: 該当する場合のみ記載（なければ空配列）
+
+OUTPUT FORMAT: JSON only. No markdown code fences (\`\`\`), no explanations before or after.

@@ -1,3 +1,5 @@
+// game/systems/ShootingSystem.js
+
 import { Controllable, InputState, Position, Rotation, Team } from '../components/index.js';
 import { createBullet } from '../core/entityFactory.js';
 // import { DebugVector } from '../debug/components/DebugVector.js'; // 不要になった
@@ -15,8 +17,8 @@ export class ShootingSystem {
     const inputState = this.world.getComponent(inputEntities[0], InputState);
 
     // --- ▼▼▼ 変更箇所 ▼▼▼ ---
-    // マウスが押されているか、またはスペースバーが押されているかを確認
-    const isShooting = inputState.isMouseDown || inputState.keys.has(' ');
+    // ポインターが押されているか、またはスペースバーが押されているかを確認
+    const isShooting = inputState.isPointerDown || inputState.keys.has(' ');
     if (!isShooting) return;
     // --- ▲▲▲ 変更ここまで ▲▲▲ ---
 
@@ -40,8 +42,8 @@ export class ShootingSystem {
     }
 
     // 処理済みの入力状態をクリアする
-    if (inputState.isMouseDown) {
-      inputState.isMouseDown = false;
+    if (inputState.isPointerDown) {
+      inputState.isPointerDown = false;
     }
     if (inputState.keys.has(' ')) {
       inputState.keys.delete(' ');

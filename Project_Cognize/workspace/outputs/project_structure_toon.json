@@ -1,0 +1,612 @@
+{
+  "TOON_HEADER": {
+    "version": "1.1-integrated-fixed",
+    "generated_at": "2025-11-23T03:07:18.047Z",
+    "source": "Project_Cognize (Internal)",
+    "db_source": "static_index.db"
+  },
+  "statistics": {
+    "totalFiles": 44,
+    "generated_by": "generate_toon.js"
+  },
+  "structure": {
+    "n": "ShootingGame7",
+    "t": "directory",
+    "p": "/",
+    "lvl": 0,
+    "nodes": [
+      {
+        "n": "DynamicErrorMonitor",
+        "t": "directory",
+        "p": "/DynamicErrorMonitor",
+        "lvl": 1,
+        "nodes": [
+          {
+            "n": "package-lock.json",
+            "t": "file",
+            "p": "/DynamicErrorMonitor/package-lock.json",
+            "lvl": 2,
+            "ext": ".json",
+            "sz": 6930,
+            "mdf": "2025-11-23 03:07:17",
+            "dbi": false
+          },
+          {
+            "n": "package.json",
+            "t": "file",
+            "p": "/DynamicErrorMonitor/package.json",
+            "lvl": 2,
+            "ext": ".json",
+            "sz": 32,
+            "mdf": "2025-11-23 03:07:17",
+            "dbi": false
+          },
+          {
+            "n": "src",
+            "t": "directory",
+            "p": "/DynamicErrorMonitor/src",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "collector",
+                "t": "directory",
+                "p": "/DynamicErrorMonitor/src/collector",
+                "lvl": 3,
+                "nodes": [
+                  {
+                    "n": "index.js",
+                    "t": "file",
+                    "p": "/DynamicErrorMonitor/src/collector/index.js",
+                    "lvl": 4,
+                    "ext": ".js",
+                    "sz": 166,
+                    "mdf": "2025-11-23 03:07:17",
+                    "dbi": false
+                  },
+                  {
+                    "n": "sync.js",
+                    "t": "file",
+                    "p": "/DynamicErrorMonitor/src/collector/sync.js",
+                    "lvl": 4,
+                    "ext": ".js",
+                    "sz": 122,
+                    "mdf": "2025-11-23 03:07:17",
+                    "dbi": false
+                  }
+                ]
+              },
+              {
+                "n": "llm-api",
+                "t": "directory",
+                "p": "/DynamicErrorMonitor/src/llm-api",
+                "lvl": 3,
+                "nodes": [
+                  {
+                    "n": "index.js",
+                    "t": "file",
+                    "p": "/DynamicErrorMonitor/src/llm-api/index.js",
+                    "lvl": 4,
+                    "ext": ".js",
+                    "sz": 187,
+                    "mdf": "2025-11-23 03:07:17",
+                    "dbi": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "n": "Project_Cognize",
+        "t": "directory",
+        "p": "/Project_Cognize",
+        "lvl": 1,
+        "nodes": [
+          {
+            "n": "config",
+            "t": "directory",
+            "p": "/Project_Cognize/config",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "shared_patterns.js",
+                "t": "file",
+                "p": "/Project_Cognize/config/shared_patterns.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 83,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              }
+            ]
+          },
+          {
+            "n": "lib",
+            "t": "directory",
+            "p": "/Project_Cognize/lib",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "config.js",
+                "t": "file",
+                "p": "/Project_Cognize/lib/config.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 23,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "config.ts",
+                "t": "file",
+                "p": "/Project_Cognize/lib/config.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 27,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "contracts.js",
+                "t": "file",
+                "p": "/Project_Cognize/lib/contracts.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 4,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "contracts.ts",
+                "t": "file",
+                "p": "/Project_Cognize/lib/contracts.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 49,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "information_provider.js",
+                "t": "file",
+                "p": "/Project_Cognize/lib/information_provider.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 264,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "information_provider.ts",
+                "t": "file",
+                "p": "/Project_Cognize/lib/information_provider.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 208,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "main.js",
+                "t": "file",
+                "p": "/Project_Cognize/lib/main.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 67,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "main.ts",
+                "t": "file",
+                "p": "/Project_Cognize/lib/main.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 25,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "prompt_strategist.js",
+                "t": "file",
+                "p": "/Project_Cognize/lib/prompt_strategist.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 84,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "prompt_strategist.ts",
+                "t": "file",
+                "p": "/Project_Cognize/lib/prompt_strategist.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 77,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "system_interface.js",
+                "t": "file",
+                "p": "/Project_Cognize/lib/system_interface.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 45,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "system_interface.ts",
+                "t": "file",
+                "p": "/Project_Cognize/lib/system_interface.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 33,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              }
+            ]
+          },
+          {
+            "n": "pages",
+            "t": "directory",
+            "p": "/Project_Cognize/pages",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "api",
+                "t": "directory",
+                "p": "/Project_Cognize/pages/api",
+                "lvl": 3,
+                "nodes": [
+                  {
+                    "n": "status.js",
+                    "t": "file",
+                    "p": "/Project_Cognize/pages/api/status.js",
+                    "lvl": 4,
+                    "ext": ".js",
+                    "sz": 10,
+                    "mdf": "2025-11-23 03:07:17",
+                    "dbi": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "n": "refactor_policy.json",
+            "t": "file",
+            "p": "/Project_Cognize/refactor_policy.json",
+            "lvl": 2,
+            "ext": ".json",
+            "sz": 57,
+            "mdf": "2025-11-23 03:07:17",
+            "dbi": true
+          },
+          {
+            "n": "scripts",
+            "t": "directory",
+            "p": "/Project_Cognize/scripts",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "generate_prompt.ts",
+                "t": "file",
+                "p": "/Project_Cognize/scripts/generate_prompt.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 595,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "generate_toon.js",
+                "t": "file",
+                "p": "/Project_Cognize/scripts/generate_toon.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 113,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "indexer_v1.3.js",
+                "t": "file",
+                "p": "/Project_Cognize/scripts/indexer_v1.3.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 706,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "query_index.js",
+                "t": "file",
+                "p": "/Project_Cognize/scripts/query_index.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 277,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              }
+            ]
+          },
+          {
+            "n": "workspace",
+            "t": "directory",
+            "p": "/Project_Cognize/workspace",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "outputs",
+                "t": "directory",
+                "p": "/Project_Cognize/workspace/outputs",
+                "lvl": 3,
+                "nodes": [
+                  {
+                    "n": "project_structure_toon.json",
+                    "t": "file",
+                    "p": "/Project_Cognize/workspace/outputs/project_structure_toon.json",
+                    "lvl": 4,
+                    "ext": ".json",
+                    "sz": 592,
+                    "mdf": "2025-11-23 03:07:17",
+                    "dbi": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "n": "game",
+        "t": "directory",
+        "p": "/game",
+        "lvl": 1,
+        "nodes": [
+          {
+            "n": "components",
+            "t": "directory",
+            "p": "/game/components",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "index.js",
+                "t": "file",
+                "p": "/game/components/index.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 14,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              }
+            ]
+          },
+          {
+            "n": "core",
+            "t": "directory",
+            "p": "/game/core",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "World.js",
+                "t": "file",
+                "p": "/game/core/World.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 129,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "entityFactory.js",
+                "t": "file",
+                "p": "/game/core/entityFactory.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 56,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "main.js",
+                "t": "file",
+                "p": "/game/core/main.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 124,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              }
+            ]
+          },
+          {
+            "n": "debug",
+            "t": "directory",
+            "p": "/game/debug",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "DebugConfig.js",
+                "t": "file",
+                "p": "/game/debug/DebugConfig.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 30,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "components",
+                "t": "directory",
+                "p": "/game/debug/components",
+                "lvl": 3,
+                "nodes": [
+                  {
+                    "n": "DebugVector.js",
+                    "t": "file",
+                    "p": "/game/debug/components/DebugVector.js",
+                    "lvl": 4,
+                    "ext": ".js",
+                    "sz": 23,
+                    "mdf": "2025-11-23 03:07:17",
+                    "dbi": false
+                  }
+                ]
+              },
+              {
+                "n": "systems",
+                "t": "directory",
+                "p": "/game/debug/systems",
+                "lvl": 3,
+                "nodes": [
+                  {
+                    "n": "DebugControlSystem.js",
+                    "t": "file",
+                    "p": "/game/debug/systems/DebugControlSystem.js",
+                    "lvl": 4,
+                    "ext": ".js",
+                    "sz": 53,
+                    "mdf": "2025-11-23 03:07:17",
+                    "dbi": false
+                  },
+                  {
+                    "n": "DebugSystem.js",
+                    "t": "file",
+                    "p": "/game/debug/systems/DebugSystem.js",
+                    "lvl": 4,
+                    "ext": ".js",
+                    "sz": 167,
+                    "mdf": "2025-11-23 03:07:17",
+                    "dbi": false
+                  },
+                  {
+                    "n": "OffscreenCleanupSystem.js",
+                    "t": "file",
+                    "p": "/game/debug/systems/OffscreenCleanupSystem.js",
+                    "lvl": 4,
+                    "ext": ".js",
+                    "sz": 35,
+                    "mdf": "2025-11-23 03:07:17",
+                    "dbi": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "n": "systems",
+            "t": "directory",
+            "p": "/game/systems",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "CollisionSystem.js",
+                "t": "file",
+                "p": "/game/systems/CollisionSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 52,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "DamageSystem.js",
+                "t": "file",
+                "p": "/game/systems/DamageSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 59,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "DeathSystem.js",
+                "t": "file",
+                "p": "/game/systems/DeathSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 24,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "InputSystem.js",
+                "t": "file",
+                "p": "/game/systems/InputSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 71,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "LifetimeSystem.js",
+                "t": "file",
+                "p": "/game/systems/LifetimeSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 27,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "MovementSystem.js",
+                "t": "file",
+                "p": "/game/systems/MovementSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 95,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "RenderSystem.js",
+                "t": "file",
+                "p": "/game/systems/RenderSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 70,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "RotationSystem.js",
+                "t": "file",
+                "p": "/game/systems/RotationSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 40,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "ShootingSystem.js",
+                "t": "file",
+                "p": "/game/systems/ShootingSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 53,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              },
+              {
+                "n": "SpawningSystem.js",
+                "t": "file",
+                "p": "/game/systems/SpawningSystem.js",
+                "lvl": 3,
+                "ext": ".js",
+                "sz": 33,
+                "mdf": "2025-11-23 03:07:17",
+                "dbi": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

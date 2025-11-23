@@ -33,3 +33,38 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# AI-generated outputs
+ai_workspace/outputs/
+
+# AI-generated outputs
+ai_workspace/outputs/
+
+# ===============================================
+# AI-Driven Project Specific Ignores
+# ===============================================
+
+# Ignore automatically generated database files, but NOT the schema definitions.
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
+
+# Ignore voluminous log files.
+*.log
+*.jsonl
+
+# Ignore environment-specific files.
+.env
+DynamicErrorMonitor/.env
+
+# Ignore dependency folders.
+DynamicErrorMonitor/node_modules/
+
+# Sentry Config File
+.env.sentry-build-plugin
+
+# Project_Cognize outputs and compiled files
+Project_Cognize/workspace/outputs/
+Project_Cognize/database/
+Project_Cognize/lib/*.js

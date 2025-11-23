@@ -6,20 +6,32 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@types/node": "20.6.2",
+    "@babel/traverse": "^7.28.5",
+    "@sentry/nextjs": "^10.26.0",
+    "@sentry/node": "^10.26.0",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.15",
+    "better-sqlite3": "^9.6.0",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.2.3",
     "eslint": "8.49.0",
     "eslint-config-next": "13.5.1",
-    "next": "13.5.1",
+    "glob": "^10.5.0",
+    "next": "^16.0.1",
     "postcss": "8.4.30",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "tailwindcss": "3.3.3",
-    "typescript": "5.2.2"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "sqlite3": "^5.1.7",
+    "tailwindcss": "3.3.3"
+  },
+  "devDependencies": {
+    "@babel/parser": "^7.28.5",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "24.10.1"
   }
 }
