@@ -1,0 +1,45 @@
+{
+  "plan_id": "PROJECT_REFACTORING_TODO_20251124",
+  "plan_name": "リファクタリング TODOリスト",
+  "objective": "残された技術的負債の返済と、未来のアーキテクチャ研究を管理する。",
+  "general_policies": {
+    "priority_policy": "priorityが、最も、小さい、数字の、タスクから、着手する。",
+    "archive_policy": "完了した、フェーズは、この、ファイルから、削除し、その、成果は、別途、記録する。"
+  },
+  "phases": [
+    {
+      "phase_id": 5,
+      "name": "【聖遺物の、活用研究】",
+      "priority": 1,
+      "status": "PENDING_ANALYSIS",
+      "objective": "relic/20251112_typescript-migration の内容を調査し、将来のTypeScript化への知見を得る。",
+      "action_plan": [
+        {
+          "step": 5.1,
+          "description": "relicブランチをチェックアウトし、ファイル構造とコードの変更点を分析する。"
+        },
+        {
+          "step": 5.2,
+          "description": "TypeScript化の、メリット、デメリット、そして、現在の、mainブランチに、適用する際の、課題を、まとめる。"
+        }
+      ]
+    },
+    {
+      "phase_id": 4,
+      "name": "【防衛システムの、修復】",
+      "priority": 2,
+      "status": "PENDING_REFACTOR",
+      "objective": "GitHub Actionsの、dry-run時に、発生する、エラーの、根本原因を、解決し、CI/CDを、完全に、安定させる。",
+      "problem_analysis": {
+        "symptom": "GitHub Actionsの、手動実行（dry-run）時に、`query_index.js`が、`TypeError: Cannot read properties of null`で、失敗する。",
+        "root_cause": "リモート環境では、`dry-run`時に、DBファイルが、生成されないため、統計情報表示スクリプトが、空の、DBを、読んで、エラーとなる。"
+      },
+      "action_plan": [
+        {
+          "step": 4.1,
+          "description": "【要リファクタリング】`indexer.js`を、改造し、`--dry-run`時には、インメモリDBを、使用し、統計情報も、自己完結で、表示するように、変更する。"
+        }
+      ]
+    }
+  ]
+}
