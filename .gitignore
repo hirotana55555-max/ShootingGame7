@@ -63,3 +63,8 @@ DynamicErrorMonitor/node_modules/
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+# Project_Cognize outputs and compiled files
+Project_Cognize/workspace/outputs/
+Project_Cognize/database/
+Project_Cognize/lib/*.js

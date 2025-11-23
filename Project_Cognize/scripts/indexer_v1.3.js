@@ -306,6 +306,16 @@ function analyzeFile(filePath) {
       imports.push({ module: source, specifiers });
     },
 
+    CallExpression(p) {
+      if (p.node.callee.name === 'require' && p.node.arguments.length > 0 && p.node.arguments[0].type === 'StringLiteral') {
+        const moduleName = p.node.arguments[0].value;
+        // 既にimportで記録されている場合は追加しない（重複防止）
+        if (!imports.some(imp => imp.module === moduleName)) {
+            imports.push({ module: moduleName, specifiers: [{ type: 'require', name: null }] });
+        }
+      }
+    },
+
     ExportAllDeclaration(p) {
       const source = p.node.source.value;
       reexports.push({
