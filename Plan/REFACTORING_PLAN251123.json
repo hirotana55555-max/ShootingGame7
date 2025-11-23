@@ -1,77 +1,66 @@
 {
-  "plan_id": "PROJECT_CLEANUP_20251123_PHASE_1",
-  "plan_name": "プロジェクトの大掃除作戦（改訂版）",
-  "objective": "不要なファイルを安全に整理・保管し、プロジェクトの健全性を取り戻す。同時に、Project_Cognizeのスキャン精度を向上させる。",
+  "plan_id": "PROJECT_BRANCH_NORMALIZATION_20251124",
+  "plan_name": "ブランチ正規化計画 - 聖遺物の、別室保管",
+  "objective": "乱立したブランチを整理し、健全な開発サイクルを確立する。同時に、歴史的遺産（TypeScript化ブランチ）を安全に保管する。",
   "general_policies": {
-    "disposal_method": "即時削除ではなく、一時保管ディレクトリへの隔離を原則とする。",
-    "archive_directory": "TEMP_ARCHIVE_20251123",
-    "progression": "各フェーズ完了後に、次のフェーズの計画を再検討・確定する。"
+    "main_branch_policy": "`main`は、常に、現在の、安定した、成果を、反映する、唯一の、正史とする。",
+    "relic_branch_policy": "現在の、文脈と、交わらない、重要な、歴史的遺産は、`relic/`プレフィックスを、付けて、永久保管する。安易な、マージを、厳禁とする。"
   },
   "phases": [
     {
       "phase_id": 1,
-      "name": "【考古学】遺物の、発掘と、鑑定",
+      "name": "【聖遺物の、封印】`develop`ブランチの、リネーム",
       "status": "PENDING_EXECUTION",
-      "objective": "グループ2（automation/）とグループ3（ルート直下の残骸）のスクリプト群の価値を鑑定する。",
+      "objective": "`develop`ブランチを、歴史的遺産として、安全に、別室保管する。",
       "action_plan": [
         {
           "step": 1.1,
-          "description": "automation/ ディレクトリ内のスクリプトファイルの中身を`cat`で表示し、内容を精査する。",
-          "command_template": "cat automation/ai_workflow.sh"
+          "description": "ローカルの`develop`ブランチを`relic/20251112_typescript-migration`にリネームする。",
+          "command_template": "git branch -m develop relic/20251112_typescript-migration"
         },
         {
           "step": 1.2,
-          "description": "ルートディレクトリ直下のスクリプトファイル（.sh, .html, .log）の中身を`cat`で表示し、内容を精査する。",
-          "command_template": "cat REALITY_CHECK.sh"
+          "description": "リモートの古い`develop`ブランチを削除する。",
+          "command_template": "git push origin :develop"
         },
         {
           "step": 1.3,
-          "description": "ひろし様の鑑定に基づき、各ファイルを『要再利用』『要保管（隔離）』『即時削除』に分類する。"
+          "description": "新しい名前の聖遺物ブランチをリモートにプッシュする。",
+          "command_template": "git push origin relic/20251112_typescript-migration"
         }
       ]
     },
     {
       "phase_id": 2,
-      "name": "【文献学】失われた、記憶の、解読",
+      "name": "【正史の、編纂】`main`ブランチの、現代化",
       "status": "WAITING",
-      "objective": "グループ4のtemplates/ディレクトリの謎を解き明かす。",
+      "objective": "現在の、全ての、成果を、`main`ブランチに、安全に、統合する。",
       "action_plan": [
         {
           "step": 2.1,
-          "description": "templates/ ディレクトリ内の2つの.txtファイルの中身を`cat`で表示し、内容を精査する。",
-          "command_template": "cat Project_Cognize/templates/system_prompt_template.txt"
+          "description": "GitHub上で、`feature/dem-unified-server`から`main`へのPull Requestを作成する。"
         },
         {
           "step": 2.2,
-          "description": "Project_Cognizeのスクリプト群（特に `generate_prompt.ts`）に対し、テンプレートファイル名で`grep`を実行し、参照箇所を特定する。",
-          "command_template": "grep -r 'system_prompt_template.txt' Project_Cognize/scripts/"
-        },
-        {
-          "step": 2.3,
-          "description": "調査結果に基づき、テンプレートの役割と要不要を判断する。"
+          "description": "コンフリクトがないことを確認し、Pull Requestをマージする。"
         }
       ]
     },
     {
       "phase_id": 3,
-      "name": "【聖域の、拡張】indexerの、自己改革",
-      "status": "ON_HOLD_FOR_REVIEW",
-      "objective": "グループ5の問題を解決し、indexerがプロジェクトの真の姿を認識できるようにする。",
-      "note": "フェーズ2完了後に再検討"
-    },
-    {
-      "phase_id": 4,
-      "name": "【正規化】愚行の、是正",
-      "status": "ON_HOLD_FOR_REVIEW",
-      "objective": "ファイル名からバージョン表記を排除し、命名規則を統一する。",
-      "note": "フェーズ2完了後に再検討"
-    },
-    {
-      "phase_id": 5,
-      "name": "【埋葬】歴史への、敬意と、未来への、船出",
-      "status": "ON_HOLD_FOR_REVIEW",
-      "objective": "不要と判断された全ファイルをTEMP_ARCHIVE_20251123へ隔離し、コミットする。",
-      "note": "フェーズ2完了後に再検討"
+      "name": "【歴史書の、整理】不要ブランチの、クリーンアップ",
+      "status": "WAITING",
+      "objective": "役目を終えたブランチを整理し、ブランチリストを最新の状態に保つ。",
+      "action_plan": [
+        {
+          "step": 3.1,
+          "description": "マージ済みの`feature/dem-unified-server`ブランチを削除する。"
+        },
+        {
+          "step": 3.2,
+          "description": "その他の一時的なバックアップブランチ（`origin/feature/dem-chaos-backup-20251122`など）を、必要に応じて、削除、または、アーカイブする。"
+        }
+      ]
     }
   ]
 }
