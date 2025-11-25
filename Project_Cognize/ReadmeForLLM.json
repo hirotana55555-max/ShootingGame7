@@ -1,0 +1,162 @@
+{
+  "manifest_version": "2.0",
+  "last_updated": "2025-11-25",
+  "project_name": "Project Cognize",
+  "ultimate_goal": "GLIA構想の中核を担う、自己認識・自己記述システム",
+  "philosophy": "LLMは、記憶を持たず、プロジェクトの全体像や、設計思想を、暗黙的に、理解することはできない。故に、我々は、LLMが、タスクを実行する、その、瞬間に、参照すべき、『信頼できる、唯一の、情報源（Single Source of Truth）』を、構造化データとして、提供し続けなければならない。それが、この、Project Cognizeの、存在意義である。",
+  "governance": {
+    "id": "GOV-01",
+    "title": "統治原則：LLMエージェントが、遵守すべき、絶対的、ルール",
+    "prohibitions": [
+      {
+        "rule": "AGENT_MODE_PROHIBITED",
+        "description": "このファイルは、分析と、理解のための、情報共有であり、タスク実行の、直接的な、指示ではない。性急な、エージェントモードへの、切り替えを、禁止する。"
+      },
+      {
+        "rule": "NO_DESTRUCTIVE_CHANGES",
+        "description": "破壊的改変は、厳禁とする。提案の、前に、必ず、現状を、徹底的に、分析し、仮説を、実証すること。"
+      }
+    ],
+    "architectural_constitution": {
+      "id": "AP-01",
+      "principle": "Single Source of Truth for Project Scope",
+      "description": "プロジェクトの、『自作コード』の、範囲や、各ツールの、振る舞いを、定義する、全ての、設定は、ただ、一つの、ファイル `/Project_Cognize/config/shared_patterns.js` に、集約される。これを、当プロジェクトの、『憲法』と、定める。",
+      "llm_instruction": {
+        "level": "CRITICAL",
+        "summary": "【最重要警告】いかなる、理由があろうとも、この、『憲法』に、反する、ような、コード（例：スクリプト内への、パスの、ハードコード）を、生成してはならない。プロジェクトの、範囲を、変更したい場合は、まず、`shared_patterns.js`の、修正を、提案せよ。"
+      }
+    }
+  },
+  "workflow_overview": {
+    "id": "WF-01",
+    "title": "データ駆動型・自己認識ワークフロー",
+    "description": "Project Cognizeは、個々の、ツールが、連携し、プロジェクト自身が、自分を、分析・記述する、エコシステムを、形成する。",
+    "data_flow": [
+      {
+        "step": 1,
+        "actor": "indexer.js",
+        "action": "憲法(`shared_patterns.js`)に、基づき、全ファイルを、スキャンし、AST解析を実行する。",
+        "output": "ファイル構造、シンボル、依存関係、インスタンス等の、詳細な、メタデータ。",
+        "destination": "static_index.db (主データベース) / static_index.jsonl (ログ)"
+      },
+      {
+        "step": 2,
+        "actor": "generate_toon.js",
+        "action": "最新の、`static_index.db`を、読み込み、プロジェクトの、完全な、階層構造を、生成する。",
+        "output": "TOON (Tree-Oriented Object Notation) 形式の、構造化データ。",
+        "destination": "project_structure_toon.json"
+      },
+      {
+        "step": 3,
+        "actor": "generate_prompt.ts",
+        "action": "目的の、タスクと、最新の、`project_structure_toon.json`、及び、各種テンプレートを、組み合わせる。",
+        "output": "LLMの、思考を、正確に、ガイドするための、コンテキスト情報が、豊富に、埋め込まれた、実行プロンプト。",
+        "destination": "LLM Agent (e.g., GLIA)"
+      }
+    ]
+  },
+  "core_components": [
+    {
+      "id": "config_file",
+      "file_name": "config/shared_patterns.js",
+      "main_description": "【憲法】プロジェクトの、範囲と、振る舞いを、定義する、唯一の、設定ファイル。全ての、ツールの、動作は、この、ファイルに、従う。"
+    },
+    {
+      "id": "indexer",
+      "file_name": "scripts/indexer.js",
+      "main_description": "【測量士】プロジェクトの、静的解析を、行い、全ての、情報を、データベース化する、中核ツール。"
+    },
+    {
+      "id": "toon_generator",
+      "file_name": "scripts/generate_toon.js",
+      "main_description": "【地図製作者】データベース情報に基づき、LLMが、解釈可能な、プロジェクトの、階層構造マップ（TOON）を、生成する。"
+    },
+    {
+      "id": "prompt_generator",
+      "file_name": "scripts/generate_prompt.ts",
+      "main_description": "【作戦立案官】TOONマップと、テンプレートを、元に、LLMへの、具体的な、指示プロンプトを、生成する。"
+    },
+    {
+      "id": "query_tool",
+      "file_name": "scripts/query_index.js",
+      "main_description": "【司書】生成された、データベースの、内容を、人間が、照会・確認するための、CLIツール。"
+    }
+  ],
+  "automation": {
+    "id": "github_actions",
+    "file_path": ".github/workflows/cognize_indexer.yml",
+    "main_description": "この、エコシステムは、GitHub Actionsによって、自動化されている。`main`ブランチへの、変更を、トリガーに、`indexer.js`が、自動実行され、データベースが、常に、最新に、保たれる。",
+    "llm_instruction": {
+      "level": "CRITICAL",
+      "summary": "【最重要】`Project_Cognize`配下の、スクリプトの、ファイル名や、コマンドオプションを、変更する際は、必ず、この、自動化ワークフロー (`cognize_indexer.yml`) も、同時に、修正しなければ、CI/CDパイプラインが、完全に、破綻する。"
+    }
+  },
+  "tool_reference": {
+    "id": "TOOL-REF-01",
+    "tool_name": "query_index.js",
+    "description": "静的解析データベースを照会するためのCLIツール。LLMは、プロジェクトに関する情報を得るために、これらのコマンドを積極的に使用すべきである。",
+    "commands": [
+      {
+        "name": "schema",
+        "description": "データベースの現在のテーブル構造とマイグレーション履歴を表示する。",
+        "usage": "node Project_Cognize/scripts/query_index.js schema",
+        "purpose": "DBの状態やスキーマ変更の確認に使用する。"
+      },
+      {
+        "name": "list",
+        "description": "プロジェクト内のファイルを一覧表示する。",
+        "usage": "node Project_Cognize/scripts/query_index.js list [オプション]",
+        "options": [
+          {
+            "name": "--self-made-only",
+            "description": "shared_patterns.jsの定義に基づき、『自作コード』と判定されたファイルのみを表示する。"
+          }
+        ],
+        "purpose": "特定の種類のファイル群をリストアップする際に使用する。"
+      },
+      {
+        "name": "search",
+        "description": "ファイルパスに対してパターン検索を実行する。",
+        "usage": "node Project_Cognize/scripts/query_index.js search <パターン> [オプション]",
+        "options": [
+          {
+            "name": "--fuzzy",
+            "description": "部分一致による曖昧検索を有効にする。デフォルトは、より高速で正確な厳密検索。"
+          }
+        ],
+        "purpose": "特定のキーワードを含むファイルを探す際に使用する。まず厳密検索を試し、見つからなければ--fuzzyを検討する。"
+      },
+      {
+        "name": "stats",
+        "description": "プロジェクト全体の包括的な統計情報を表示する。",
+        "usage": "node Project_Cognize/scripts/query_index.js stats [オプション]",
+        "options": [
+          {
+            "name": "--by-category",
+            "description": "自作コードを『component』『game-core』などのカテゴリ別に集計した、より詳細な統計を表示する。"
+          }
+        ],
+        "purpose": "プロジェクトの全体像（規模、言語構成、自作コード率など）を素早く把握するために使用する。"
+      },
+      {
+        "name": "deps",
+        "description": "指定されたファイルが、どのファイルに依存し（import）、どのファイルから依存されているか（imported by）を表示する。",
+        "usage": "node Project_Cognize/scripts/query_index.js deps <ファイルパス>",
+        "options": [],
+        "purpose": "コード変更時の影響範囲を調査するために不可欠なコマンド。"
+      },
+      {
+        "name": "instances",
+        "description": "指定されたクラスが、プロジェクト内のどこでインスタンス化（`new`）されているかを検索する。",
+        "usage": "node Project_Cognize/scripts/query_index.js instances <クラス名> [オプション]",
+        "options": [
+          {
+            "name": "--show-builtins",
+            "description": "デフォルトで除外されているJavaScriptのビルトインクラス（RegExp, Date等）も検索対象に含める。"
+          }
+        ],
+        "purpose": "特定のクラスの使われ方を調査したり、リファクタリングの影響範囲を特定したりする際に使用する。"
+      }
+    ]
+  }
+}

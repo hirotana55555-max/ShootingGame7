@@ -1,5 +1,5 @@
 {
-  "plan_id": "PROJECT_REFACTORING_TODO_20251124",
+  "plan_id": "PROJECT_REFACTORING_TODO_20251125",
   "plan_name": "リファクタリング TODOリスト",
   "objective": "残された技術的負債の返済と、未来のアーキテクチャ研究を管理する。",
   "general_policies": {
@@ -9,33 +9,141 @@
   "phases": [
     {
       "phase_id": 6,
-      "name": "【現存資産の、活用研究】",
-      "priority": 1,
-      "status": "PENDING_ANALYSIS",
-      "objective": "現在のmainブランチに存在する各種ツール（Project_Cognize, DynamicErrorMonitor）を正式に整備し、開発ワークフローに組み込む。",
+      "name": "【最優先QA】不具合の、網羅的、洗い出しと、構造分析",
+      "priority": 0,
+      "status": "COMPLETED",
+      "objective": "Project_Cognize配下の、全ツールの、全機能を、体系的に、テストし、ドキュメントと、実装間の、全ての、不整合（バグ）を、発見・記録する。同時に、テスト過程で、得られた、アーキテクチャ上の、重要な、気づきも、記録し、未来の、改善に、繋げる。",
       "action_plan": [
         {
           "step": 6.1,
-          "description": "各ツールのReadmeを最新化し、役割と使い方を明確にする。"
+          "description": "ReadmeForLLM.jsonを、テスト仕様書として、各ツールの、コマンドと、オプションを、一つずつ、実行した。",
+          "status": "COMPLETED"
         },
         {
           "step": 6.2,
-          "description": "ツール間の連携（例：DEMがCognizeのDBを参照する等）の可能性を検討し、具体的な改修計画を立てる。"
+          "description": "発見した、不具合や、気づきを、以下の、『管理台帳』に、全て、記録した。",
+          "status": "COMPLETED"
+        }
+      ],
+      "bug_tracking_ledger": [
+        {
+          "bug_id": "BUG-001",
+          "status": "DISCOVERED"
+        },
+        {
+          "bug_id": "BUG-002",
+          "status": "DISCOVERED"
+        },
+        {
+          "bug_id": "BUG-003",
+          "status": "DISCOVERED"
+        },
+        {
+          "bug_id": "BUG-004",
+          "status": "DISCOVERED"
+        },
+        {
+          "bug_id": "BUG-005",
+          "status": "DISCOVERED"
+        },
+        {
+          "bug_id": "BUG-006",
+          "tool": "indexer.js / query_index.js",
+          "symptom": "『頻繁にインスタンス化されるクラス』の、統計に、JavaScript組み込みオブジェクトが、大量に、含まれ、ノイズとなっている。",
+          "cause": "インスタンス化の、追跡時に、自作クラスと、組み込みオブジェクトを、区別する、仕組みが、ないため。",
+          "status": "PENDING_INVESTIGATION"
+        },
+        {
+          "bug_id": "BUG-007",
+          "status": "CLOSED_AS_NOT_A_BUG"
+        }
+      ],
+      "architectural_insights": [
+        {
+          "insight_id": "INSIGHT-001",
+          "status": "RECORDED"
         }
       ]
     },
     {
-      "phase_id": 4,
-      "name": "【防衛システムの、修復】",
-      "priority": 2,
-      "status": "PENDING_REFACTOR",
-      "objective": "GitHub Actionsの、dry-run時に、発生する、エラーの、根本原因を、解決し、CI/CDを、完全に、安定させる。",
+      "phase_id": 9,
+      "name": "【不滅化作戦】Project_Cognizeの、自己認識能力の、確立",
+      "priority": 1,
+      "status": "IN_PROGRESS",
+      "objective": "Project_Cognizeが、『自作コード』の、範囲を、完全に、自己認識し、その、定義を、未来の、LLMに、永続的に、伝達する、仕組みを、構築する。",
       "action_plan": [
         {
-          "step": 4.1,
-          "description": "【要リファクタリング】`indexer.js`を、改造し、`--dry-run`時には、インメモリDBを、使用し、統計情報も、自己完結で、表示するように、変更する。"
+          "step": 9.1,
+          "description": "【調査】`generate_toon.js`を、分析し、プロジェクト構造の、認識ロジックを、解明する。",
+          "status": "PENDING"
+        },
+        {
+          "step": 9.2,
+          "description": "【調査】`generate_prompt.ts`を、分析し、LLMへの、コンテキスト提供の、仕組みを、解明する。",
+          "status": "PENDING"
+        },
+        {
+          "step": 9.3,
+          "description": "【設計】『自作コード』の、範囲を、`config/shared_patterns.js`で、一元管理する、アーキテクチャを、設計する。",
+          "status": "PENDING"
+        },
+        {
+          "step": 9.4,
+          "description": "【設計】LLMに、アーキテクチャの、原則を、永続的に、伝達するための、戦略文書、及び、プロンプト注入の、仕組みを、設計する。",
+          "status": "PENDING"
         }
       ]
+    },
+    {
+      "phase_id": 8,
+      "name": "【コネクテッド・ワールド - 連携システムの、完全統合】",
+      "priority": 2,
+      "status": "PENDING",
+      "objective": "indexer.js, query_index.js, cognize_indexer.yml の、3システム間の、矛盾を、完全に、解消し、期待通りに、連携する、堅牢な、CI/CDパイプラインを、再構築する。",
+      "action_plan": [
+        {
+          "step": 8.1,
+          "status": "PENDING"
+        },
+        {
+          "step": 8.2,
+          "status": "PENDING"
+        },
+        {
+          "step": 8.3,
+          "status": "PENDING"
+        },
+        {
+          "step": 8.4,
+          "status": "PENDING"
+        }
+      ]
+    }
+  ],
+  "completed_phases": [
+    {
+      "phase_id": 8,
+      "name": "【Project_Cognize v2.0 移行プロジェクト】",
+      "status": "COMPLETED",
+      "objective": "Project Cognizeのスキーマをv2.0に進化させ、自作コード判定エンジンを導入する。",
+      "key_achievements": [
+        {
+          "id": "8-1",
+          "description": "v2.0データベーススキーマへの移行",
+          "details": "`migrate.js`と6つのマイグレーションファイルを用いて、`file_index`等のテーブルを拡張し、監査ログ用のテーブルを新設した。"
+        },
+        {
+          "id": "8-2",
+          "description": "v2.0 `indexer.js`（GLIA準備版）の導入",
+          "details": "失われていたv2.0版の`indexer.js`と`shared_patterns.js`を再発見・配置し、`shared_patterns.js`（憲法）に基づいた自作コード判定を実現した。"
+        },
+        {
+          "id": "8-3",
+          "description": "v2.0ドキュメントの整備",
+          "details": "v2.0の機能に対応した`99_USER_MANUAL.md`を配置し、`ReadmeForLLM.json`を最新の状態に更新した。"
+        }
+      ],
+      "final_result": "プロジェクト内の自作コード率97.5%（116/119ファイル）を達成。コードの『出自』を、高精度で、自動分類する、自己認識能力を獲得した。"
     }
   ]
 }

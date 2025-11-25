@@ -1,12 +1,12 @@
 {
   "TOON_HEADER": {
     "version": "1.1-integrated-fixed",
-    "generated_at": "2025-11-23T03:07:18.047Z",
+    "generated_at": "2025-11-25T04:52:14.394Z",
     "source": "Project_Cognize (Internal)",
     "db_source": "static_index.db"
   },
   "statistics": {
-    "totalFiles": 44,
+    "totalFiles": 112,
     "generated_by": "generate_toon.js"
   },
   "structure": {
@@ -22,13 +22,77 @@
         "lvl": 1,
         "nodes": [
           {
+            "n": "ReadmeForLLM.json",
+            "t": "file",
+            "p": "/DynamicErrorMonitor/ReadmeForLLM.json",
+            "lvl": 2,
+            "ext": ".json",
+            "sz": 120,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
+            "n": "database",
+            "t": "directory",
+            "p": "/DynamicErrorMonitor/database",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "errors.db",
+                "t": "file",
+                "p": "/DynamicErrorMonitor/database/errors.db",
+                "lvl": 3,
+                "ext": ".db",
+                "sz": 0,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "schema.sql",
+                "t": "file",
+                "p": "/DynamicErrorMonitor/database/schema.sql",
+                "lvl": 3,
+                "ext": ".sql",
+                "sz": 0,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              }
+            ]
+          },
+          {
+            "n": "infra",
+            "t": "directory",
+            "p": "/DynamicErrorMonitor/infra",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "glitchtip",
+                "t": "directory",
+                "p": "/DynamicErrorMonitor/infra/glitchtip",
+                "lvl": 3,
+                "nodes": [
+                  {
+                    "n": "docker-compose.yml",
+                    "t": "file",
+                    "p": "/DynamicErrorMonitor/infra/glitchtip/docker-compose.yml",
+                    "lvl": 4,
+                    "ext": ".yml",
+                    "sz": 0,
+                    "mdf": "2025-11-25 03:58:30",
+                    "dbi": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "n": "package-lock.json",
             "t": "file",
             "p": "/DynamicErrorMonitor/package-lock.json",
             "lvl": 2,
             "ext": ".json",
             "sz": 6930,
-            "mdf": "2025-11-23 03:07:17",
+            "mdf": "2025-11-25 03:58:30",
             "dbi": false
           },
           {
@@ -38,7 +102,7 @@
             "lvl": 2,
             "ext": ".json",
             "sz": 32,
-            "mdf": "2025-11-23 03:07:17",
+            "mdf": "2025-11-25 03:58:30",
             "dbi": false
           },
           {
@@ -60,7 +124,7 @@
                     "lvl": 4,
                     "ext": ".js",
                     "sz": 166,
-                    "mdf": "2025-11-23 03:07:17",
+                    "mdf": "2025-11-25 03:58:30",
                     "dbi": false
                   },
                   {
@@ -70,7 +134,7 @@
                     "lvl": 4,
                     "ext": ".js",
                     "sz": 122,
-                    "mdf": "2025-11-23 03:07:17",
+                    "mdf": "2025-11-25 03:58:30",
                     "dbi": false
                   }
                 ]
@@ -88,10 +152,126 @@
                     "lvl": 4,
                     "ext": ".js",
                     "sz": 187,
-                    "mdf": "2025-11-23 03:07:17",
+                    "mdf": "2025-11-25 03:58:30",
                     "dbi": false
                   }
                 ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "n": "Plan",
+        "t": "directory",
+        "p": "/Plan",
+        "lvl": 1,
+        "nodes": [
+          {
+            "n": "DEBUGGING_POLICY2.md",
+            "t": "file",
+            "p": "/Plan/DEBUGGING_POLICY2.md",
+            "lvl": 2,
+            "ext": ".md",
+            "sz": 0,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
+            "n": "DESIGN_DOCUMENT.md",
+            "t": "file",
+            "p": "/Plan/DESIGN_DOCUMENT.md",
+            "lvl": 2,
+            "ext": ".md",
+            "sz": 0,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
+            "n": "DESIGN_DOCUMENT_ENEMY.md",
+            "t": "file",
+            "p": "/Plan/DESIGN_DOCUMENT_ENEMY.md",
+            "lvl": 2,
+            "ext": ".md",
+            "sz": 0,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
+            "n": "DESIGN_DOCUMENT_ENEMY2.md",
+            "t": "file",
+            "p": "/Plan/DESIGN_DOCUMENT_ENEMY2.md",
+            "lvl": 2,
+            "ext": ".md",
+            "sz": 0,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
+            "n": "DIRECTORY_STRUCTURE.md",
+            "t": "file",
+            "p": "/Plan/DIRECTORY_STRUCTURE.md",
+            "lvl": 2,
+            "ext": ".md",
+            "sz": 0,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
+            "n": "README.md",
+            "t": "file",
+            "p": "/Plan/README.md",
+            "lvl": 2,
+            "ext": ".md",
+            "sz": 0,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
+            "n": "REFACTORING_PLAN.json",
+            "t": "file",
+            "p": "/Plan/REFACTORING_PLAN.json",
+            "lvl": 2,
+            "ext": ".json",
+            "sz": 86,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
+            "n": "REFACTORING_PLAN3.md",
+            "t": "file",
+            "p": "/Plan/REFACTORING_PLAN3.md",
+            "lvl": 2,
+            "ext": ".md",
+            "sz": 0,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
+            "n": "archive",
+            "t": "directory",
+            "p": "/Plan/archive",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "251123_REFACTORING_PLAN.json",
+                "t": "file",
+                "p": "/Plan/archive/251123_REFACTORING_PLAN.json",
+                "lvl": 3,
+                "ext": ".json",
+                "sz": 99,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "251125_REFACTORING_PLAN.json",
+                "t": "file",
+                "p": "/Plan/archive/251125_REFACTORING_PLAN.json",
+                "lvl": 3,
+                "ext": ".json",
+                "sz": 38,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
               }
             ]
           }
@@ -104,6 +284,74 @@
         "lvl": 1,
         "nodes": [
           {
+            "n": "REFACTORING",
+            "t": "directory",
+            "p": "/Project_Cognize/REFACTORING",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "README.md",
+                "t": "file",
+                "p": "/Project_Cognize/REFACTORING/README.md",
+                "lvl": 3,
+                "ext": ".md",
+                "sz": 0,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "ai_workflow.sh",
+                "t": "file",
+                "p": "/Project_Cognize/REFACTORING/ai_workflow.sh",
+                "lvl": 3,
+                "ext": ".sh",
+                "sz": 0,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "auto_prompt.md",
+                "t": "file",
+                "p": "/Project_Cognize/REFACTORING/auto_prompt.md",
+                "lvl": 3,
+                "ext": ".md",
+                "sz": 0,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "auto_scanner.sh",
+                "t": "file",
+                "p": "/Project_Cognize/REFACTORING/auto_scanner.sh",
+                "lvl": 3,
+                "ext": ".sh",
+                "sz": 0,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "dashboard.html",
+                "t": "file",
+                "p": "/Project_Cognize/REFACTORING/dashboard.html",
+                "lvl": 3,
+                "ext": ".html",
+                "sz": 0,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              }
+            ]
+          },
+          {
+            "n": "ReadmeForLLM.json",
+            "t": "file",
+            "p": "/Project_Cognize/ReadmeForLLM.json",
+            "lvl": 2,
+            "ext": ".json",
+            "sz": 154,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
             "n": "config",
             "t": "directory",
             "p": "/Project_Cognize/config",
@@ -115,8 +363,46 @@
                 "p": "/Project_Cognize/config/shared_patterns.js",
                 "lvl": 3,
                 "ext": ".js",
-                "sz": 83,
-                "mdf": "2025-11-23 03:07:17",
+                "sz": 78,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              }
+            ]
+          },
+          {
+            "n": "database",
+            "t": "directory",
+            "p": "/Project_Cognize/database",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "static_index.db",
+                "t": "file",
+                "p": "/Project_Cognize/database/static_index.db",
+                "lvl": 3,
+                "ext": ".db",
+                "sz": 0,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "static_index.db-shm",
+                "t": "file",
+                "p": "/Project_Cognize/database/static_index.db-shm",
+                "lvl": 3,
+                "ext": ".db-shm",
+                "sz": 0,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "static_index.db-wal",
+                "t": "file",
+                "p": "/Project_Cognize/database/static_index.db-wal",
+                "lvl": 3,
+                "ext": ".db-wal",
+                "sz": 0,
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               }
             ]
@@ -134,7 +420,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 23,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -144,7 +430,7 @@
                 "lvl": 3,
                 "ext": ".ts",
                 "sz": 27,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -154,7 +440,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 4,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -164,7 +450,7 @@
                 "lvl": 3,
                 "ext": ".ts",
                 "sz": 49,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -174,7 +460,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 264,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -184,7 +470,7 @@
                 "lvl": 3,
                 "ext": ".ts",
                 "sz": 208,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -194,7 +480,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 67,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -204,7 +490,7 @@
                 "lvl": 3,
                 "ext": ".ts",
                 "sz": 25,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -214,7 +500,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 84,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -224,7 +510,7 @@
                 "lvl": 3,
                 "ext": ".ts",
                 "sz": 77,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -234,7 +520,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 45,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -244,7 +530,7 @@
                 "lvl": 3,
                 "ext": ".ts",
                 "sz": 33,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               }
             ]
@@ -268,7 +554,7 @@
                     "lvl": 4,
                     "ext": ".js",
                     "sz": 10,
-                    "mdf": "2025-11-23 03:07:17",
+                    "mdf": "2025-11-25 03:58:30",
                     "dbi": false
                   }
                 ]
@@ -282,7 +568,7 @@
             "lvl": 2,
             "ext": ".json",
             "sz": 57,
-            "mdf": "2025-11-23 03:07:17",
+            "mdf": "2025-11-25 03:58:30",
             "dbi": true
           },
           {
@@ -298,7 +584,7 @@
                 "lvl": 3,
                 "ext": ".ts",
                 "sz": 595,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -308,17 +594,17 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 113,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
-                "n": "indexer_v1.3.js",
+                "n": "indexer.js",
                 "t": "file",
-                "p": "/Project_Cognize/scripts/indexer_v1.3.js",
+                "p": "/Project_Cognize/scripts/indexer.js",
                 "lvl": 3,
                 "ext": ".js",
-                "sz": 706,
-                "mdf": "2025-11-23 03:07:17",
+                "sz": 646,
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -328,7 +614,55 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 277,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "rotate_jsonl.sh",
+                "t": "file",
+                "p": "/Project_Cognize/scripts/rotate_jsonl.sh",
+                "lvl": 3,
+                "ext": ".sh",
+                "sz": 0,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              }
+            ]
+          },
+          {
+            "n": "setup_env.sh",
+            "t": "file",
+            "p": "/Project_Cognize/setup_env.sh",
+            "lvl": 2,
+            "ext": ".sh",
+            "sz": 0,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
+            "n": "templates",
+            "t": "directory",
+            "p": "/Project_Cognize/templates",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "system_prompt_template.txt",
+                "t": "file",
+                "p": "/Project_Cognize/templates/system_prompt_template.txt",
+                "lvl": 3,
+                "ext": ".txt",
+                "sz": 0,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "task_prompt_template.txt",
+                "t": "file",
+                "p": "/Project_Cognize/templates/task_prompt_template.txt",
+                "lvl": 3,
+                "ext": ".txt",
+                "sz": 0,
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               }
             ]
@@ -339,6 +673,24 @@
             "p": "/Project_Cognize/workspace",
             "lvl": 2,
             "nodes": [
+              {
+                "n": "inputs",
+                "t": "directory",
+                "p": "/Project_Cognize/workspace/inputs",
+                "lvl": 3,
+                "nodes": [
+                  {
+                    "n": "context_template.md",
+                    "t": "file",
+                    "p": "/Project_Cognize/workspace/inputs/context_template.md",
+                    "lvl": 4,
+                    "ext": ".md",
+                    "sz": 0,
+                    "mdf": "2025-11-25 03:58:30",
+                    "dbi": false
+                  }
+                ]
+              },
               {
                 "n": "outputs",
                 "t": "directory",
@@ -351,13 +703,173 @@
                     "p": "/Project_Cognize/workspace/outputs/project_structure_toon.json",
                     "lvl": 4,
                     "ext": ".json",
-                    "sz": 592,
-                    "mdf": "2025-11-23 03:07:17",
+                    "sz": 612,
+                    "mdf": "2025-11-25 03:58:30",
+                    "dbi": false
+                  }
+                ]
+              },
+              {
+                "n": "refactor_position_memo.md",
+                "t": "file",
+                "p": "/Project_Cognize/workspace/refactor_position_memo.md",
+                "lvl": 3,
+                "ext": ".md",
+                "sz": 0,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "n": "README.md",
+        "t": "file",
+        "p": "/README.md",
+        "lvl": 1,
+        "ext": ".md",
+        "sz": 0,
+        "mdf": "2025-11-25 03:58:30",
+        "dbi": false
+      },
+      {
+        "n": "app",
+        "t": "directory",
+        "p": "/app",
+        "lvl": 1,
+        "nodes": [
+          {
+            "n": "api",
+            "t": "directory",
+            "p": "/app/api",
+            "lvl": 2,
+            "nodes": [
+              {
+                "n": "_lib",
+                "t": "directory",
+                "p": "/app/api/_lib",
+                "lvl": 3,
+                "nodes": [
+                  {
+                    "n": "db.ts",
+                    "t": "file",
+                    "p": "/app/api/_lib/db.ts",
+                    "lvl": 4,
+                    "ext": ".ts",
+                    "sz": 63,
+                    "mdf": "2025-11-25 03:58:30",
+                    "dbi": false
+                  },
+                  {
+                    "n": "parser.ts",
+                    "t": "file",
+                    "p": "/app/api/_lib/parser.ts",
+                    "lvl": 4,
+                    "ext": ".ts",
+                    "sz": 55,
+                    "mdf": "2025-11-25 03:58:30",
+                    "dbi": false
+                  },
+                  {
+                    "n": "resolver.ts",
+                    "t": "file",
+                    "p": "/app/api/_lib/resolver.ts",
+                    "lvl": 4,
+                    "ext": ".ts",
+                    "sz": 145,
+                    "mdf": "2025-11-25 03:58:30",
+                    "dbi": false
+                  }
+                ]
+              },
+              {
+                "n": "collect",
+                "t": "directory",
+                "p": "/app/api/collect",
+                "lvl": 3,
+                "nodes": [
+                  {
+                    "n": "route.ts",
+                    "t": "file",
+                    "p": "/app/api/collect/route.ts",
+                    "lvl": 4,
+                    "ext": ".ts",
+                    "sz": 104,
+                    "mdf": "2025-11-25 03:58:30",
                     "dbi": false
                   }
                 ]
               }
             ]
+          },
+          {
+            "n": "favicon.ico",
+            "t": "file",
+            "p": "/app/favicon.ico",
+            "lvl": 2,
+            "ext": ".ico",
+            "sz": 0,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
+            "n": "global-error.tsx",
+            "t": "file",
+            "p": "/app/global-error.tsx",
+            "lvl": 2,
+            "ext": ".tsx",
+            "sz": 23,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
+            "n": "globals.css",
+            "t": "file",
+            "p": "/app/globals.css",
+            "lvl": 2,
+            "ext": ".css",
+            "sz": 0,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
+            "n": "layout.tsx",
+            "t": "file",
+            "p": "/app/layout.tsx",
+            "lvl": 2,
+            "ext": ".tsx",
+            "sz": 80,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
+            "n": "page.tsx",
+            "t": "file",
+            "p": "/app/page.tsx",
+            "lvl": 2,
+            "ext": ".tsx",
+            "sz": 40,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          }
+        ]
+      },
+      {
+        "n": "components",
+        "t": "directory",
+        "p": "/components",
+        "lvl": 1,
+        "nodes": [
+          {
+            "n": "GameCanvas.tsx",
+            "t": "file",
+            "p": "/components/GameCanvas.tsx",
+            "lvl": 2,
+            "ext": ".tsx",
+            "sz": 58,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
           }
         ]
       },
@@ -374,13 +886,133 @@
             "lvl": 2,
             "nodes": [
               {
+                "n": "Bullet.ts",
+                "t": "file",
+                "p": "/game/components/Bullet.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 9,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "Collidable.ts",
+                "t": "file",
+                "p": "/game/components/Collidable.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 42,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "Controllable.ts",
+                "t": "file",
+                "p": "/game/components/Controllable.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 13,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "Generator.ts",
+                "t": "file",
+                "p": "/game/components/Generator.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 19,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "Health.ts",
+                "t": "file",
+                "p": "/game/components/Health.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 27,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "InputState.ts",
+                "t": "file",
+                "p": "/game/components/InputState.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 21,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "Lifetime.ts",
+                "t": "file",
+                "p": "/game/components/Lifetime.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 34,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "Position.ts",
+                "t": "file",
+                "p": "/game/components/Position.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 14,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "Renderable.ts",
+                "t": "file",
+                "p": "/game/components/Renderable.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 22,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "Rotation.ts",
+                "t": "file",
+                "p": "/game/components/Rotation.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 21,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "Team.ts",
+                "t": "file",
+                "p": "/game/components/Team.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 33,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
+                "n": "Velocity.ts",
+                "t": "file",
+                "p": "/game/components/Velocity.ts",
+                "lvl": 3,
+                "ext": ".ts",
+                "sz": 14,
+                "mdf": "2025-11-25 03:58:30",
+                "dbi": false
+              },
+              {
                 "n": "index.js",
                 "t": "file",
                 "p": "/game/components/index.js",
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 14,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               }
             ]
@@ -398,7 +1030,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 129,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -408,7 +1040,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 56,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -418,7 +1050,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 124,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               }
             ]
@@ -436,7 +1068,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 30,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -452,7 +1084,7 @@
                     "lvl": 4,
                     "ext": ".js",
                     "sz": 23,
-                    "mdf": "2025-11-23 03:07:17",
+                    "mdf": "2025-11-25 03:58:30",
                     "dbi": false
                   }
                 ]
@@ -470,7 +1102,7 @@
                     "lvl": 4,
                     "ext": ".js",
                     "sz": 53,
-                    "mdf": "2025-11-23 03:07:17",
+                    "mdf": "2025-11-25 03:58:30",
                     "dbi": false
                   },
                   {
@@ -480,7 +1112,7 @@
                     "lvl": 4,
                     "ext": ".js",
                     "sz": 167,
-                    "mdf": "2025-11-23 03:07:17",
+                    "mdf": "2025-11-25 03:58:30",
                     "dbi": false
                   },
                   {
@@ -490,7 +1122,7 @@
                     "lvl": 4,
                     "ext": ".js",
                     "sz": 35,
-                    "mdf": "2025-11-23 03:07:17",
+                    "mdf": "2025-11-25 03:58:30",
                     "dbi": false
                   }
                 ]
@@ -510,7 +1142,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 52,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -520,7 +1152,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 59,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -530,7 +1162,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 24,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -540,7 +1172,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 71,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -550,7 +1182,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 27,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -560,7 +1192,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 95,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -570,7 +1202,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 70,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -580,7 +1212,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 40,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -590,7 +1222,7 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 53,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               },
               {
@@ -600,12 +1232,188 @@
                 "lvl": 3,
                 "ext": ".js",
                 "sz": 33,
-                "mdf": "2025-11-23 03:07:17",
+                "mdf": "2025-11-25 03:58:30",
                 "dbi": false
               }
             ]
           }
         ]
+      },
+      {
+        "n": "instrumentation-client.ts",
+        "t": "file",
+        "p": "/instrumentation-client.ts",
+        "lvl": 1,
+        "ext": ".ts",
+        "sz": 15,
+        "mdf": "2025-11-25 03:58:30",
+        "dbi": false
+      },
+      {
+        "n": "instrumentation.ts",
+        "t": "file",
+        "p": "/instrumentation.ts",
+        "lvl": 1,
+        "ext": ".ts",
+        "sz": 14,
+        "mdf": "2025-11-25 03:58:30",
+        "dbi": false
+      },
+      {
+        "n": "next-env.d.ts",
+        "t": "file",
+        "p": "/next-env.d.ts",
+        "lvl": 1,
+        "ext": ".ts",
+        "sz": 7,
+        "mdf": "2025-11-25 03:58:30",
+        "dbi": false
+      },
+      {
+        "n": "next.config.js",
+        "t": "file",
+        "p": "/next.config.js",
+        "lvl": 1,
+        "ext": ".js",
+        "sz": 48,
+        "mdf": "2025-11-25 03:58:30",
+        "dbi": false
+      },
+      {
+        "n": "package-lock.json",
+        "t": "file",
+        "p": "/package-lock.json",
+        "lvl": 1,
+        "ext": ".json",
+        "sz": 10446,
+        "mdf": "2025-11-25 03:58:30",
+        "dbi": false
+      },
+      {
+        "n": "package.json",
+        "t": "file",
+        "p": "/package.json",
+        "lvl": 1,
+        "ext": ".json",
+        "sz": 38,
+        "mdf": "2025-11-25 03:58:30",
+        "dbi": false
+      },
+      {
+        "n": "postcss.config.js",
+        "t": "file",
+        "p": "/postcss.config.js",
+        "lvl": 1,
+        "ext": ".js",
+        "sz": 7,
+        "mdf": "2025-11-25 03:58:30",
+        "dbi": false
+      },
+      {
+        "n": "public",
+        "t": "directory",
+        "p": "/public",
+        "lvl": 1,
+        "nodes": [
+          {
+            "n": "error-snippet.js",
+            "t": "file",
+            "p": "/public/error-snippet.js",
+            "lvl": 2,
+            "ext": ".js",
+            "sz": 74,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
+            "n": "next.svg",
+            "t": "file",
+            "p": "/public/next.svg",
+            "lvl": 2,
+            "ext": ".svg",
+            "sz": 0,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
+            "n": "vercel.svg",
+            "t": "file",
+            "p": "/public/vercel.svg",
+            "lvl": 2,
+            "ext": ".svg",
+            "sz": 0,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          }
+        ]
+      },
+      {
+        "n": "scripts",
+        "t": "directory",
+        "p": "/scripts",
+        "lvl": 1,
+        "nodes": [
+          {
+            "n": "quick_start.sh",
+            "t": "file",
+            "p": "/scripts/quick_start.sh",
+            "lvl": 2,
+            "ext": ".sh",
+            "sz": 0,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          },
+          {
+            "n": "start_all_systems.sh",
+            "t": "file",
+            "p": "/scripts/start_all_systems.sh",
+            "lvl": 2,
+            "ext": ".sh",
+            "sz": 0,
+            "mdf": "2025-11-25 03:58:30",
+            "dbi": false
+          }
+        ]
+      },
+      {
+        "n": "sentry.edge.config.ts",
+        "t": "file",
+        "p": "/sentry.edge.config.ts",
+        "lvl": 1,
+        "ext": ".ts",
+        "sz": 15,
+        "mdf": "2025-11-25 03:58:30",
+        "dbi": false
+      },
+      {
+        "n": "sentry.server.config.ts",
+        "t": "file",
+        "p": "/sentry.server.config.ts",
+        "lvl": 1,
+        "ext": ".ts",
+        "sz": 14,
+        "mdf": "2025-11-25 03:58:30",
+        "dbi": false
+      },
+      {
+        "n": "tailwind.config.ts",
+        "t": "file",
+        "p": "/tailwind.config.ts",
+        "lvl": 1,
+        "ext": ".ts",
+        "sz": 21,
+        "mdf": "2025-11-25 03:58:30",
+        "dbi": false
+      },
+      {
+        "n": "tsconfig.json",
+        "t": "file",
+        "p": "/tsconfig.json",
+        "lvl": 1,
+        "ext": ".json",
+        "sz": 46,
+        "mdf": "2025-11-25 03:58:30",
+        "dbi": false
       }
     ]
   }

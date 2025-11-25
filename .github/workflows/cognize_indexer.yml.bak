@@ -8,9 +8,11 @@ on:
       - 'Project_Cognize/workspace/outputs/**'
       - 'Project_Cognize/database/**'
       - '**.md'
+  
   pull_request:
     branches:
       - main
+  
   workflow_dispatch:
     inputs:
       mode:
@@ -29,7 +31,7 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
+  pull-requests: read
 
 jobs:
   index:
@@ -39,7 +41,7 @@ jobs:
       - name: リポジトリのチェックアウト
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 2  # 差分比較のため直前のコミットも取得
 
       - name: Node.js のセットアップ
         uses: actions/setup-node@v4
@@ -52,28 +54,6 @@ jobs:
 
       - name: データベースディレクトリの作成
         run: mkdir -p Project_Cognize/database
-
-      - name: データベースバックアップ
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          if [ -f "Project_Cognize/database/static_index.db" ]; then
-            BACKUP_DIR="Project_Cognize/database/backups"
-            mkdir -p "$BACKUP_DIR"
-            TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-            cp "Project_Cognize/database/static_index.db" "$BACKUP_DIR/static_index_${TIMESTAMP}.db"
-            echo "✓ バックアップ作成: static_index_${TIMESTAMP}.db"
-            find "$BACKUP_DIR" -name "*.db" -mtime +7 -delete
-          fi
-
-      - name: データベースマイグレーション
-        run: node Project_Cognize/scripts/migrate.js
-
-      - name: スキーマ検証
-        run: |
-          if [ -f "Project_Cognize/database/static_index.db" ]; then
-            echo "=== スキーマ検証 ==="
-            node Project_Cognize/scripts/query_index.js schema || echo "⚠️ スキーマ表示に失敗（初回は正常）"
-          fi
 
       - name: インデクサー実行（dry-run）
         if: github.event_name == 'pull_request' || github.event.inputs.mode == 'dry-run'
@@ -93,10 +73,6 @@ jobs:
           fi
           node Project_Cognize/scripts/indexer.js $ARGS
 
-      - name: TOON生成
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.inputs.mode != 'dry-run'
-        run: node Project_Cognize/scripts/generate_toon.js
-
       - name: JSONL検証
         run: |
           if [ -f "Project_Cognize/workspace/outputs/static_index.jsonl" ]; then
@@ -108,24 +84,7 @@ jobs:
       - name: 統計情報の表示
         run: |
           if [ -f "Project_Cognize/database/static_index.db" ]; then
-            echo "=== 基本統計 ==="
             node Project_Cognize/scripts/query_index.js stats
-            echo ""
-            echo "=== カテゴリ別統計 ==="
-            node Project_Cognize/scripts/query_index.js stats --by-category
-          fi
-
-      - name: データ整合性チェック
-        run: |
-          if [ -f "Project_Cognize/database/static_index.db" ]; then
-            echo "=== データ整合性チェック ==="
-            NULL_COUNT=$(sqlite3 Project_Cognize/database/static_index.db \
-              "SELECT COUNT(*) FROM file_index WHERE path IS NULL OR file_hash IS NULL")
-            if [ "$NULL_COUNT" -gt 0 ]; then
-              echo "❌ エラー: NULL値が検出されました（$NULL_COUNT件）"
-              exit 1
-            fi
-            echo "✓ データ整合性チェック完了"
           fi
 
       - name: 変更の確認
@@ -146,7 +105,7 @@ jobs:
           git commit -m "chore: update Cognize index [skip ci]" || echo "変更なし"
           git push
 
-      - name: アーティファクトのアップロード
+      - name: アーティファクトのアップロード（PR用）
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
@@ -156,30 +115,27 @@ jobs:
             Project_Cognize/database/static_index.db
           retention-days: 7
 
-      - name: PRコメント
+      - name: PRコメント（統計情報）
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           script: |
+            const fs = require('fs');
             const { execSync } = require('child_process');
+            
             try {
               const stats = execSync('node Project_Cognize/scripts/query_index.js stats', {
                 encoding: 'utf8'
               });
-              const categoryStats = execSync('node Project_Cognize/scripts/query_index.js stats --by-category', {
-                encoding: 'utf8'
-              });
-              const commentBody = '## 📊 Cognize インデックス統計\n\n' +
-                '```\n' + stats + '\n```\n\n' +
-                '<details>\n<summary>📂 カテゴリ別詳細</summary>\n\n' +
-                '```\n' + categoryStats + '\n```\n' +
-                '</details>';
+              
+              const comment = `## 📊 Cognize インデックス統計\n\n\`\`\`\n${stats}\n\`\`\``;
+              
               github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: commentBody
+                body: comment
               });
             } catch (error) {
-              console.log('統計情報の投稿をスキップ:', error.message);
+              console.log('統計情報の投稿をスキップ');
             }

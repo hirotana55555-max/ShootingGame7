@@ -1,44 +1,30 @@
 #!/usr/bin/env node
 /**
- * Cognize Indexer v2.0 - GLIA準備版
- * 
- * @version 2.0
- * @description Project_Cognizeの中核となる静的解析・インデックス作成ツール
- * 
- * 新機能（Phase 0 + Phase 1）:
- * - ノイズ除去: JavaScriptビルトインクラスのインスタンス化を無視
- * - 自作コード判定: SOURCE_CODE_RULESに基づく初歩的な判定
- * - クリティカルファイル検出: CRITICAL_FILESとの照合
- * 
+ * Cognize Indexer v1.5 - Config-Driven Architect
+ *
+ * @metadata
+ * @version 1.5
+ * @description Project_Cognizeの中核となる静的解析・インデックス作成ツール。
  * @important
- * このファイルは、`/Project_Cognize/config/shared_patterns.js` の設定に完全に従属します。
- * スキャン範囲の変更は、必ず `shared_patterns.js` を編集してください。
- * 
- * 実行:
- *   node Project_Cognize/scripts/indexer.js [--dry-run] [--full-scan] [--verbose]
+ * このファイルは、`/Project_Cognize/config/shared_patterns.js` の、設定に、完全に従属します。
+ * スキャン範囲の、変更は、必ず、`shared_patterns.js` を、編集してください。
+ * このファイル内に、直接、パスや、フィルターを、ハードコードすることは、禁止されています。
+ * 変更を加える際は、必ず、`Project_Cognize/ReadmeForLLM.json` の、`architecture_policy` を、参照してください。
  */
 
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const crypto = require('crypto');
+// [革命] 外部設定ファイルを、唯一の、情報源として、読み込む
+const { IGNORE_PATTERNS } = require('../config/shared_patterns.js');
 const glob = require('glob');
 const Database = require('better-sqlite3');
 const { parse } = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
 
 // ====================
-// 設定読み込み（憲法への服従）
-// ====================
-const {
-  IGNORE_PATTERNS,
-  SOURCE_CODE_RULES,
-  BUILTIN_CLASSES,
-  CRITICAL_FILES
-} = require('../config/shared_patterns.js');
-
-// ====================
-// プロジェクト構成
+// 設定
 // ====================
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
 const COGNIZE_ROOT = path.join(PROJECT_ROOT, 'Project_Cognize');
@@ -48,7 +34,7 @@ const ARCHIVE_DIR = path.join(COGNIZE_ROOT, 'workspace/outputs');
 const MAX_JSONL_SIZE_MB = 50;
 
 const DRY_RUN = process.argv.includes('--dry-run');
-const FULL_SCAN = process.argv.includes('--full-scan');
+const FULL_SCAN = process.argv.includes('--full-scan'); // このフラグは、後方互換性のために、残すが、挙動は、統一される
 const VERBOSE = process.argv.includes('--verbose');
 
 // ====================
@@ -95,109 +81,20 @@ function getCurrentCommit() {
   }
 }
 
-// ====================
-// 自作コード判定エンジン（Phase 1）
-// ====================
-function classifyFile(filePath) {
-  const normalizedPath = filePath.replace(/\\/g, '/');
-  
-  // クリティカルファイルチェック
-  const isCritical = CRITICAL_FILES.some(critPath => 
-    normalizedPath.includes(critPath.replace(/\\/g, '/'))
-  );
-  
-  // include_paths にマッチするか
-  const isIncluded = SOURCE_CODE_RULES.include_paths.some(pattern => {
-    const regexPattern = pattern.replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*');
-    const regex = new RegExp(`^${regexPattern}$`);
-    return regex.test(normalizedPath);
-  });
-  
-  // exclude_paths にマッチするか
-  const isExcluded = SOURCE_CODE_RULES.exclude_paths.some(pattern => {
-    const regexPattern = pattern.replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*');
-    const regex = new RegExp(`^${regexPattern}$`);
-    return regex.test(normalizedPath);
-  });
-  
-  // config_files にマッチするか
-  const isConfig = SOURCE_CODE_RULES.config_files.some(configFile =>
-    normalizedPath.endsWith(configFile)
-  );
-  
-  // 判定ロジック
-  let isSelfMade = false;
-  let confidence = 0.0;
-  let reason = '';
-  let category = 'unknown';
-  
-  if (isExcluded) {
-    isSelfMade = false;
-    confidence = 1.0;
-    reason = 'matches exclude_paths rule';
-    category = 'external';
-  } else if (isCritical) {
-    isSelfMade = true;
-    confidence = 1.0;
-    reason = 'marked as critical file';
-    category = 'critical';
-  } else if (isConfig) {
-    isSelfMade = true;
-    confidence = 0.9;
-    reason = 'config file (self-made but rarely modified)';
-    category = 'config';
-  } else if (isIncluded) {
-    isSelfMade = true;
-    confidence = 0.95;
-    reason = 'matches include_paths rule';
-    
-    // カテゴリ詳細判定
-    if (normalizedPath.startsWith('components/')) {
-      category = 'component';
-    } else if (normalizedPath.startsWith('app/')) {
-      category = 'app';
-    } else if (normalizedPath.startsWith('game/core/')) {
-      category = 'game-core';
-    } else if (normalizedPath.startsWith('game/components/')) {
-      category = 'game-component';
-    } else if (normalizedPath.startsWith('game/systems/')) {
-      category = 'game-system';
-    } else if (normalizedPath.startsWith('game/debug/')) {
-      category = 'debug';
-    } else {
-      category = 'self-made';
-    }
-  } else {
-    // どちらにもマッチしない → 低確信度で自作と仮定
-    isSelfMade = true;
-    confidence = 0.5;
-    reason = 'not in exclude list, assumed self-made';
-    category = 'uncertain';
-  }
-  
-  return {
-    is_self_made: isSelfMade,
-    confidence,
-    reason,
-    category,
-    is_critical: isCritical
-  };
-}
-
-// ====================
-// ファイル収集
-// ====================
+// [革命] 独裁国家を、解体し、議会（config）に、従う、シンプルな、関数に、作り替えた
 function getChangedFiles() {
-  log('スキャン開始: config/shared_patterns.js の定義を使用', 'info');
+  // 差分スキャンや、ハードコードされた、パターンを、完全に、廃止。
+  // 常に、configファイルに、基づく、一貫した、スキャンを、実行する。
+  log('スキャン開始: config/shared_patterns.js の定義を使用します。', 'info');
   
-  const files = glob.sync('**/*', {
-    cwd: PROJECT_ROOT,
-    ignore: IGNORE_PATTERNS,
-    nodir: true,
-    absolute: false
+  const files = glob.sync('**/*', { // プロジェクトの、全ファイルを、一旦、対象にする
+      cwd: PROJECT_ROOT,
+      ignore: IGNORE_PATTERNS, // configから、読み込んだ、除外パターンのみを、適用
+      nodir: true,
+      absolute: false // 出力は、プロジェクトルートからの、相対パス
   });
 
-  log(`スキャン対象として ${files.length} ファイルを検出`, 'verbose');
+  log(`スキャン対象として ${files.length} ファイルを検出しました。`, 'verbose');
   return files;
 }
 
@@ -273,11 +170,7 @@ function initDatabase() {
       commit_sha TEXT,
       json_meta TEXT,
       is_critical BOOLEAN DEFAULT 0,
-      last_accessed REAL DEFAULT 0,
-      is_self_made BOOLEAN DEFAULT 0,
-      confidence REAL DEFAULT 0.0,
-      classification_reason TEXT,
-      category TEXT
+      last_accessed REAL DEFAULT 0
     );
 
     CREATE TABLE IF NOT EXISTS file_dependencies (
@@ -302,8 +195,6 @@ function initDatabase() {
     CREATE INDEX IF NOT EXISTS idx_updated_at ON file_index(updated_at DESC);
     CREATE INDEX IF NOT EXISTS idx_critical ON file_index(is_critical);
     CREATE INDEX IF NOT EXISTS idx_last_accessed ON file_index(last_accessed);
-    CREATE INDEX IF NOT EXISTS idx_self_made ON file_index(is_self_made);
-    CREATE INDEX IF NOT EXISTS idx_category ON file_index(category);
   `);
 
   log('SQLiteデータベース初期化完了', 'debug');
@@ -338,10 +229,8 @@ function analyzeFile(filePath) {
   const exports = [];
   const reexports = [];
   const instances = [];
-  const lines = code.split('\n');
 
-  // ★ Phase 1: ビルトインクラスのSetを事前作成（高速化）
-  const builtinSet = new Set(BUILTIN_CLASSES);
+  const lines = code.split('\n');
 
   traverse(ast, {
     ImportDeclaration(p) {
@@ -366,7 +255,7 @@ function analyzeFile(filePath) {
       if (p.node.callee.name === 'require' && p.node.arguments.length > 0 && p.node.arguments[0].type === 'StringLiteral') {
         const moduleName = p.node.arguments[0].value;
         if (!imports.some(imp => imp.module === moduleName)) {
-          imports.push({ module: moduleName, specifiers: [{ type: 'require', name: null }] });
+            imports.push({ module: moduleName, specifiers: [{ type: 'require', name: null }] });
         }
       }
     },
@@ -477,17 +366,6 @@ function analyzeFile(filePath) {
 
       if (!className) return;
 
-      // ★ Phase 1: ノイズ除去 - ビルトインクラスをスキップ
-      if (builtinSet.has(className)) {
-        return;
-      }
-
-      // ★ さらに高度な判定: 大文字始まりでないクラス名は疑わしい
-      if (!className.match(/^[A-Z]/)) {
-        log(`疑わしいクラス名をスキップ: ${className} in ${filePath}`, 'debug');
-        return;
-      }
-
       const args = node.arguments.map(arg => {
         if (arg.type === 'ObjectExpression') {
           return {
@@ -539,9 +417,6 @@ function analyzeFile(filePath) {
   };
 }
 
-// ====================
-// JSONLローテーション
-// ====================
 function checkRotation() {
   if (!fs.existsSync(JSONL_PATH)) return;
 
@@ -551,7 +426,7 @@ function checkRotation() {
   log(`static_index.jsonl サイズ: ${sizeMB.toFixed(2)}MB`, 'verbose');
 
   if (sizeMB > MAX_JSONL_SIZE_MB) {
-    const timestamp = new Date().toISOString().split('T')[0].replace(/-/g, '');
+    const timestamp = new Date().toISOString().split('T').replace(/-/g, '');
     const archivePath = path.join(ARCHIVE_DIR, `static_index_${timestamp}.jsonl.gz`);
 
     log(`⚠ JSONLが${MAX_JSONL_SIZE_MB}MB超過 → ローテーション開始`, 'warn');
@@ -572,17 +447,17 @@ function checkRotation() {
 function main() {
   const startTime = Date.now();
 
-  log('=== Cognize Indexer v2.0 (GLIA準備版) 開始 ===');
+  log('=== Cognize Indexer v1.5 開始 ===');
   log(`モード: ${DRY_RUN ? 'DRY-RUN（書き込みなし）' : '本番実行'}`);
-  log(`スキャン: config/shared_patterns.js に基づく一貫したフルスキャン`);
+  log(`スキャン: config/shared_patterns.js に基づく、一貫した、フルスキャン`);
 
   if (FULL_SCAN && !DRY_RUN) {
     if (fs.existsSync(DB_PATH)) {
       try {
         fs.unlinkSync(DB_PATH);
-        log('⚠ フルスキャンモードのため既存DBを削除', 'warn');
+        log('⚠ フルスキャンモードのため、既存のデータベースを削除しました。', 'warn');
       } catch (err) {
-        log(`DB削除失敗: ${err.message}`, 'error');
+        log(`データベースの削除に失敗しました: ${err.message}`, 'error');
         process.exit(1);
       }
     }
@@ -609,9 +484,8 @@ function main() {
   const insertFile = db.prepare(`
     INSERT OR REPLACE INTO file_index (
       path, file_hash, language, symbols_json, imports_json, exports_json,
-      loc, updated_at, commit_sha, json_meta, is_critical, last_accessed,
-      is_self_made, confidence, classification_reason, category
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?)
+      loc, updated_at, commit_sha, json_meta, is_critical, last_accessed
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?, ?, ?)
   `);
 
   const insertDep = db.prepare(`
@@ -662,18 +536,15 @@ function main() {
         };
       }
 
-      // ★ Phase 1: 自作コード判定
-      const classification = classifyFile(relPath);
-
       const stats = fs.statSync(fullPath);
       const lastAccessed = stats.atimeMs;
 
       const record = {
         record_id: crypto.randomUUID(),
-        schema_version: '2.0',
+        schema_version: '1.5',
         provider: {
           name: 'cognize-indexer',
-          version: '2.0',
+          version: '1.5',
           mode: DRY_RUN ? 'dry-run' : 'production'
         },
         commit: commitSha,
@@ -698,14 +569,7 @@ function main() {
             last_accessed: lastAccessed
           },
           json_meta: analysis.json_meta,
-          is_critical: analysis.is_critical || classification.is_critical,
-          // ★ Phase 1: 新しい判定結果
-          classification: {
-            is_self_made: classification.is_self_made,
-            confidence: classification.confidence,
-            reason: classification.reason,
-            category: classification.category
-          }
+          is_critical: analysis.is_critical
         }
       };
 
@@ -722,12 +586,8 @@ function main() {
           analysis.loc,
           commitSha,
           analysis.json_meta || null,
-          analysis.is_critical || classification.is_critical ? 1 : 0,
-          lastAccessed,
-          classification.is_self_made ? 1 : 0,
-          classification.confidence,
-          classification.reason,
-          classification.category
+          analysis.is_critical ? 1 : 0,
+          lastAccessed
         );
 
         deleteDeps.run(relPath);
@@ -755,8 +615,7 @@ function main() {
       const typeLog = relPath.endsWith('.json') ? 'JSON' : 'JS/TS/TSX';
       const instCount = analysis.instances ? analysis.instances.length : 0;
       const instLog = instCount > 0 ? `, ${instCount}インスタンス` : '';
-      const classLog = classification.is_self_made ? ` [自作: ${classification.category}]` : '';
-      log(`処理完了: ${relPath} (${typeLog}${instLog}${classLog})`, 'verbose');
+      log(`処理完了: ${relPath} (${typeLog}${instLog})`, 'verbose');
 
     } catch (err) {
       errorCount++;
