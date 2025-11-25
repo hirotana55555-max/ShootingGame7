@@ -1,0 +1,257 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+const Database = require('better-sqlite3');
+
+const PROJECT_ROOT = path.resolve(__dirname, '../..');
+const DB_PATH = path.join(PROJECT_ROOT, 'Project_Cognize/database/static_index.db');
+const MIGRATIONS_DIR = path.join(PROJECT_ROOT, 'Project_Cognize/migrations');
+const BACKUP_DIR = path.join(PROJECT_ROOT, 'Project_Cognize/database/backups');
+
+const DRY_RUN = process.argv.includes('--dry-run');
+
+function log(msg, level = 'info') {
+  const icons = { info: '✓', warn: '⚠', error: '✗', debug: '•' };
+  console.log(`${icons[level] || '•'} ${msg}`);
+}
+
+function ensureDir(dirPath) {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
+}
+
+function calculateHash(content) {
+  return crypto.createHash('sha256').update(content).digest('hex').substring(0, 16);
+}
+
+function backupDatabase() {
+  if (!fs.existsSync(DB_PATH)) {
+    return null;
+  }
+  
+  ensureDir(BACKUP_DIR);
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const backupPath = path.join(BACKUP_DIR, `static_index_${timestamp}.db`);
+  
+  fs.copyFileSync(DB_PATH, backupPath);
+  log(`バックアップ作成: ${path.basename(backupPath)}`, 'info');
+  
+  return backupPath;
+}
+
+function getMigrationFiles() {
+  if (!fs.existsSync(MIGRATIONS_DIR)) {
+    log(`マイグレーションディレクトリが存在しません: ${MIGRATIONS_DIR}`, 'error');
+    return [];
+  }
+  
+  return fs.readdirSync(MIGRATIONS_DIR)
+    .filter(f => f.endsWith('.sql'))
+    .sort()
+    .map(filename => {
+      const filePath = path.join(MIGRATIONS_DIR, filename);
+      const content = fs.readFileSync(filePath, 'utf8');
+      const version = filename.replace('.sql', '');
+      
+      return {
+        version,
+        filename,
+        path: filePath,
+        content,
+        hash: calculateHash(content)
+      };
+    });
+}
+
+function initSchemaMigrationsTable(db) {
+  db.exec(\`
+    CREATE TABLE IF NOT EXISTS schema_migrations (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      version TEXT NOT NULL UNIQUE,
+      applied_at TEXT NOT NULL DEFAULT (datetime('now')),
+      description TEXT,
+      sql_hash TEXT
+    )
+  \`);
+}
+
+function getAppliedMigrations(db) {
+  try {
+    const rows = db.prepare('SELECT version, sql_hash FROM schema_migrations ORDER BY id').all();
+    return new Map(rows.map(r => [r.version, r.sql_hash]));
+  } catch (err) {
+    return new Map();
+  }
+}
+
+function applyMigration(db, migration, dryRun = false) {
+  const applied = getAppliedMigrations(db);
+  
+  if (applied.has(migration.version)) {
+    const existingHash = applied.get(migration.version);
+    if (existingHash === migration.hash) {
+      log(\`スキップ: \${migration.filename} (適用済み)\`, 'debug');
+      return { status: 'skipped', migration };
+    } else {
+      log(\`⚠ 警告: \${migration.filename} の内容が変更されています\`, 'warn');
+      return { status: 'conflict', migration };
+    }
+  }
+  
+  log(\`適用中: \${migration.filename}\`, 'info');
+  
+  if (dryRun) {
+    log('  (DRY-RUNモード: 実際には実行されません)', 'debug');
+    return { status: 'would-apply', migration };
+  }
+  
+  try {
+    db.transaction(() => {
+      db.exec(migration.content);
+      
+      if (!migration.content.includes('INSERT INTO schema_migrations')) {
+        db.prepare(\`
+          INSERT INTO schema_migrations (version, sql_hash, description)
+          VALUES (?, ?, ?)
+        \`).run(
+          migration.version,
+          migration.hash,
+          \`Applied migration: \${migration.filename}\`
+        );
+      }
+    })();
+    
+    log(\`  ✓ 適用完了\`, 'info');
+    return { status: 'applied', migration };
+    
+  } catch (err) {
+    log(\`  ✗ 適用失敗: \${err.message}\`, 'error');
+    return { status: 'failed', migration, error: err };
+  }
+}
+
+function main() {
+  if (process.argv.includes('--help')) {
+    console.log(\`
+Cognize Migration Manager - 使用方法
+
+  node Project_Cognize/scripts/migrate.js [--dry-run]
+
+  --dry-run: 実際の変更は行わず、実行されるマイグレーションを表示します。
+    \`);
+    return;
+  }
+
+  console.log('=== Cognize Migration Manager ===\\n');
+  
+  if (DRY_RUN) {
+    log('モード: DRY-RUN（実際の変更は行いません）', 'warn');
+  }
+  
+  if (!DRY_RUN) {
+    backupDatabase();
+  }
+  
+  const dbExists = fs.existsSync(DB_PATH);
+  const db = new Database(DB_PATH);
+  
+  if (!dbExists) {
+    log('新規データベースを作成しました', 'info');
+  }
+  
+  initSchemaMigrationsTable(db);
+  
+  const migrations = getMigrationFiles();
+  log(\`マイグレーションファイル: \${migrations.length}個\\n\`, 'info');
+  
+  if (migrations.length === 0) {
+    log('適用するマイグレーションがありません', 'warn');
+    db.close();
+    return;
+  }
+  
+  const results = {
+    applied: [],
+    skipped: [],
+    conflicts: [],
+    failed: []
+  };
+  
+  for (const migration of migrations) {
+    const result = applyMigration(db, migration, DRY_RUN);
+    
+    switch (result.status) {
+      case 'applied':
+      case 'would-apply':
+        results.applied.push(result);
+        break;
+      case 'skipped':
+        results.skipped.push(result);
+        break;
+      case 'conflict':
+        results.conflicts.push(result);
+        break;
+      case 'failed':
+        results.failed.push(result);
+        break;
+    }
+  }
+  
+  console.log('\\n=== マイグレーション結果 ===\\n');
+  log(\`適用: \${results.applied.length}個\`, results.applied.length > 0 ? 'info' : 'debug');
+  log(\`スキップ: \${results.skipped.length}個\`, 'debug');
+  
+  if (results.conflicts.length > 0) {
+    log(\`コンフリクト: \${results.conflicts.length}個\`, 'warn');
+    results.conflicts.forEach(r => {
+      log(\`  - \${r.migration.filename}\`, 'warn');
+    });
+  }
+  
+  if (results.failed.length > 0) {
+    log(\`失敗: \${results.failed.length}個\`, 'error');
+    results.failed.forEach(r => {
+      log(\`  - \${r.migration.filename}: \${r.error.message}\`, 'error');
+    });
+  }
+  
+  try {
+    console.log('\\n=== 現在のスキーマバージョン ===\\n');
+    const versions = db.prepare(\`
+      SELECT version, applied_at, description
+      FROM schema_migrations
+      ORDER BY id DESC
+      LIMIT 5
+    \`).all();
+    
+    versions.forEach(v => {
+      console.log(\`  \${v.version} - \${v.applied_at}\`);
+      if (v.description) {
+        console.log(\`    \${v.description}\`);
+      }
+    });
+  } catch (err) {
+    log('バージョン情報の取得に失敗', 'debug');
+  }
+  
+  db.close();
+  
+  console.log('');
+  
+  if (results.failed.length > 0) {
+    log('マイグレーションが失敗しました', 'error');
+    process.exit(1);
+  }
+  
+  log('マイグレーション完了', 'info');
+}
+
+try {
+  main();
+} catch (err) {
+  console.error('\\n✗ 致命的エラー:', err.message);
+  console.error(err.stack);
+  process.exit(1);
+}

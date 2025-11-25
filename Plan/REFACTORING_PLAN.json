@@ -26,11 +26,26 @@
         }
       ],
       "bug_tracking_ledger": [
-        { "bug_id": "BUG-001", "status": "DISCOVERED" },
-        { "bug_id": "BUG-002", "status": "DISCOVERED" },
-        { "bug_id": "BUG-003", "status": "DISCOVERED" },
-        { "bug_id": "BUG-004", "status": "DISCOVERED" },
-        { "bug_id": "BUG-005", "status": "DISCOVERED" },
+        {
+          "bug_id": "BUG-001",
+          "status": "DISCOVERED"
+        },
+        {
+          "bug_id": "BUG-002",
+          "status": "DISCOVERED"
+        },
+        {
+          "bug_id": "BUG-003",
+          "status": "DISCOVERED"
+        },
+        {
+          "bug_id": "BUG-004",
+          "status": "DISCOVERED"
+        },
+        {
+          "bug_id": "BUG-005",
+          "status": "DISCOVERED"
+        },
         {
           "bug_id": "BUG-006",
           "tool": "indexer.js / query_index.js",
@@ -38,10 +53,16 @@
           "cause": "インスタンス化の、追跡時に、自作クラスと、組み込みオブジェクトを、区別する、仕組みが、ないため。",
           "status": "PENDING_INVESTIGATION"
         },
-        { "bug_id": "BUG-007", "status": "CLOSED_AS_NOT_A_BUG" }
+        {
+          "bug_id": "BUG-007",
+          "status": "CLOSED_AS_NOT_A_BUG"
+        }
       ],
       "architectural_insights": [
-        { "insight_id": "INSIGHT-001", "status": "RECORDED" }
+        {
+          "insight_id": "INSIGHT-001",
+          "status": "RECORDED"
+        }
       ]
     },
     {
@@ -80,11 +101,49 @@
       "status": "PENDING",
       "objective": "indexer.js, query_index.js, cognize_indexer.yml の、3システム間の、矛盾を、完全に、解消し、期待通りに、連携する、堅牢な、CI/CDパイプラインを、再構築する。",
       "action_plan": [
-        { "step": 8.1, "status": "PENDING" },
-        { "step": 8.2, "status": "PENDING" },
-        { "step": 8.3, "status": "PENDING" },
-        { "step": 8.4, "status": "PENDING" }
+        {
+          "step": 8.1,
+          "status": "PENDING"
+        },
+        {
+          "step": 8.2,
+          "status": "PENDING"
+        },
+        {
+          "step": 8.3,
+          "status": "PENDING"
+        },
+        {
+          "step": 8.4,
+          "status": "PENDING"
+        }
       ]
+    }
+  ],
+  "completed_phases": [
+    {
+      "phase_id": 8,
+      "name": "【Project_Cognize v2.0 移行プロジェクト】",
+      "status": "COMPLETED",
+      "objective": "Project Cognizeのスキーマをv2.0に進化させ、自作コード判定エンジンを導入する。",
+      "key_achievements": [
+        {
+          "id": "8-1",
+          "description": "v2.0データベーススキーマへの移行",
+          "details": "`migrate.js`と6つのマイグレーションファイルを用いて、`file_index`等のテーブルを拡張し、監査ログ用のテーブルを新設した。"
+        },
+        {
+          "id": "8-2",
+          "description": "v2.0 `indexer.js`（GLIA準備版）の導入",
+          "details": "失われていたv2.0版の`indexer.js`と`shared_patterns.js`を再発見・配置し、`shared_patterns.js`（憲法）に基づいた自作コード判定を実現した。"
+        },
+        {
+          "id": "8-3",
+          "description": "v2.0ドキュメントの整備",
+          "details": "v2.0の機能に対応した`99_USER_MANUAL.md`を配置し、`ReadmeForLLM.json`を最新の状態に更新した。"
+        }
+      ],
+      "final_result": "プロジェクト内の自作コード率97.5%（116/119ファイル）を達成。コードの『出自』を、高精度で、自動分類する、自己認識能力を獲得した。"
     }
   ]
 }
