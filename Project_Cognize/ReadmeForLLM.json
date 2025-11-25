@@ -1,153 +1,98 @@
 {
-  "architecture_policy": {
-    "id": "AP-01",
-    "principle": "Single Source of Truth (信頼できる、唯一の、情報源)",
-    "description": "当プロジェクトの、スキャン範囲や、振る舞いを、定義する、設定は、必ず、`/Project_Cognize/config/` ディレクトリ内の、設定ファイルに、集約されます。スクリプトファイル内に、直接、設定を、ハードコードすることは、固く、禁止されています。",
-    "rules": [
+  "manifest_version": "2.0",
+  "last_updated": "2025-11-25",
+  "project_name": "Project Cognize",
+  "ultimate_goal": "GLIA構想の中核を担う、自己認識・自己記述システム",
+  "philosophy": "LLMは、記憶を持たず、プロジェクトの全体像や、設計思想を、暗黙的に、理解することはできない。故に、我々は、LLMが、タスクを実行する、その、瞬間に、参照すべき、『信頼できる、唯一の、情報源（Single Source of Truth）』を、構造化データとして、提供し続けなければならない。それが、この、Project Cognizeの、存在意義である。",
+
+  "governance": {
+    "id": "GOV-01",
+    "title": "統治原則：LLMエージェントが、遵守すべき、絶対的、ルール",
+    "prohibitions": [
       {
-        "target_file": "Project_Cognize/scripts/indexer.js",
-        "instruction": "このスクリプトは、必ず、`../config/shared_patterns.js` を、読み込み、その、`IGNORE_PATTERNS` に、従って、動作しなければなりません。独自の、フィルタリングロジックを、実装しては、いけません。"
+        "rule": "AGENT_MODE_PROHIBITED",
+        "description": "このファイルは、分析と、理解のための、情報共有であり、タスク実行の、直接的な、指示ではない。性急な、エージェントモードへの、切り替えを、禁止する。"
+      },
+      {
+        "rule": "NO_DESTRUCTIVE_CHANGES",
+        "description": "破壊的改変は、厳禁とする。提案の、前に、必ず、現状を、徹底的に、分析し、仮説を、実証すること。"
       }
     ],
-    "llm_instruction": "【最重要警告】この、architecture_policyは、プロジェクトの、安定性を、維持するための、絶対的な、ルールです。この、原則に、反する、ような、コードの、変更提案は、決して、行わないでください。変更が必要な場合は、まず、configファイルの、修正を、提案してください。"
-  },
-  "prohibitions": [
-    {
-      "rule": "AGENT_MODE_PROHIBITED",
-      "description": "これは分析のための情報共有でタスク実行の指示ではない。エージェントモードへの切り替えは絶対に禁止する。"
-    },
-    {
-      "rule": "NO_DESTRUCTIVE_CHANGES",
-      "description": "破壊的改変は厳禁。現状を徹底分析し、仮説を実証した後にのみ改変提案を行う。"
+    "architectural_constitution": {
+      "id": "AP-01",
+      "principle": "Single Source of Truth for Project Scope",
+      "description": "プロジェクトの、『自作コード』の、範囲や、各ツールの、振る舞いを、定義する、全ての、設定は、ただ、一つの、ファイル `/Project_Cognize/config/shared_patterns.js` に、集約される。これを、当プロジェクトの、『憲法』と、定める。",
+      "llm_instruction": {
+        "level": "CRITICAL",
+        "summary": "【最重要警告】いかなる、理由があろうとも、この、『憲法』に、反する、ような、コード（例：スクリプト内への、パスの、ハードコード）を、生成してはならない。プロジェクトの、範囲を、変更したい場合は、まず、`shared_patterns.js`の、修正を、提案せよ。"
+      }
     }
-  ],
-  "manifest_version": "1.0",
-  "last_updated": "2025-11-25",
-  "project_name": "Project_Cognize",
-  "description": "AI協業による、自己進化型、開発補助システム。プロジェクトの構造と意味を自己解析し、データベース化することで、LLMエージェントの自律的なリファクタリングを支援する。",
-  "philosophy": "LLMは、人間のように、プロジェクトの全体像を、暗黙的に、理解することはできない。故に、我々は、LLMが、プロジェクトを、正確に、『認知』するための、構造化された、情報（＝このmanifestや、indexerが、生成するDB）を、提供し続けなければならない。",
+  },
+
+  "workflow_overview": {
+    "id": "WF-01",
+    "title": "データ駆動型・自己認識ワークフロー",
+    "description": "Project Cognizeは、個々の、ツールが、連携し、プロジェクト自身が、自分を、分析・記述する、エコシステムを、形成する。",
+    "data_flow": [
+      {
+        "step": 1,
+        "actor": "indexer.js",
+        "action": "憲法(`shared_patterns.js`)に、基づき、全ファイルを、スキャンし、AST解析を実行する。",
+        "output": "ファイル構造、シンボル、依存関係、インスタンス等の、詳細な、メタデータ。",
+        "destination": "static_index.db (主データベース) / static_index.jsonl (ログ)"
+      },
+      {
+        "step": 2,
+        "actor": "generate_toon.js",
+        "action": "最新の、`static_index.db`を、読み込み、プロジェクトの、完全な、階層構造を、生成する。",
+        "output": "TOON (Tree-Oriented Object Notation) 形式の、構造化データ。",
+        "destination": "project_structure_toon.json"
+      },
+      {
+        "step": 3,
+        "actor": "generate_prompt.ts",
+        "action": "目的の、タスクと、最新の、`project_structure_toon.json`、及び、各種テンプレートを、組み合わせる。",
+        "output": "LLMの、思考を、正確に、ガイドするための、コンテキスト情報が、豊富に、埋め込まれた、実行プロンプト。",
+        "destination": "LLM Agent (e.g., GLIA)"
+      }
+    ]
+  },
+
   "core_components": [
     {
-      "id": "indexer",
-      "file_name": "indexer.js",
-      "main_description": "Project_Cognizeの中核となる静的解析・インデックス作成ツール。",
-      "functional_overview": [
-        {
-          "id": 1,
-          "summary": "設定ファイル駆動スキャン",
-          "details": "スキャン範囲は config/shared_patterns.js の IGNORE_PATTERNS に完全に従う。ハードコードされたルールは存在しない。"
-        },
-        {
-          "id": 2,
-          "summary": "ASTによる詳細解析",
-          "details": "JavaScript/TypeScriptファイル (.js, .ts, .tsx) に対して Babel/AST 解析を実行し、シンボル、インポート/エクスポート、クラスインスタンス情報を抽出する。"
-        },
-        {
-          "id": 3,
-          "summary": "JSON専用処理",
-          "details": ".json ファイルの構造を検証し、サイズ、キーカウント、クリティカルファイル判定などのメタ情報を収集する。"
-        },
-        {
-          "id": 4,
-          "summary": "データベース永続化",
-          "details": "抽出した全メタデータを高性能な SQLiteデータベース (database/static_index.db) に格納する。"
-        },
-        {
-          "id": 5,
-          "summary": "JSONLログ出力",
-          "details": "解析レコードを JSON Lines形式 (workspace/outputs/static_index.jsonl) で追記ログとして出力する。"
-        },
-        {
-          "id": 6,
-          "summary": "フルスキャンとDBクリーンアップ",
-          "details": "--full-scan オプション指定時、スキャン前に既存のデータベースを自動的に削除し、クリーンな状態から再構築する。"
-        }
-      ],
-      "command_options": {
-        "execution_example": "node ./Project_Cognize/scripts/indexer.js [オプション]",
-        "options": [
-          {
-            "option": "（オプションなし）",
-            "meaning": "通常実行（フルスキャン）",
-            "purpose": "config/shared_patterns.js に基づき、全ファイルをスキャンし、DBとJSONLに書き込む。",
-            "llm_instruction": "通常のリファクタリング前の更新に使用します。"
-          },
-          {
-            "option": "--dry-run",
-            "meaning": "書き込みなし",
-            "purpose": "ファイル解析は実行するが、DBやJSONLファイルへの書き込みは行わない。",
-            "llm_instruction": "解析ロジックのテストやデバッグ、CIでの影響評価に使用します。"
-          },
-          {
-            "option": "--full-scan",
-            "meaning": "DB強制クリーンアップ",
-            "purpose": "スキャン前にデータベースを強制的に削除する。スキャン自体は常時フルスキャン。",
-            "llm_instruction": "DBが壊れた場合や、完全にクリーンな状態から再構築したい場合に使用します。"
-          },
-          {
-            "option": "--verbose",
-            "meaning": "詳細ログ出力",
-            "purpose": "処理中の各ファイルの状態、デバッグ情報など、詳細な実行ログを表示する。",
-            "llm_instruction": "問題発生時の調査に使用します。"
-          }
-        ]
-      }
+      "id": "config_file",
+      "file_name": "config/shared_patterns.js",
+      "main_description": "【憲法】プロジェクトの、範囲と、振る舞いを、定義する、唯一の、設定ファイル。全ての、ツールの、動作は、この、ファイルに、従う。"
     },
     {
-      "id": "query_tool",
-      "file_name": "query_index.js",
-      "main_description": "プロジェクトの静的インデックスデータベース (static_index.db) を照会するためのCLIツール。",
-      "commands": [
-        {
-          "command": "list",
-          "summary": "全ファイル一覧の表示"
-        },
-        {
-          "command": "search <pattern>",
-          "summary": "ファイルパスの部分一致検索"
-        },
-        {
-          "command": "stats",
-          "summary": "プロジェクトの統計情報表示"
-        },
-        {
-          "command": "deps <file>",
-          "summary": "指定ファイルの依存関係（使用/被使用）を表示"
-        },
-        {
-          "command": "instances <className>",
-          "summary": "クラスのインスタンス化箇所を検索"
-        }
-      ]
+      "id": "indexer",
+      "file_name": "scripts/indexer.js",
+      "main_description": "【測量士】プロジェクトの、静的解析を、行い、全ての、情報を、データベース化する、中核ツール。"
     },
     {
       "id": "toon_generator",
-      "file_name": "generate_toon.js",
-      "main_description": "インデックスDBの内容に基づき、プロジェクト全体の階層構造を表現するTOON (Tree-Oriented Object Notation) 形式のJSONファイルを生成する。"
+      "file_name": "scripts/generate_toon.js",
+      "main_description": "【地図製作者】データベース情報に基づき、LLMが、解釈可能な、プロジェクトの、階層構造マップ（TOON）を、生成する。"
     },
     {
-      "id": "log_rotator",
-      "file_name": "rotate_jsonl.sh",
-      "main_description": "JSONLファイルが肥大化した場合に、自動的に圧縮・アーカイブするためのシェルスクリプト。"
+      "id": "prompt_generator",
+      "file_name": "scripts/generate_prompt.ts",
+      "main_description": "【作戦立案官】TOONマップと、テンプレートを、元に、LLMへの、具体的な、指示プロンプトを、生成する。"
+    },
+    {
+      "id": "query_tool",
+      "file_name": "scripts/query_index.js",
+      "main_description": "【司書】生成された、データベースの、内容を、人間が、照会・確認するための、CLIツール。"
     }
   ],
+
   "automation": {
     "id": "github_actions",
     "file_path": ".github/workflows/cognize_indexer.yml",
-    "main_description": "このプロジェクトは、GitHub Actionsによって、高度に自動化されています。このワークフローは、`main`ブランチへの `push` または `pull_request` をトリガーとして、`indexer.js`を自動実行します。",
-    "triggers": [
-      {
-        "event": "Pull Request (to main)",
-        "action": "変更内容をシミュレーション（`indexer`を`--dry-run`で実行）し、プロジェクト構造への影響（統計情報）をPRコメントに投稿します。これにより、マージ前に変更の妥当性を客観的に評価できます。"
-      },
-      {
-        "event": "Push (to main)",
-        "action": "プロジェクト全体をスキャンし、`static_index.db`を最新の状態に更新します。更新があった場合、このワークフロー自身がコミットとプッシュを行い、データベースを自己修正します。"
-      }
-    ],
+    "main_description": "この、エコシステムは、GitHub Actionsによって、自動化されている。`main`ブランチへの、変更を、トリガーに、`indexer.js`が、自動実行され、データベースが、常に、最新に、保たれる。",
     "llm_instruction": {
       "level": "CRITICAL",
-      "summary": "【最重要】`Project_Cognize`の、ファイルや、スクリプト、特に`indexer.js`の、ファイル名、パス、コマンドオプションに、変更を、加える際は、必ず、この、GitHub Actions (`cognize_indexer.yml`) の、修正も、同時に、行ってください。さもなくば、CI/CDパイプラインが、完全に、破綻します。"
+      "summary": "【最重要】`Project_Cognize`配下の、スクリプトの、ファイル名や、コマンドオプションを、変更する際は、必ず、この、自動化ワークフロー (`cognize_indexer.yml`) も、同時に、修正しなければ、CI/CDパイプラインが、完全に、破綻する。"
     }
   }
 }
