@@ -432,11 +432,8 @@ function showInstances(className, options = {}) {
   }
 }
 
-// ★★★★★ 修正箇所 ★★★★★
 const command = process.argv[2];
 const arg = process.argv[3];
-// ★★★★★★★★★★★★★★★
-
 const flags = process.argv.slice(2);
 
 const options = {

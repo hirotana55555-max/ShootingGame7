@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
- * Cognize Indexer v2.0 - GLIA準備版
+ * Cognize Indexer v2.0 - GLIA準備版 (patched: micromatch)
  * 
  * @version 2.0
  * @description Project_Cognizeの中核となる静的解析・インデックス作成ツール
  * 
  * 新機能（Phase 0 + Phase 1）:
  * - ノイズ除去: JavaScriptビルトインクラスのインスタンス化を無視
- * - 自作コード判定: SOURCE_CODE_RULESに基づく初歩的な判定
+ * - 自作コード判定: SOURCE_CODE_RULESに基づく初歩的な判定 (micromatch使用)
  * - クリティカルファイル検出: CRITICAL_FILESとの照合
  * 
  * @important
@@ -26,6 +26,7 @@ const glob = require('glob');
 const Database = require('better-sqlite3');
 const { parse } = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
+const micromatch = require('micromatch'); // <- added per patch
 
 // ====================
 // 設定読み込み（憲法への服従）
@@ -96,41 +97,51 @@ function getCurrentCommit() {
 }
 
 // ====================
-// 自作コード判定エンジン（Phase 1）
+// 自作コード判定エンジン（Phase 1） - micromatch版
 // ====================
 function classifyFile(filePath) {
-  const normalizedPath = filePath.replace(/\\/g, '/');
-  
-  // クリティカルファイルチェック
+  const normalizedPath = filePath.replace(/\\/g, '/').replace(/^\.\//, '');
+
+  // クリティカルファイルチェック (simple includes is reliable)
   const isCritical = CRITICAL_FILES.some(critPath => 
     normalizedPath.includes(critPath.replace(/\\/g, '/'))
   );
-  
-  // include_paths にマッチするか
-  const isIncluded = SOURCE_CODE_RULES.include_paths.some(pattern => {
-    const regexPattern = pattern.replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*');
-    const regex = new RegExp(`^${regexPattern}$`);
-    return regex.test(normalizedPath);
-  });
-  
-  // exclude_paths にマッチするか
-  const isExcluded = SOURCE_CODE_RULES.exclude_paths.some(pattern => {
-    const regexPattern = pattern.replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*');
-    const regex = new RegExp(`^${regexPattern}$`);
-    return regex.test(normalizedPath);
-  });
-  
-  // config_files にマッチするか
-  const isConfig = SOURCE_CODE_RULES.config_files.some(configFile =>
+
+  // include_paths / exclude_paths に対して micromatch で判定
+  // guard: if arrays are absent, treat as empty arrays
+  const includePatterns = Array.isArray(SOURCE_CODE_RULES.include_paths) ? SOURCE_CODE_RULES.include_paths : [];
+  const excludePatterns = Array.isArray(SOURCE_CODE_RULES.exclude_paths) ? SOURCE_CODE_RULES.exclude_paths : [];
+
+  // micromatch.isMatch handles glob patterns robustly
+  let isIncluded = false;
+  let isExcluded = false;
+
+  try {
+    if (includePatterns.length > 0) {
+      // micromatch expects paths like 'game/components/Bullet.ts'
+      isIncluded = micromatch.isMatch(normalizedPath, includePatterns, { dot: true });
+    }
+    if (excludePatterns.length > 0) {
+      isExcluded = micromatch.isMatch(normalizedPath, excludePatterns, { dot: true });
+    }
+  } catch (e) {
+    // Fallback silently but log for debugging
+    log(`micromatch error for path=${normalizedPath} : ${e.message}`, 'warn');
+    isIncluded = false;
+    isExcluded = false;
+  }
+
+  // config_files にマッチするか（exact-ish check: endsWith）
+  const isConfig = Array.isArray(SOURCE_CODE_RULES.config_files) && SOURCE_CODE_RULES.config_files.some(configFile =>
     normalizedPath.endsWith(configFile)
   );
-  
+
   // 判定ロジック
   let isSelfMade = false;
   let confidence = 0.0;
   let reason = '';
   let category = 'unknown';
-  
+
   if (isExcluded) {
     isSelfMade = false;
     confidence = 1.0;
@@ -150,8 +161,8 @@ function classifyFile(filePath) {
     isSelfMade = true;
     confidence = 0.95;
     reason = 'matches include_paths rule';
-    
-    // カテゴリ詳細判定
+
+    // カテゴリ詳細判定 (normalizedPath is without leading ./)
     if (normalizedPath.startsWith('components/')) {
       category = 'component';
     } else if (normalizedPath.startsWith('app/')) {
@@ -174,7 +185,7 @@ function classifyFile(filePath) {
     reason = 'not in exclude list, assumed self-made';
     category = 'uncertain';
   }
-  
+
   return {
     is_self_made: isSelfMade,
     confidence,
@@ -189,7 +200,7 @@ function classifyFile(filePath) {
 // ====================
 function getChangedFiles() {
   log('スキャン開始: config/shared_patterns.js の定義を使用', 'info');
-  
+
   const files = glob.sync('**/*', {
     cwd: PROJECT_ROOT,
     ignore: IGNORE_PATTERNS,
@@ -208,7 +219,7 @@ function analyzeJSONFile(filePath) {
   const fullPath = path.join(PROJECT_ROOT, filePath);
   const stats = fs.statSync(fullPath);
   const content = fs.readFileSync(fullPath, 'utf8');
-  
+
   let jsonMeta = {
     type: 'json',
     file_size: stats.size,
@@ -216,7 +227,7 @@ function analyzeJSONFile(filePath) {
     last_modified: stats.mtimeMs,
     is_critical: false
   };
-  
+
   try {
     const parsed = JSON.parse(content);
     const keys = Object.keys(parsed);
@@ -318,7 +329,7 @@ function analyzeFile(filePath) {
   if (!fs.existsSync(fullPath)) {
     throw new Error(`ファイルが存在しません: ${filePath}`);
   }
-  
+
   const code = fs.readFileSync(fullPath, 'utf8');
   const ext = path.extname(filePath);
   const language = ext.match(/\.tsx?$/) ? 'typescript' : 'javascript';
@@ -496,11 +507,11 @@ function analyzeFile(filePath) {
               const key = prop.key ? prop.key.name : null;
               const valueType = prop.value ? prop.value.type : 'unknown';
               let value = null;
-              
+
               if (prop.value && prop.value.type === 'Literal') {
                 value = prop.value.value;
               }
-              
+
               return { key, valueType, value };
             })
           };
@@ -640,10 +651,10 @@ function main() {
       if (!fs.existsSync(fullPath)) {
         throw new Error(`ファイルが存在しません: ${relPath}`);
       }
-      
+
       const fileHash = getFileHash(fullPath);
       let analysis;
-      
+
       if (relPath.endsWith('.json')) {
         analysis = analyzeJSONFile(relPath);
       } else if (relPath.endsWith('.js') || relPath.endsWith('.ts') || relPath.endsWith('.tsx')) {

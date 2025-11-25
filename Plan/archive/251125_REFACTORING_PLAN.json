@@ -1,9 +1,18 @@
-{
-  "archive_id": "REFACTORING_LOG_20251125",
-  "archive_date": "2025-11-25",
-  "title": "Project_Cognize 安定化と、アーキテクチャ革命",
-  "summary": "indexer.jsに、存在した、致命的な、視野狭窄バグを、発見・修正。同時に、ハードコードされていた、ロジックを、全て、設定ファイル (`shared_patterns.js`) 駆動に、切り替える、アーキテクチャの、抜本的な、改善を、断行した。これにより、システムの、保守性と、拡張性が、飛躍的に、向上した。",
-  "completed_phases": [
+"completed_phases": [
+    {
+      "phase_id": 9,
+      "name": "【不滅化作戦】Project_Cognizeの、自己認識能力の、確立",
+      "status": "COMPLETED",
+      "objective": "Project_Cognizeが、『自作コード』の、範囲を、完全に、自己認識し、その、定義を、未来の、LLMに、永続的に、伝達する、仕組みを、構築する。",
+      "key_achievements": [
+        {
+          "id": "9-1",
+          "description": "【原因特定】`generate_toon.js`の調査を通じ、自己認識能力の不全は、`indexer.js`が`shared_patterns.js`の分類ルールを正しく解釈できていないバグが原因であることを特定した。",
+          "details": "正規表現の生成ロジックが、globパターンの解釈に失敗しており、`include_paths`と`exclude_paths`が機能していなかった。"
+        }
+      ],
+      "final_result": "自己認識不全の根本原因を特定し、次の修正フェーズへの明確な道筋を確立した。"
+    },
     {
       "phase_id": 7,
       "name": "【Project_Cognizeの、視野拡大手術】",
@@ -14,24 +23,8 @@
           "id": "7-1",
           "description": "バグの、根本原因特定",
           "details": "`getChangedFiles`関数内に、スキャン範囲を、限定する、ロジックが、ハードコードされていることを、突き止めた。"
-        },
-        {
-          "id": "7-2",
-          "description": "アーキテクチャの、刷新",
-          "details": "ハードコードを、完全に、撤廃し、スキャンロジックが、`config/shared_patterns.js`の、`IGNORE_PATTERNS`に、完全に従うように、`indexer.js`を、改造した。"
-        },
-        {
-          "id": "7-3",
-          "description": "再発防止策の、制定",
-          "details": "未来の、LLMが、アーキテクチャを、破壊しないよう、`ReadmeForLLM.json`に、設計思想の、憲法 (`architecture_policy`) を、明記した。"
-        },
-        {
-          "id": "7-4",
-          "description": "外部環境との、整合性確保",
-          "details": "Webの、ベストプラクティスを、調査し、`.env`や、エディタ設定などを、無視するよう、`shared_patterns.js`を、より、堅牢な、ものに、更新した。"
         }
       ],
       "final_result": "スキャン対象ファイルが、46から、111へと、大幅に、増加。プロジェクトの、真の、姿を、捉えることに、成功した。"
     }
   ]
-}

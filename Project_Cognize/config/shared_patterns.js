@@ -1,82 +1,112 @@
 /**
- * 共通スキャンパターン設定 v2.0 (Single Source of Truth)
- * 
+ * 共通スキャンパターン設定 v2.2 (GLIA Constitutional Layer)
+ *
  * 設計思想:
- * - プロジェクトの「自作コード範囲」を明確に定義
- * - 全システム（indexer, generate_toon, DEM, 未来のGLIA）が参照
- * - ルールベース + ヒューリスティック推論の併用
- * 
- * バージョン: 2.0 (GLIA準備版)
- * 更新日: 2025-11-25
- * 責任者: ひろし, Manus, Claude
+ * - 「どこまでが自作コードか」を厳密かつ安全に定義する
+ * - indexer / DEM / generate_toon / GLIA の統一的な Single Source of Truth
+ * - include > exclude > config > critical の優先順位
+ * - micromatch と相性の良い “最小驚き原則” のパターン設計
+ *
+ * 更新日: 2025-11-26
+ * 担当: ひろし / Manus / Claude / ChatGPT
  */
 
+//
 // ===========================
-// 除外パターン（全システム共通）
+// 除外パターン（プロジェクト外部 or ノイズ）
 // ===========================
+//
 const IGNORE_PATTERNS = [
-  // == 依存関係 ==
-  '**/node_modules/**',
-  
-  // == ビルド成果物・キャッシュ ==
-  '**/dist/**',
-  '**/build/**',
-  '**/.next/**',
-  '**/out/**',
-  '**/.swc/**',
-  '**/*.tsbuildinfo',
-  '**/.cache/**',
-  '**/.eslintcache',
-  
-  // == 機密情報 ==
-  '**/.env',
-  '**/.env.local',
-  '**/.env.*.local',
-  
-  // == ログ・デバッグファイル ==
-  '**/*.log',
-  '**/npm-debug.log*',
-  '**/yarn-*.log*',
-  '**/report.[0-9]*.json',
-  
-  // == OS・エディタ ==
-  '**/.DS_Store',
-  '**/.vscode/**',
-  '**/.idea/**',
-  
-  // == Project_Cognize 自己参照防止 ==
-  '**/Project_Cognize/workspace/outputs/**',
-  '**/Project_Cognize/database/**',
-  '**/*.jsonl',
-  '**/*.jsonl.gz',
-  
-  // == 一時・アーカイブ ==
-  '**/TEMP_ARCHIVE_*/**',
-  '**/automation/**'  // 削除予定の過剰機能
+  // 依存関係
+  'node_modules/**',
+
+  // ビルド成果物 / キャッシュ
+  'dist/**',
+  'build/**',
+  '.next/**',
+  'out/**',
+  '.swc/**',
+  '*.tsbuildinfo',
+  '.cache/**',
+  '.eslintcache',
+
+  // 環境ファイル
+  '.env',
+  '.env.*',
+  '.env.local',
+  '.env.*.local',
+
+  // ログ
+  '*.log',
+  'npm-debug.log*',
+  'yarn-*.log*',
+
+  // OS / IDE
+  '.DS_Store',
+  '.vscode/**',
+  '.idea/**',
+
+  // Cognize 自己参照
+  'Project_Cognize/workspace/outputs/**',
+  'Project_Cognize/database/**',
+  '*.jsonl',
+  '*.jsonl.gz',
+
+  // 一時ファイル
+  'TEMP_ARCHIVE_*/**',
+  'automation/**'
 ];
 
+//
 // ===========================
-// 自作コード判定ルール（GLIA構想の核心）
+// 自作コード判定ルール
 // ===========================
+//
 const SOURCE_CODE_RULES = {
-  // --- ホワイトリスト: 明示的な自作コード領域 ---
+  //
+  // --- ホワイトリスト（最重要） ---
+  // micromatch の仕様上、ルート起点で書く方が誤爆が減る
+  //
   include_paths: [
-    'components/**',      // React UI層
-    'app/**',             // Next.js App Router
-    'game/**',            // ゲームエンジン本体
-    'lib/**',             // 共通ライブラリ（存在すれば）
-    'utils/**'            // ユーティリティ（存在すれば）
+    // Cognize/GLIA 全体
+    'Project_Cognize/**',
+
+    // Dynamic Error Monitor 全体
+    'DynamicErrorMonitor/**',
+
+    // プロジェクト計画
+    'Plan/**',
+
+    // ルートスクリプト
+    'scripts/**',
+
+    // 共通ユーティリティ
+    'lib/**',
+    'utils/**',
+
+    // アプリケーション本体
+    'components/**',
+    'app/**',
+    'game/**',
   ],
-  
-  // --- ブラックリスト: 明示的な外部コード ---
+
+  //
+  // --- 明示的な外部コード（ブラックリスト） ---
+  //
   exclude_paths: [
     'node_modules/**',
-    'public/**',          // 静的ファイル（SVG, 画像等）
-    '.next/**'
+    'public/**',
+    '.next/**',
+
+    // lock file 明示的列挙（誤爆を避ける）
+    'package-lock.json',
+    'yarn.lock',
+    'pnpm-lock.yaml'
   ],
-  
-  // --- 特殊ルール: Next.jsの設定ファイル ---
-  // これらは「自作」だが、通常はLLMに触らせたくない
+
+  //
+  // --- 設定ファイル（自作だが critical ではない） ---
+  //
   config_files: [
     'next.config.js',
     'tailwind.config.ts',
@@ -84,51 +114,49 @@ const SOURCE_CODE_RULES = {
     'tsconfig.json',
     'package.json'
   ],
-  
-  // --- ヒューリスティック推論 ---
+
+  //
+  // --- ヒューリスティック推論（indexer.js で未実装なので flag のみにする） ---
+  // 実装がされていない機能を ON にするのは危険なので、明示的に off。
+  //
   heuristics: {
-    // import元がpackage.jsonのdependenciesに無ければ自作と判定
-    infer_from_package_json: true,
-    
-    // ディレクトリにREADME/LICENSEがあれば外部ライブラリと判定
-    infer_from_metadata: true,
-    
-    // 相対パス import は自作コード
-    relative_imports_are_self_made: true
+    infer_from_package_json: false,
+    infer_from_metadata: false,
+    relative_imports_are_self_made: true,   // これは既に indexer 側で実質活用されている
   }
 };
 
+//
 // ===========================
-// JavaScriptビルトインクラス（ノイズ除去用）
+// JavaScript ビルトイン（ノイズ除去）
 // ===========================
+//
 const BUILTIN_CLASSES = [
-  // 基本オブジェクト
+  // 基礎
   'Object', 'Array', 'Function', 'String', 'Number', 'Boolean', 'Symbol', 'BigInt',
-  
-  // エラー系
-  'Error', 'TypeError', 'RangeError', 'ReferenceError', 'SyntaxError', 
+
+  // エラー
+  'Error', 'TypeError', 'RangeError', 'ReferenceError', 'SyntaxError',
   'EvalError', 'URIError', 'AggregateError',
-  
+
   // コレクション
   'Map', 'Set', 'WeakMap', 'WeakSet',
-  
-  // 日付・正規表現
+
+  // 日付 / 正規表現
   'Date', 'RegExp',
-  
-  // Promise・非同期
+
+  // 非同期
   'Promise', 'AsyncFunction', 'GeneratorFunction',
-  
-  // バイナリデータ
+
+  // バイト列
   'ArrayBuffer', 'SharedArrayBuffer', 'DataView',
   'Int8Array', 'Uint8Array', 'Uint8ClampedArray',
-  'Int16Array', 'Uint16Array', 
+  'Int16Array', 'Uint16Array',
   'Int32Array', 'Uint32Array',
-  'Float32Array', 'Float64Array', 'BigInt64Array', 'BigUint64Array',
-  
-  // その他
-  'Proxy', 'Reflect', 'Intl', 'WebAssembly',
-  
-  // ブラウザAPI（稀にnewされる）
+  'Float32Array', 'Float64Array',
+  'BigInt64Array', 'BigUint64Array',
+
+  // Web API
   'URL', 'URLSearchParams', 'FormData', 'Blob', 'File',
   'Request', 'Response', 'Headers',
   'WebSocket', 'EventSource', 'MessageChannel', 'BroadcastChannel',
@@ -136,36 +164,49 @@ const BUILTIN_CLASSES = [
   'Image', 'Audio', 'Option'
 ];
 
+//
 // ===========================
-// クリティカルファイル（AIへの「憲法」）
+// クリティカルファイル（最重要ドキュメント）
 // ===========================
+//
 const CRITICAL_FILES = [
   'Project_Cognize/refactor_policy.json',
   'DynamicErrorMonitor/baseline_summary.json',
-  'game/core/World.js',           // ゲームエンジンの心臓部
-  'game/core/entityFactory.js',   // エンティティ生成の核
-  'game/core/main.js'             // ゲームループ
+
+  // ゲームコア
+  'game/core/World.js',
+  'game/core/entityFactory.js',
+  'game/core/main.js'
 ];
 
+//
 // ===========================
-// メタデータ（将来の拡張用）
+// メタデータ（将来的な GLIA 拡張向け）
 // ===========================
+//
 const SYSTEM_METADATA = {
-  current_owner: 'Project_Cognize',
-  project_name: 'ShootingGame7',
-  architecture: 'ECS (Entity-Component-System)',
+  project: 'ShootingGame7',
+  owner: 'Project_Cognize',
   framework: 'Next.js 16 + React 19',
-  
-  scheduled_migration: {
-    phase1: 'DynamicErrorMonitor統合',
-    phase2: 'GLIA構想実装'
+
+  architecture: {
+    core: 'ECS',
+    analyzer: 'Project_Cognize',
+    observability: 'DynamicErrorMonitor'
   },
-  
-  version: '2.0',
-  last_updated: '2025-11-25',
-  authors: ['ひろし', 'Manus', 'Claude']
+
+  glia_phases: {
+    phase1: 'Observability unification',
+    phase2: 'Distributed GLIA micro-agents',
+    phase3: 'Full autonomy routing'
+  },
+
+  version: '2.2',
+  last_updated: '2025-11-26',
+  authors: ['ひろし', 'Manus', 'Claude', 'ChatGPT']
 };
 
+//
 // ===========================
 // エクスポート
 // ===========================
