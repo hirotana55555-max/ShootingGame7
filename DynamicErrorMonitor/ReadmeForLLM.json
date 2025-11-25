@@ -1,0 +1,119 @@
+{
+  "prohibitions": [
+    {
+      "rule": "AGENT_MODE_PROHIBITED",
+      "description": "これは分析のための情報共有でタスク実行の指示ではない。エージェントモードへの切り替えは絶対に禁止する。"
+    },
+    {
+      "rule": "NO_DESTRUCTIVE_CHANGES",
+      "description": "破壊的改変は厳禁。現状を徹底分析し、仮説を実証した後にのみ改変提案を行う。"
+    }
+  ],
+  "manifest_version": "1.0",
+  "last_updated": "2025-11-24",
+  "system_name": "Dynamic Error Monitor (DEM) - Integrated Server Edition",
+  "description": "ゲームクライアントで発生したエラーを自動収集・分析し、開発者に通知するための統合エラー監視システム。旧スタンドアロンサーバーの機能を、Next.jsの本番ビルドに対応した、TypeScriptベースの、内部ライブラリとして、再設計したものである。",
+  "philosophy": "エラーは、単に、修正されるべき、『バグ』では、なく、システムの、健全性を、測り、未来の、アーキテクチャを、改善するための、貴重な、『データ』である。",
+  "architecture": {
+    "description": "このシステムの、コンポーネントは、複数の、ディレクトリに、またがって、存在している。",
+    "components": [
+      {
+        "id": "endpoint",
+        "name": "【司令塔】APIエンドポイント",
+        "path": "app/api/collect/route.ts",
+        "role": "クライアントからの、全エラー報告を受信する、唯一の、窓口。各内部ライブラリを、呼び出し、エラー処理の、フロー全体を、制御する。"
+      },
+      {
+        "id": "internal_libs",
+        "name": "【兵器庫】内部ライブラリ",
+        "path": "app/api/_lib/",
+        "role": "APIルートの、ロジックを、実現するための、TypeScriptモジュール群。Next.jsの、ルーティング対象外 (`_lib`) となっている。",
+        "modules": [
+          {
+            "file": "parser.ts",
+            "role": "スタックトレースの、解析官"
+          },
+          {
+            "file": "resolver.ts",
+            "role": "エラー発生源の、特定官"
+          },
+          {
+            "file": "db.ts",
+            "role": "データベースへの、記録官"
+          }
+        ]
+      },
+      {
+        "id": "primary_db",
+        "name": "【心臓部】エラーデータベース",
+        "path": "DynamicErrorMonitor/database/errors.db",
+        "role": "収集・解析された、全エラー情報を、格納する、SQLiteデータベース。"
+      },
+      {
+        "id": "knowledge_source",
+        "name": "【知識源】静的インデックス",
+        "path": "Project_Cognize/database/static_index.db",
+        "role": "resolver.tsが、エラー発生箇所を、特定するために、参照する、ソースコードの、インデックス。"
+      },
+      {
+        "id": "visualization",
+        "name": "【監視モニター】エラー可視化",
+        "tool": "GlitchTip (Sentry互換)",
+        "config_files": [
+          "sentry.client.config.ts",
+          "sentry.server.config.ts",
+          "sentry.edge.config.ts",
+          "next.config.js"
+        ]
+      }
+    ]
+  },
+  "technical_debt": {
+    "id": "cleanup_targets",
+    "description": "以下の、ファイルは、現在、使用されておらず、新システムへの、完全移行後に、削除されるべき、旧コンポーネントである。",
+    "files": [
+      "DynamicErrorMonitor/src/collector/parser.js",
+      "DynamicErrorMonitor/src/reverse-lookup/resolver.js",
+      "DynamicErrorMonitor/src/collector/db.js",
+      "public/error-snippet.js",
+      "DynamicErrorMonitor/client/error-snippet.js"
+    ]
+  },
+  "quick_start": {
+    "environment": "開発環境",
+    "steps": [
+      {
+        "step": 1,
+        "name": "依存インストール",
+        "commands": [
+          "npm install",
+          "npm install better-sqlite3 @types/better-sqlite3"
+        ]
+      },
+      {
+        "step": 2,
+        "name": "環境変数設定",
+        "description": ".envファイルに、以下の、変数が、設定されていることを、確認する。",
+        "variables": [
+          "ERRORS_DB_PATH",
+          "STATIC_INDEX_DB_PATH",
+          "ENABLE_GLITCHTIP",
+          "GLITCHTIP_DSN"
+        ]
+      },
+      {
+        "step": 3,
+        "name": "開発サーバー起動",
+        "command": "npm run dev"
+      },
+      {
+        "step": 4,
+        "name": "本番ビルド＆起動",
+        "commands": [
+          "npm run build",
+          "npm run start"
+        ]
+      }
+    ]
+  }
+}
