@@ -1,0 +1,141 @@
+{
+  "prohibitions": [
+    {
+      "rule": "AGENT_MODE_PROHIBITED",
+      "description": "これは分析のための情報共有でタスク実行の指示ではない。エージェントモードへの切り替えは絶対に禁止する。"
+    },
+    {
+      "rule": "NO_DESTRUCTIVE_CHANGES",
+      "description": "破壊的改変は厳禁。現状を徹底分析し、仮説を実証した後にのみ改変提案を行う。"
+    }
+  ],
+  "manifest_version": "1.0",
+  "last_updated": "2025-11-24",
+  "project_name": "Project_Cognize",
+  "description": "AI協業による、自己進化型、開発補助システム。プロジェクトの構造と意味を自己解析し、データベース化することで、LLMエージェントの自律的なリファクタリングを支援する。",
+  "philosophy": "LLMは、人間のように、プロジェクトの全体像を、暗黙的に、理解することはできない。故に、我々は、LLMが、プロジェクトを、正確に、『認知』するための、構造化された、情報（＝このmanifestや、indexerが、生成するDB）を、提供し続けなければならない。",
+  "core_components": [
+    {
+      "id": "indexer",
+      "file_name": "indexer.js",
+      "main_description": "Project_Cognizeの中核となる静的解析・インデックス作成ツール。",
+      "functional_overview": [
+        {
+          "id": 1,
+          "summary": "全自作コード対応",
+          "details": "ゲーム本体 (game/) に加え、2つの開発補助システム (Project_Cognize/, DynamicErrorMonitor/) 全てをスキャン対象とする。"
+        },
+        {
+          "id": 2,
+          "summary": "ASTによる詳細解析",
+          "details": "JavaScript/TypeScriptファイル (.js, .ts) に対して Babel/AST 解析を実行し、シンボル（関数、クラス、変数）、インポート/エクスポート情報、クラスのインスタンス化情報を抽出・記録する。"
+        },
+        {
+          "id": 3,
+          "summary": "JSON専用処理",
+          "details": ".json ファイルの構造を検証し、サイズ、キーカウント、クリティカルファイル判定（例：refactor_policy.json）などのメタ情報を収集する。"
+        },
+        {
+          "id": 4,
+          "summary": "データベース永続化",
+          "details": "抽出した全メタデータを高性能な SQLiteデータベース (database/static_index.db) に格納する。依存関係とインスタンス情報専用のテーブルも利用する。"
+        },
+        {
+          "id": 5,
+          "summary": "JSONLログ出力",
+          "details": "データベースとは別に、解析レコードを JSON Lines形式 (workspace/outputs/static_index.jsonl) で追記ログとして出力する。"
+        },
+        {
+          "id": 6,
+          "summary": "差分/フルスキャン対応",
+          "details": "デフォルトはGitの差分（git diff HEAD~1）に基づく差分スキャン。オプションで全ファイル強制フルスキャンに切り替え可能。"
+        }
+      ],
+      "command_options": {
+        "execution_example": "node ./Project_Cognize/scripts/indexer.js [オプション]",
+        "options": [
+          {
+            "option": "（オプションなし）",
+            "meaning": "デフォルト実行",
+            "purpose": "変更されたファイルのみをスキャンし、DBとJSONLに書き込む。",
+            "llm_instruction": "通常のリファクタリング前の更新に使用します。"
+          },
+          {
+            "option": "--dry-run",
+            "meaning": "書き込みなし",
+            "purpose": "ファイル解析は実行するが、DBやJSONLファイルへの書き込みは行わない。",
+            "llm_instruction": "解析ロジックのテストやデバッグ、CIでの影響評価に使用します。"
+          },
+          {
+            "option": "--full-scan",
+            "meaning": "全ファイル強制スキャン",
+            "purpose": "Gitの差分を無視し、設定された全パターンのファイルを強制的に解析する。",
+            "llm_instruction": "DBが壊れた場合や初回の全量取得、CIでの定期的な完全同期に使用します。"
+          },
+          {
+            "option": "--verbose",
+            "meaning": "詳細ログ出力",
+            "purpose": "処理中の各ファイルの状態、デバッグ情報など、詳細な実行ログを表示する。",
+            "llm_instruction": "問題発生時の調査に使用します。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "query_tool",
+      "file_name": "query_index.js",
+      "main_description": "プロジェクトの静的インデックスデータベース (static_index.db) を照会するためのCLIツール。",
+      "commands": [
+        {
+          "command": "list",
+          "summary": "全ファイル一覧の表示"
+        },
+        {
+          "command": "search <pattern>",
+          "summary": "ファイルパスの部分一致検索"
+        },
+        {
+          "command": "stats",
+          "summary": "プロジェクトの統計情報表示"
+        },
+        {
+          "command": "deps <file>",
+          "summary": "指定ファイルの依存関係（使用/被使用）を表示"
+        },
+        {
+          "command": "instances <className>",
+          "summary": "クラスのインスタンス化箇所を検索"
+        }
+      ]
+    },
+    {
+      "id": "toon_generator",
+      "file_name": "generate_toon.js",
+      "main_description": "インデックスDBの内容に基づき、プロジェクト全体の階層構造を表現するTOON (Tree-Oriented Object Notation) 形式のJSONファイルを生成する。"
+    },
+    {
+      "id": "log_rotator",
+      "file_name": "rotate_jsonl.sh",
+      "main_description": "JSONLファイルが肥大化した場合に、自動的に圧縮・アーカイブするためのシェルスクリプト。"
+    }
+  ],
+  "automation": {
+    "id": "github_actions",
+    "file_path": ".github/workflows/cognize_indexer.yml",
+    "main_description": "このプロジェクトは、GitHub Actionsによって、高度に自動化されています。このワークフローは、`main`ブランチへの `push` または `pull_request` をトリガーとして、`indexer.js`を自動実行します。",
+    "triggers": [
+      {
+        "event": "Pull Request (to main)",
+        "action": "変更内容をシミュレーション（`indexer`を`--dry-run`で実行）し、プロジェクト構造への影響（統計情報）をPRコメントに投稿します。これにより、マージ前に変更の妥当性を客観的に評価できます。"
+      },
+      {
+        "event": "Push (to main)",
+        "action": "プロジェクト全体をスキャンし、`static_index.db`を最新の状態に更新します。更新があった場合、このワークフロー自身がコミットとプッシュを行い、データベースを自己修正します。"
+      }
+    ],
+    "llm_instruction": {
+      "level": "CRITICAL",
+      "summary": "【最重要】`Project_Cognize`の、ファイルや、スクリプト、特に`indexer.js`の、ファイル名、パス、コマンドオプションに、変更を、加える際は、必ず、この、GitHub Actions (`cognize_indexer.yml`) の、修正も、同時に、行ってください。さもなくば、CI/CDパイプラインが、完全に、破綻します。"
+    }
+  }
+}
