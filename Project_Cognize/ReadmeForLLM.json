@@ -1,4 +1,16 @@
 {
+  "architecture_policy": {
+    "id": "AP-01",
+    "principle": "Single Source of Truth (信頼できる、唯一の、情報源)",
+    "description": "当プロジェクトの、スキャン範囲や、振る舞いを、定義する、設定は、必ず、`/Project_Cognize/config/` ディレクトリ内の、設定ファイルに、集約されます。スクリプトファイル内に、直接、設定を、ハードコードすることは、固く、禁止されています。",
+    "rules": [
+      {
+        "target_file": "Project_Cognize/scripts/indexer.js",
+        "instruction": "このスクリプトは、必ず、`../config/shared_patterns.js` を、読み込み、その、`IGNORE_PATTERNS` に、従って、動作しなければなりません。独自の、フィルタリングロジックを、実装しては、いけません。"
+      }
+    ],
+    "llm_instruction": "【最重要警告】この、architecture_policyは、プロジェクトの、安定性を、維持するための、絶対的な、ルールです。この、原則に、反する、ような、コードの、変更提案は、決して、行わないでください。変更が必要な場合は、まず、configファイルの、修正を、提案してください。"
+  },
   "prohibitions": [
     {
       "rule": "AGENT_MODE_PROHIBITED",
@@ -10,7 +22,7 @@
     }
   ],
   "manifest_version": "1.0",
-  "last_updated": "2025-11-24",
+  "last_updated": "2025-11-25",
   "project_name": "Project_Cognize",
   "description": "AI協業による、自己進化型、開発補助システム。プロジェクトの構造と意味を自己解析し、データベース化することで、LLMエージェントの自律的なリファクタリングを支援する。",
   "philosophy": "LLMは、人間のように、プロジェクトの全体像を、暗黙的に、理解することはできない。故に、我々は、LLMが、プロジェクトを、正確に、『認知』するための、構造化された、情報（＝このmanifestや、indexerが、生成するDB）を、提供し続けなければならない。",
@@ -22,33 +34,33 @@
       "functional_overview": [
         {
           "id": 1,
-          "summary": "全自作コード対応",
-          "details": "ゲーム本体 (game/) に加え、2つの開発補助システム (Project_Cognize/, DynamicErrorMonitor/) 全てをスキャン対象とする。"
+          "summary": "設定ファイル駆動スキャン",
+          "details": "スキャン範囲は config/shared_patterns.js の IGNORE_PATTERNS に完全に従う。ハードコードされたルールは存在しない。"
         },
         {
           "id": 2,
           "summary": "ASTによる詳細解析",
-          "details": "JavaScript/TypeScriptファイル (.js, .ts) に対して Babel/AST 解析を実行し、シンボル（関数、クラス、変数）、インポート/エクスポート情報、クラスのインスタンス化情報を抽出・記録する。"
+          "details": "JavaScript/TypeScriptファイル (.js, .ts, .tsx) に対して Babel/AST 解析を実行し、シンボル、インポート/エクスポート、クラスインスタンス情報を抽出する。"
         },
         {
           "id": 3,
           "summary": "JSON専用処理",
-          "details": ".json ファイルの構造を検証し、サイズ、キーカウント、クリティカルファイル判定（例：refactor_policy.json）などのメタ情報を収集する。"
+          "details": ".json ファイルの構造を検証し、サイズ、キーカウント、クリティカルファイル判定などのメタ情報を収集する。"
         },
         {
           "id": 4,
           "summary": "データベース永続化",
-          "details": "抽出した全メタデータを高性能な SQLiteデータベース (database/static_index.db) に格納する。依存関係とインスタンス情報専用のテーブルも利用する。"
+          "details": "抽出した全メタデータを高性能な SQLiteデータベース (database/static_index.db) に格納する。"
         },
         {
           "id": 5,
           "summary": "JSONLログ出力",
-          "details": "データベースとは別に、解析レコードを JSON Lines形式 (workspace/outputs/static_index.jsonl) で追記ログとして出力する。"
+          "details": "解析レコードを JSON Lines形式 (workspace/outputs/static_index.jsonl) で追記ログとして出力する。"
         },
         {
           "id": 6,
-          "summary": "差分/フルスキャン対応",
-          "details": "デフォルトはGitの差分（git diff HEAD~1）に基づく差分スキャン。オプションで全ファイル強制フルスキャンに切り替え可能。"
+          "summary": "フルスキャンとDBクリーンアップ",
+          "details": "--full-scan オプション指定時、スキャン前に既存のデータベースを自動的に削除し、クリーンな状態から再構築する。"
         }
       ],
       "command_options": {
@@ -56,8 +68,8 @@
         "options": [
           {
             "option": "（オプションなし）",
-            "meaning": "デフォルト実行",
-            "purpose": "変更されたファイルのみをスキャンし、DBとJSONLに書き込む。",
+            "meaning": "通常実行（フルスキャン）",
+            "purpose": "config/shared_patterns.js に基づき、全ファイルをスキャンし、DBとJSONLに書き込む。",
             "llm_instruction": "通常のリファクタリング前の更新に使用します。"
           },
           {
@@ -68,9 +80,9 @@
           },
           {
             "option": "--full-scan",
-            "meaning": "全ファイル強制スキャン",
-            "purpose": "Gitの差分を無視し、設定された全パターンのファイルを強制的に解析する。",
-            "llm_instruction": "DBが壊れた場合や初回の全量取得、CIでの定期的な完全同期に使用します。"
+            "meaning": "DB強制クリーンアップ",
+            "purpose": "スキャン前にデータベースを強制的に削除する。スキャン自体は常時フルスキャン。",
+            "llm_instruction": "DBが壊れた場合や、完全にクリーンな状態から再構築したい場合に使用します。"
           },
           {
             "option": "--verbose",

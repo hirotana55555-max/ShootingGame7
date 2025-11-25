@@ -1,5 +1,5 @@
 {
-  "plan_id": "PROJECT_REFACTORING_TODO_20251124",
+  "plan_id": "PROJECT_REFACTORING_TODO_20251125",
   "plan_name": "リファクタリング TODOリスト",
   "objective": "残された技術的負債の返済と、未来のアーキテクチャ研究を管理する。",
   "general_policies": {
@@ -9,18 +9,20 @@
   "phases": [
     {
       "phase_id": 6,
-      "name": "【現存資産の、活用研究】",
+      "name": "【現存資産の、品質保証】",
       "priority": 1,
-      "status": "PENDING_ANALYSIS",
+      "status": "PENDING",
       "objective": "現在のmainブランチに存在する各種ツール（Project_Cognize, DynamicErrorMonitor）を正式に整備し、開発ワークフローに組み込む。",
       "action_plan": [
         {
           "step": 6.1,
-          "description": "各ツールのReadmeを最新化し、役割と使い方を明確にする。"
+          "description": "各ツールのReadmeを最新化し、役割と使い方を明確にする。",
+          "status": "COMPLETED"
         },
         {
           "step": 6.2,
-          "description": "ツール間の連携（例：DEMがCognizeのDBを参照する等）の可能性を検討し、具体的な改修計画を立てる。"
+          "description": "各ツールの実装とドキュメントの整合性を、コマンド実行によって、品質保証する。",
+          "status": "PENDING"
         }
       ]
     },
@@ -34,6 +36,24 @@
         {
           "step": 4.1,
           "description": "【要リファクタリング】`indexer.js`を、改造し、`--dry-run`時には、インメモリDBを、使用し、統計情報も、自己完結で、表示するように、変更する。"
+        }
+      ]
+    },
+    {
+      "phase_id": 7,
+      "name": "【Project_Cognizeの、視野拡大手術】",
+      "priority": 99,
+      "status": "COMPLETED",
+      "objective": "indexer.jsのスキャン範囲を、プロジェクトの、実態に合わせて、拡張し、真の、全体像を、把握できるようにする。",
+      "problem_analysis": {
+        "symptom": "indexer.jsが、スキャン対象として、46ファイルしか、認識していなかった。",
+        "root_cause": "indexer.js内部に、スキャン範囲を、限定する、ロジックが、ハードコードされていたため。"
+      },
+      "action_plan": [
+        {
+          "step": 7.1,
+          "description": "【COMPLETED】`indexer.js`の、ハードコードされた、ロジックを、全て、撤廃。スキャン範囲の、定義を、`config/shared_patterns.js`に、完全に、移管した。",
+          "result": "スキャン対象ファイルが、46から、111へと、大幅に、増加。ルート階層の、ファイルも、正しく、認識されるようになった。"
         }
       ]
     }

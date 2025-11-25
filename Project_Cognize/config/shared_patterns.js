@@ -6,50 +6,63 @@
  * - 将来的なDEM/GLIAへの移植を考慮
  * - 非エンジニアでも理解可能なコメント付き
  * 
- * バージョン: 1.1 (TypeScript対応追加)
- * 作成日: 2025-11-21
- * 責任者: ひろし
+ * バージョン: 2.0 (World-Class Best Practice Edition)
+ * 作成日: 2025-11-25
+ * 責任者: ひろし, Manus
  */
 
-// ★ 共通スキャンパターン（全システムで共用）
-export const SCAN_PATTERNS = [
-  // ゲーム本体（コア開発対象）
-  'game/**/*.{js,json,html,css}',
-  
-  // Project_Cognize（AI依存開発の聖域）
-  'Project_Cognize/**/*.{js,json,ts}',
-  '!Project_Cognize/workspace/outputs/**',    // 生成物は除外
-  '!Project_Cognize/database/**',             // DBは除外
-  
-  // DynamicErrorMonitor（動的エラー監視）
-  'DynamicErrorMonitor/**/*.{js,json,ts}',
-  '!DynamicErrorMonitor/node_modules/**',     // 依存関係は除外
-  
-  // Project_scanner（プロジェクトスキャナー）
-  'Project_scanner/**/*.{js,json,ts}',
-  '!Project_scanner/output/**',               // 生成物は除外
-  
-  // ★ 新規追加: TypeScriptスクリプトを明示的に対象に
-  'Project_Cognize/scripts/*.ts'
-];
-
 // ★ 共通除外パターン（全システムで共用）
+// Web上のベストプラクティスに基づき、セキュリティと一貫性を向上
 export const IGNORE_PATTERNS = [
-  '**/node_modules/**',       // 依存関係（外部）
-  '**/dist/**',               // ビルド成果物
-  '**/build/**',              // ビルド成果物  
-  '**/.git/**',               // バージョン管理
-  '**/.next/**',              // Next.js生成物
-  '**/*.log',                 // ログファイル
+  // == 依存関係 ==
+  // 最も基本的で重要な除外対象。サイズが大きく、再インストール可能なため。
+  '**/node_modules/**',
+
+  // == ビルド成果物・キャッシュ ==
+  // ビルドやコンパイルによって自動生成されるファイル群。
+  '**/dist/**',
+  '**/build/**',
+  '**/.next/**',
+  '**/out/**',          // Next.jsの静的エクスポート先
+  '**/.swc/**',         // Next.jsのコンパイラキャッシュ
+  '**/*.tsbuildinfo',   // TypeScriptの増分ビルド情報
+  '**/.cache',          // 各種ツールのキャッシュ（ESLint, Parcelなど）
+  '**/.eslintcache',    // ESLintのキャッシュ
+
+  // == 機密情報 ==
+  // APIキーやパスワードなど、絶対にリポジトリに含めてはならないファイル。
+  '**/.env',
+  '**/.env.local',
+  '**/.env.development.local',
+  '**/.env.test.local',
+  '**/.env.production.local',
+
+  // == ログ・デバッグファイル ==
+  // 実行時に生成される一時的なログやレポート。
+  '**/*.log',
+  'npm-debug.log*',
+  'yarn-debug.log*',
+  'yarn-error.log*',
+  'report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json', // Node.jsの診断レポート
+
+  // == OS・エディタ固有ファイル ==
+  // 開発者個人の環境に依存するファイル。
+  '.DS_Store',          // macOS
+  '.vscode/',           // Visual Studio Code
+  '.idea/',             // JetBrains IDEs
+
+  // == プロジェクト固有の除外設定 ==
   '**/*.jsonl',               // インデックス出力
   '**/TEMP_ARCHIVE_*/**',     // 一時隔離フォルダ
   '**/automation/**'          // 過剰機能（削除予定）
 ];
 
 // ★ クリティカルファイル（AIへの憲法等）
+// ※ このセクションは、indexer.jsでは、直接、参照されていませんが、
+//   プロジェクトの重要ファイルを、明示するために、残しておきます。
 export const CRITICAL_FILES = [
-  'Project_Cognize/refactor_policy.json',      // AIへの「憲法」
-  'DynamicErrorMonitor/baseline_summary.json' // ベースライン情報
+  'Project_Cognize/refactor_policy.json',
+  'DynamicErrorMonitor/baseline_summary.json'
 ];
 
 // ★ 将来の拡張用メタデータ
@@ -59,25 +72,6 @@ export const SYSTEM_METADATA = {
     phase1: 'DynamicErrorMonitor (近い将来)',
     phase2: 'GLIA (設計中)'
   },
-  version: '1.1',
-  last_updated: '2025-11-21'
+  version: '2.0',
+  last_updated: '2025-11-25'
 };
-
-// ★ 非エンジニア向けヘルパー関数
-export function getScanSummary() {
-  return {
-    total_patterns: SCAN_PATTERNS.length,
-    critical_files: CRITICAL_FILES.length,
-    system_info: SYSTEM_METADATA
-  };
-}
-
-// ★ 安全性チェック（実行時検証用）
-export function validatePatterns() {
-  const invalidPatterns = SCAN_PATTERNS.filter(p => p.includes('TEMP_ARCHIVE') || p.includes('automation'));
-  if (invalidPatterns.length > 0) {
-    console.warn('⚠ 警告: 安全性の低いパターンが検出されました', invalidPatterns);
-    return false;
-  }
-  return true;
-}

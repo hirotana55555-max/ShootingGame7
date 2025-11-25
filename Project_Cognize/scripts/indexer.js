@@ -1,18 +1,23 @@
 #!/usr/bin/env node
 /**
- * Cognize Indexer v1.4 - 全自作コード対応版
- * 
- * 改善点:
- * - 開発補助システム自身を含む全自作コードを対象
- * - JSONファイルの安全な処理
- * - 未使用ファイル検出の基盤を構築
- * - ★ --full-scan時にDBを自動削除する機能を追加
+ * Cognize Indexer v1.5 - Config-Driven Architect
+ *
+ * @metadata
+ * @version 1.5
+ * @description Project_Cognizeの中核となる静的解析・インデックス作成ツール。
+ * @important
+ * このファイルは、`/Project_Cognize/config/shared_patterns.js` の、設定に、完全に従属します。
+ * スキャン範囲の、変更は、必ず、`shared_patterns.js` を、編集してください。
+ * このファイル内に、直接、パスや、フィルターを、ハードコードすることは、禁止されています。
+ * 変更を加える際は、必ず、`Project_Cognize/ReadmeForLLM.json` の、`architecture_policy` を、参照してください。
  */
 
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const crypto = require('crypto');
+// [革命] 外部設定ファイルを、唯一の、情報源として、読み込む
+const { IGNORE_PATTERNS } = require('../config/shared_patterns.js');
 const glob = require('glob');
 const Database = require('better-sqlite3');
 const { parse } = require('@babel/parser');
@@ -29,7 +34,7 @@ const ARCHIVE_DIR = path.join(COGNIZE_ROOT, 'workspace/outputs');
 const MAX_JSONL_SIZE_MB = 50;
 
 const DRY_RUN = process.argv.includes('--dry-run');
-const FULL_SCAN = process.argv.includes('--full-scan');
+const FULL_SCAN = process.argv.includes('--full-scan'); // このフラグは、後方互換性のために、残すが、挙動は、統一される
 const VERBOSE = process.argv.includes('--verbose');
 
 // ====================
@@ -76,78 +81,21 @@ function getCurrentCommit() {
   }
 }
 
+// [革命] 独裁国家を、解体し、議会（config）に、従う、シンプルな、関数に、作り替えた
 function getChangedFiles() {
-  // ★ 全自作コード対応: 開発補助システム自身を含む
-  const SCAN_PATTERNS = [
-    // ゲーム本体
-    'game/**/*.{js,json,html,css}',
-    
-    // Project_Cognize (AI依存開発の聖域)
-    'Project_Cognize/**/*.{js,json,ts}',
-    '!Project_Cognize/workspace/outputs/**', // 生成物は除外
-    '!Project_Cognize/database/**',          // DBは除外
-    
-    // DynamicErrorMonitor (動的エラー監視)
-    'DynamicErrorMonitor/**/*.{js,json,ts}',
-    '!DynamicErrorMonitor/node_modules/**',  // 依存関係は除外
-    
-    // Project_scanner (プロジェクトスキャナー)
-    'Project_scanner/**/*.{js,json,ts}',
-    '!Project_scanner/output/**'             // 生成物は除外
-  ];
+  // 差分スキャンや、ハードコードされた、パターンを、完全に、廃止。
+  // 常に、configファイルに、基づく、一貫した、スキャンを、実行する。
+  log('スキャン開始: config/shared_patterns.js の定義を使用します。', 'info');
   
-  const IGNORE_PATTERNS = [
-    '**/node_modules/**',
-    '**/dist/**',
-    '**/build/**',
-    '**/.git/**',
-    '**/.next/**',
-    '**/*.log',
-    '**/*.jsonl',
-    '**/TEMP_ARCHIVE_*/**'
-  ];
-
-  if (FULL_SCAN) {
-    log('フルスキャンモード（全自作コード対応）', 'verbose');
-    return glob.sync(SCAN_PATTERNS, {
+  const files = glob.sync('**/*', { // プロジェクトの、全ファイルを、一旦、対象にする
       cwd: PROJECT_ROOT,
-      ignore: IGNORE_PATTERNS,
-      nodir: true
-    });
-  }
-
-  try {
-    log('差分スキャンを試行...', 'debug');
-    const diff = execSync('git diff --name-only HEAD~1', {
-      cwd: PROJECT_ROOT,
-      encoding: 'utf8'
-    });
-    const changed = diff
-      .split('\n')
-      .filter(f => f && f.trim() !== '')
-      .filter(f => 
-        f.includes('game/') || 
-        f.includes('Project_Cognize/') || 
-        f.includes('DynamicErrorMonitor/') || 
-        f.includes('Project_scanner/')
-      )
-      .filter(f => !IGNORE_PATTERNS.some(pattern => 
-        f.includes(pattern.replace('**/', ''))));
-
-    if (changed.length > 0) {
-      log(`差分検出: ${changed.length}ファイル`, 'verbose');
-      return changed;
-    }
-  } catch (err) {
-    log(`差分取得失敗: ${err.message}`, 'debug');
-  }
-
-  log('フォールバック: 全自作コードパターンでスキャン', 'verbose');
-  return glob.sync(SCAN_PATTERNS, {
-    cwd: PROJECT_ROOT,
-    ignore: IGNORE_PATTERNS,
-    nodir: true
+      ignore: IGNORE_PATTERNS, // configから、読み込んだ、除外パターンのみを、適用
+      nodir: true,
+      absolute: false // 出力は、プロジェクトルートからの、相対パス
   });
+
+  log(`スキャン対象として ${files.length} ファイルを検出しました。`, 'verbose');
+  return files;
 }
 
 // ====================
@@ -158,7 +106,6 @@ function analyzeJSONFile(filePath) {
   const stats = fs.statSync(fullPath);
   const content = fs.readFileSync(fullPath, 'utf8');
   
-  // JSON構造の簡易検証
   let jsonMeta = {
     type: 'json',
     file_size: stats.size,
@@ -175,7 +122,6 @@ function analyzeJSONFile(filePath) {
       keys_count: keys.length,
       has_array: Array.isArray(parsed),
       sample_keys: keys.slice(0, 5),
-      // クリティカルファイルの判定
       is_critical: filePath.includes('refactor_policy.json') || 
                   filePath.includes('baseline_summary.json')
     };
@@ -201,7 +147,7 @@ function analyzeJSONFile(filePath) {
 }
 
 // ====================
-// SQLite初期化（拡張スキーマ）
+// SQLite初期化
 // ====================
 function initDatabase() {
   ensureDir(path.dirname(DB_PATH));
@@ -211,7 +157,6 @@ function initDatabase() {
   db.pragma('synchronous = NORMAL');
   db.pragma('busy_timeout = 5000');
 
-  // 拡張スキーマ: JSONメタ情報とクリティカルフラグを追加
   db.exec(`
     CREATE TABLE IF NOT EXISTS file_index (
       path TEXT PRIMARY KEY,
@@ -252,7 +197,7 @@ function initDatabase() {
     CREATE INDEX IF NOT EXISTS idx_last_accessed ON file_index(last_accessed);
   `);
 
-  log('SQLiteデータベース初期化完了（全自作コード対応スキーマ）', 'debug');
+  log('SQLiteデータベース初期化完了', 'debug');
   return db;
 }
 
@@ -309,7 +254,6 @@ function analyzeFile(filePath) {
     CallExpression(p) {
       if (p.node.callee.name === 'require' && p.node.arguments.length > 0 && p.node.arguments[0].type === 'StringLiteral') {
         const moduleName = p.node.arguments[0].value;
-        // 既にimportで記録されている場合は追加しない（重複防止）
         if (!imports.some(imp => imp.module === moduleName)) {
             imports.push({ module: moduleName, specifiers: [{ type: 'require', name: null }] });
         }
@@ -503,13 +447,10 @@ function checkRotation() {
 function main() {
   const startTime = Date.now();
 
-  log('=== Cognize Indexer v1.4 開始 ===');
+  log('=== Cognize Indexer v1.5 開始 ===');
   log(`モード: ${DRY_RUN ? 'DRY-RUN（書き込みなし）' : '本番実行'}`);
-  log(`スキャン: ${FULL_SCAN ? 'フルスキャン' : '差分スキャン'}`);
-  log('スキャン範囲: 全自作コード（ゲーム＋3開発補助システム）');
+  log(`スキャン: config/shared_patterns.js に基づく、一貫した、フルスキャン`);
 
-  // ★★★★★ 改変箇所 ★★★★★
-  // --full-scanの場合、書き込み前にDBを削除してクリーンな状態にする
   if (FULL_SCAN && !DRY_RUN) {
     if (fs.existsSync(DB_PATH)) {
       try {
@@ -517,12 +458,10 @@ function main() {
         log('⚠ フルスキャンモードのため、既存のデータベースを削除しました。', 'warn');
       } catch (err) {
         log(`データベースの削除に失敗しました: ${err.message}`, 'error');
-        // エラーが発生した場合は、続行せずに終了する
         process.exit(1);
       }
     }
   }
-  // ★★★★★ 改変ここまで ★★★★★
 
   ensureFile(JSONL_PATH);
   checkRotation();
@@ -579,22 +518,15 @@ function main() {
       const fileHash = getFileHash(fullPath);
       let analysis;
       
-      // ファイルタイプによる処理分岐
       if (relPath.endsWith('.json')) {
         analysis = analyzeJSONFile(relPath);
-      } else if (relPath.endsWith('.js') || relPath.endsWith('.ts')) {
+      } else if (relPath.endsWith('.js') || relPath.endsWith('.ts') || relPath.endsWith('.tsx')) {
         analysis = analyzeFile(relPath);
       } else {
-        // その他のファイルはメタ情報のみ
         const stats = fs.statSync(fullPath);
         analysis = {
           language: path.extname(relPath).replace('.', '') || 'unknown',
-          symbols: [],
-          imports: [],
-          exports: [],
-          reexports: [],
-          instances: [],
-          loc: 0,
+          symbols: [], imports: [], exports: [], reexports: [], instances: [], loc: 0,
           json_meta: JSON.stringify({
             file_size: stats.size,
             last_accessed: stats.atimeMs,
@@ -604,16 +536,15 @@ function main() {
         };
       }
 
-      // アクセス日時の取得
       const stats = fs.statSync(fullPath);
       const lastAccessed = stats.atimeMs;
 
       const record = {
         record_id: crypto.randomUUID(),
-        schema_version: '1.4',
+        schema_version: '1.5',
         provider: {
           name: 'cognize-indexer',
-          version: '1.4',
+          version: '1.5',
           mode: DRY_RUN ? 'dry-run' : 'production'
         },
         commit: commitSha,
@@ -681,7 +612,7 @@ function main() {
       }
 
       successCount++;
-      const typeLog = relPath.endsWith('.json') ? 'JSON' : 'JS/TS';
+      const typeLog = relPath.endsWith('.json') ? 'JSON' : 'JS/TS/TSX';
       const instCount = analysis.instances ? analysis.instances.length : 0;
       const instLog = instCount > 0 ? `, ${instCount}インスタンス` : '';
       log(`処理完了: ${relPath} (${typeLog}${instLog})`, 'verbose');
@@ -703,7 +634,6 @@ function main() {
   log(`成功: ${successCount}ファイル`);
   log(`失敗: ${errorCount}ファイル`);
   log(`実行時間: ${elapsed}秒`);
-  log(`対象範囲: ゲーム本体＋3開発補助システム`);
 }
 
 try {
