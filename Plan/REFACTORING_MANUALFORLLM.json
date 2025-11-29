@@ -1,0 +1,44 @@
+{
+  "system_name": "LLM Refactoring Operational Manual",
+  "version": "1.0",
+  "last_updated": "2025-11-29",
+  "philosophy": "LLMは、コードの意図を完全に推測するのではなく、提供された構造化された『知識源』と『手順書』のみに基づき、安全に、かつ正確にタスクを遂行しなければならない。",
+  "workflow_guide": [
+    {
+      "guide_id": 1,
+      "title": "【原則1】プロジェクトの事実分析と構造把握の手順",
+      "procedure": "リファクタリングに着手する前、必ず以下の知識源を参照し、プロジェクトの全体構造と技術的定義を把握すること。",
+      "references": [
+        "静的構造分析結果: Project_Cognize/workspace/outputs/project_structure_toon.json",
+        "技術的憲法: Project_Cognize/config/shared_patterns.js"
+      ],
+      "action": "コードの変更は、構造把握と、分析結果（DB）の照会が完了した後に行う。"
+    },
+    {
+      "guide_id": 2,
+      "title": "【原則2】ターミナル操作の提供（非エンジニアサポート）",
+      "procedure": "非エンジニアであるユーザー（私）が、VSCodeのターミナル上でミスなく作業を遂行できるよう、**実行すべきターミナルコマンドを、コピー＆ペーストできる形式で、完全に提供する**こと。",
+      "prohibition": "直接的な破壊的コマンド（rm -rfなど）の実行は、ユーザーの承認（確認）なしに絶対に行わないこと。",
+      "action": "コマンド実行ログと、ファイル更新結果の確認を必ずユーザーに求める。"
+    },
+    {
+      "guide_id": 3,
+      "title": "【原則3】作業履歴の記録と計画の更新",
+      "procedure": "リファクタリング作業の節目（例: 大規模なバグ修正完了、フェーズ完了時）には、以下のルールに従い、作業記録と計画ファイルを更新すること。",
+      "rules": [
+        {
+          "target": "Plan/archive/",
+          "action": "日付をプレフィックスとした新しいファイル名（例: 251129_REFACTORING_PLAN.json）を作成し、完了したフェーズの詳細（原因、キー成果、最終結果）を記載する。"
+        },
+        {
+          "target": "Plan/REFACTORING_PLAN.json",
+          "action": "完了したフェーズは`status: COMPLETED`に更新し、`phases`配列から削除する（または、完了したフェーズの履歴を`completed_phases`に移動し、`phases`には進行中・未着手のタスクのみを残す）。"
+        }
+      ]
+    }
+  ],
+  "context_for_llm": {
+    "note": "このマニュアルは、LLMがプロジェクト全体のリファクタリング作業において、『最も優先して参照すべき運用ルール』である。"
+  }
+}
+

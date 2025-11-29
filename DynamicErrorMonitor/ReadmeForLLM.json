@@ -10,9 +10,9 @@
     }
   ],
   "manifest_version": "1.0",
-  "last_updated": "2025-11-24",
+  "last_updated": "2025-11-29",
   "system_name": "Dynamic Error Monitor (DEM) - Integrated Server Edition",
-  "description": "ゲームクライアントで発生したエラーを自動収集・分析し、開発者に通知するための統合エラー監視システム。旧スタンドアロンサーバーの機能を、Next.jsの本番ビルドに対応した、TypeScriptベースの、内部ライブラリとして、再設計したものである。",
+  "description": "ゲームクライアントで発生したエラーを自動収集・分析し、LLMと開発者に通知するための統合エラー監視システム。旧スタンドアロンサーバーの機能を、Next.jsの本番ビルドに対応した、TypeScriptベースの、内部ライブラリとして、再設計したものである。",
   "philosophy": "エラーは、単に、修正されるべき、『バグ』では、なく、システムの、健全性を、測り、未来の、アーキテクチャを、改善するための、貴重な、『データ』である。",
   "architecture": {
     "description": "このシステムの、コンポーネントは、複数の、ディレクトリに、またがって、存在している。",
@@ -48,24 +48,8 @@
         "name": "【心臓部】エラーデータベース",
         "path": "DynamicErrorMonitor/database/errors.db",
         "role": "収集・解析された、全エラー情報を、格納する、SQLiteデータベース。"
-      },
-      {
-        "id": "knowledge_source",
-        "name": "【知識源】静的インデックス",
-        "path": "Project_Cognize/database/static_index.db",
-        "role": "resolver.tsが、エラー発生箇所を、特定するために、参照する、ソースコードの、インデックス。"
-      },
-      {
-        "id": "visualization",
-        "name": "【監視モニター】エラー可視化",
-        "tool": "GlitchTip (Sentry互換)",
-        "config_files": [
-          "sentry.client.config.ts",
-          "sentry.server.config.ts",
-          "sentry.edge.config.ts",
-          "next.config.js"
-        ]
       }
+      /* 削除されたセクション: knowledge_source, visualization */
     ]
   },
   "technical_debt": {

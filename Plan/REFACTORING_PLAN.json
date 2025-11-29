@@ -108,37 +108,6 @@
   },
   "phases": [
     {
-      "phase_id": 10,
-      "name": "【測量士の視力矯正】indexer.js 分類バグ修正と環境復旧",
-      "priority": 1,
-      "status": "COMPLETED",
-      "objective": "indexer.jsがshared_patterns.jsのルールを正しく解釈できない致命的なバグを修正し、Project Cognizeの自己認識能力を完全に回復させる。",
-      "current_situation": "環境構築の問題を解決し、`indexer.js`の`node_modules`除外ロジックの追加と、それが機能することを確認した。",
-      "action_plan": [
-        {
-          "step": 10.1,
-          "description": "【完了】classifyFile関数の正規表現ロジックを、micromatchライブラリを使用する方式に置き換える。",
-          "status": "COMPLETED"
-        },
-        {
-          "step": 10.2,
-          "description": "【完了】Node.js V20環境への移行、`build-essential`導入、`better-sqlite3`の再ビルド、`npm install --force`の実行。",
-          "status": "COMPLETED"
-        },
-        {
-          "step": 10.3,
-          "description": "【完了】`classifyFile`関数に`node_modules`を最優先で除外するロジックを追加し、TOON生成時に依存ファイルが完全に除外されることを実証。",
-          "status": "COMPLETED"
-        },
-        {
-          "step": 10.4,
-          "description": "【完了】全ログをクリーンアップし、`indexer.js`と`generate_toon.js`を順次実行し、システムが期待通り動作することを最終確認した。",
-          "status": "COMPLETED"
-        }
-      ],
-      "related_bug_id": "BUG-008, BUG-009"
-    },
-    {
       "phase_id": 8,
       "name": "【コネクテッド・ワールド - 連携システムの、完全統合】",
       "priority": 2,
@@ -156,84 +125,6 @@
           "status": "PENDING"
         }
       ]
-    }
-  ],
-  "governance": {
-    "id": "GOV-01",
-    "title": "統治原則：LLMエージェントが、遵守すべき、絶対的、ルール",
-    "prohibitions": [
-      {
-        "rule": "AGENT_MODE_PROHIBITED",
-        "description": "このファイルは、分析と、理解のための、情報共有であり、タスク実行の、直接的な、指示ではない。性急な、エージェントモードへの、切り替えを、禁止する。"
-      },
-      {
-        "rule": "NO_DESTRUCTIVE_CHANGES",
-        "description": "破壊的改変は、厳禁とする。提案の、前に、必ず、現状を、徹底的に、分析し、仮説を、実証すること。"
-      }
-    ],
-    "architectural_constitution": {
-      "id": "AP-01",
-      "principle": "Single Source of Truth for Project Scope",
-      "description": "プロジェクトの、『自作コード』の、範囲や、各ツールの、振る舞いを、定義する、全ての、設定は、ただ、一つの、ファイル `/Project_Cognize/config/shared_patterns.js` に、集約される。これを、当プロジェクトの、『憲法』と、定める。",
-      "llm_instruction": {
-        "level": "CRITICAL",
-        "summary": "【最重要警告】いかなる、理由があろうとも、この、『憲法』に、反する、ような、コード（例：スクリプト内への、パスの、ハードコード）を、生成してはならない。プロジェクトの、範囲を、変更したい場合は、まず、`shared_patterns.js`の、修正を、提案せよ。"
-      }
-    }
-  },
-  "workflow_overview": {
-    "id": "WF-01",
-    "title": "データ駆動型・自己認識ワークフロー",
-    "description": "Project Cognizeは、個々の、ツールが、連携し、プロジェクト自身が、自分を、分析・記述する、エコシステムを、形成する。",
-    "data_flow": [
-      {
-        "step": 1,
-        "actor": "indexer.js",
-        "action": "憲法(`shared_patterns.js`)に、基づき、全ファイルを、スキャンし、AST解析を実行する。",
-        "output": "ファイル構造、シンボル、依存関係、インスタンス等の、詳細な、メタデータ。",
-        "destination": "static_index.db (主データベース) / static_index.jsonl (ログ)"
-      },
-      {
-        "step": 2,
-        "actor": "generate_toon.js",
-        "action": "最新の、`static_index.db`を、読み込み、プロジェクトの、完全な、階層構造を、生成する。",
-        "output": "TOON (Tree-Oriented Object Notation) 形式の、構造化データ。",
-        "destination": "project_structure_toon.json"
-      },
-      {
-        "step": 3,
-        "actor": "generate_prompt.ts",
-        "action": "目的の、タスクと、最新の、`project_structure_toon.json`、及び、各種テンプレートを、組み合わせる。",
-        "output": "LLMの、思考を、正確に、ガイドするための、コンテキスト情報が、豊富に、埋め込まれた、実行プロンプト。",
-        "destination": "LLM Agent (e.g., GLIA)"
-      }
-    ]
-  },
-  "core_components": [
-    {
-      "id": "config_file",
-      "file_name": "config/shared_patterns.js",
-      "main_description": "【憲法】プロジェクトの、範囲と、振る舞いを、定義する、唯一の、設定ファイル。全ての、ツールの、動作は、この、ファイルに、従う。"
-    },
-    {
-      "id": "indexer",
-      "file_name": "scripts/indexer.js",
-      "main_description": "【測量士】プロジェクトの、静的解析を、行い、全ての、情報を、データベース化する、中核ツール。"
-    },
-    {
-      "id": "toon_generator",
-      "file_name": "scripts/generate_toon.js",
-      "main_description": "【地図製作者】データベース情報に基づき、LLMが、解釈可能な、プロジェクトの、階層構造マップ（TOON）を、生成する。"
-    },
-    {
-      "id": "prompt_generator",
-      "file_name": "scripts/generate_prompt.ts",
-      "main_description": "【作戦立案官】TOONマップと、テンプレートを、元に、LLMへの、具体的な、指示プロンプトを、生成する。"
-    },
-    {
-      "id": "query_tool",
-      "file_name": "scripts/query_index.js",
-      "main_description": "【司書】生成された、データベースの、内容を、人間が、照会・確認するための、CLIツール。"
     }
   ],
   "automation": {
