@@ -1,20 +1,15 @@
 #!/usr/bin/env node
 /**
- * Cognize Indexer v2.0 - GLIA準備版 (patched: micromatch)
- * 
- * @version 2.0
- * @description Project_Cognizeの中核となる静的解析・インデックス作成ツール
- * 
- * 新機能（Phase 0 + Phase 1）:
- * - ノイズ除去: JavaScriptビルトインクラスのインスタンス化を無視
- * - 自作コード判定: SOURCE_CODE_RULESに基づく初歩的な判定 (micromatch使用)
- * - クリティカルファイル検出: CRITICAL_FILESとの照合
- * 
- * @important
- * このファイルは、`/Project_Cognize/config/shared_patterns.js` の設定に完全に従属します。
- * スキャン範囲の変更は、必ず `shared_patterns.js` を編集してください。
- * 
- * 実行:
+ * Cognize Indexer v2.1 - GLIA preparation (fast-glob + micromatch)
+ *
+ * @version 2.1
+ * @description Project_Cognize static analysis and indexer
+ *
+ * Notes:
+ * - Uses fast-glob to apply ignore patterns at collection time
+ * - Uses micromatch for robust include/exclude matching
+ *
+ * Usage:
  *   node Project_Cognize/scripts/indexer.js [--dry-run] [--full-scan] [--verbose]
  */
 
@@ -22,15 +17,12 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const crypto = require('crypto');
-const glob = require('glob');
+const fg = require('fast-glob');
 const Database = require('better-sqlite3');
 const { parse } = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
-const micromatch = require('micromatch'); // <- added per patch
+const micromatch = require('micromatch');
 
-// ====================
-// 設定読み込み（憲法への服従）
-// ====================
 const {
   IGNORE_PATTERNS,
   SOURCE_CODE_RULES,
@@ -38,9 +30,6 @@ const {
   CRITICAL_FILES
 } = require('../config/shared_patterns.js');
 
-// ====================
-// プロジェクト構成
-// ====================
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
 const COGNIZE_ROOT = path.join(PROJECT_ROOT, 'Project_Cognize');
 const JSONL_PATH = path.join(COGNIZE_ROOT, 'workspace/outputs/static_index.jsonl');
@@ -52,9 +41,6 @@ const DRY_RUN = process.argv.includes('--dry-run');
 const FULL_SCAN = process.argv.includes('--full-scan');
 const VERBOSE = process.argv.includes('--verbose');
 
-// ====================
-// ユーティリティ
-// ====================
 function log(msg, level = 'info') {
   const icons = { info: '✓', warn: '⚠', error: '✗', verbose: '→', debug: '•' };
   if (level === 'verbose' && !VERBOSE) return;
@@ -65,7 +51,7 @@ function log(msg, level = 'info') {
 function ensureDir(dirPath) {
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
-    log(`ディレクトリ作成: ${path.relative(PROJECT_ROOT, dirPath)}`, 'verbose');
+    log(`Directory created: ${path.relative(PROJECT_ROOT, dirPath)}`, 'verbose');
   }
 }
 
@@ -73,13 +59,13 @@ function ensureFile(filePath) {
   if (!fs.existsSync(filePath)) {
     ensureDir(path.dirname(filePath));
     fs.writeFileSync(filePath, '');
-    log(`ファイル作成: ${path.relative(PROJECT_ROOT, filePath)}`, 'verbose');
+    log(`File created: ${path.relative(PROJECT_ROOT, filePath)}`, 'verbose');
   }
 }
 
 function getFileHash(filePath) {
   if (!fs.existsSync(filePath)) {
-    throw new Error(`ファイルが存在しません: ${filePath}`);
+    throw new Error(`File does not exist: ${filePath}`);
   }
   const data = fs.readFileSync(filePath);
   return 'sha256:' + crypto.createHash('sha256').update(data).digest('hex');
@@ -96,47 +82,43 @@ function getCurrentCommit() {
   }
 }
 
-// ====================
-// 自作コード判定エンジン（Phase 1） - micromatch版
-// ====================
+// indexer.js の classifyFile 関数内を以下の内容に置き換えるイメージです
 function classifyFile(filePath) {
   const normalizedPath = filePath.replace(/\\/g, '/').replace(/^\.\//, '');
 
-  // クリティカルファイルチェック (simple includes is reliable)
-  const isCritical = CRITICAL_FILES.some(critPath => 
+  // ★★★ 以下のチェックを最優先に追加（これが解決の鍵です） ★★★
+  if (normalizedPath.startsWith('node_modules/') || normalizedPath.startsWith('DynamicErrorMonitor/node_modules/')) {
+    return { is_self_made: false, confidence: 1.0, reason: 'explicitly excluded node_modules', category: 'external' };
+  }
+  // ★★★ ここまで ★★★
+
+  const isCritical = Array.isArray(CRITICAL_FILES) && CRITICAL_FILES.some(critPath =>
     normalizedPath.includes(critPath.replace(/\\/g, '/'))
   );
 
-  // include_paths / exclude_paths に対して micromatch で判定
-  // guard: if arrays are absent, treat as empty arrays
   const includePatterns = Array.isArray(SOURCE_CODE_RULES.include_paths) ? SOURCE_CODE_RULES.include_paths : [];
   const excludePatterns = Array.isArray(SOURCE_CODE_RULES.exclude_paths) ? SOURCE_CODE_RULES.exclude_paths : [];
 
-  // micromatch.isMatch handles glob patterns robustly
   let isIncluded = false;
   let isExcluded = false;
 
   try {
     if (includePatterns.length > 0) {
-      // micromatch expects paths like 'game/components/Bullet.ts'
       isIncluded = micromatch.isMatch(normalizedPath, includePatterns, { dot: true });
     }
     if (excludePatterns.length > 0) {
       isExcluded = micromatch.isMatch(normalizedPath, excludePatterns, { dot: true });
     }
   } catch (e) {
-    // Fallback silently but log for debugging
     log(`micromatch error for path=${normalizedPath} : ${e.message}`, 'warn');
     isIncluded = false;
     isExcluded = false;
   }
 
-  // config_files にマッチするか（exact-ish check: endsWith）
   const isConfig = Array.isArray(SOURCE_CODE_RULES.config_files) && SOURCE_CODE_RULES.config_files.some(configFile =>
     normalizedPath.endsWith(configFile)
   );
 
-  // 判定ロジック
   let isSelfMade = false;
   let confidence = 0.0;
   let reason = '';
@@ -152,17 +134,11 @@ function classifyFile(filePath) {
     confidence = 1.0;
     reason = 'marked as critical file';
     category = 'critical';
-  } else if (isConfig) {
-    isSelfMade = true;
-    confidence = 0.9;
-    reason = 'config file (self-made but rarely modified)';
-    category = 'config';
   } else if (isIncluded) {
     isSelfMade = true;
     confidence = 0.95;
     reason = 'matches include_paths rule';
 
-    // カテゴリ詳細判定 (normalizedPath is without leading ./)
     if (normalizedPath.startsWith('components/')) {
       category = 'component';
     } else if (normalizedPath.startsWith('app/')) {
@@ -179,10 +155,9 @@ function classifyFile(filePath) {
       category = 'self-made';
     }
   } else {
-    // どちらにもマッチしない → 低確信度で自作と仮定
     isSelfMade = true;
     confidence = 0.5;
-    reason = 'not in exclude list, assumed self-made';
+    reason = 'not in include or exclude, assumed self-made';
     category = 'uncertain';
   }
 
@@ -195,26 +170,43 @@ function classifyFile(filePath) {
   };
 }
 
-// ====================
-// ファイル収集
-// ====================
 function getChangedFiles() {
-  log('スキャン開始: config/shared_patterns.js の定義を使用', 'info');
+  log('Starting scan: using config/shared_patterns.js', 'info');
 
-  const files = glob.sync('**/*', {
-    cwd: PROJECT_ROOT,
-    ignore: IGNORE_PATTERNS,
-    nodir: true,
-    absolute: false
-  });
+  const includePatterns = Array.isArray(SOURCE_CODE_RULES.include_paths) && SOURCE_CODE_RULES.include_paths.length > 0
+    ? SOURCE_CODE_RULES.include_paths.slice()
+    : ['**/*'];
 
-  log(`スキャン対象として ${files.length} ファイルを検出`, 'verbose');
-  return files;
+  const excludePatterns = Array.isArray(SOURCE_CODE_RULES.exclude_paths) ? SOURCE_CODE_RULES.exclude_paths.slice() : [];
+  const ignorePatterns = Array.isArray(IGNORE_PATTERNS) ? IGNORE_PATTERNS.slice() : [];
+
+  if (!ignorePatterns.includes('**/node_modules/**')) {
+    ignorePatterns.push('**/node_modules/**');
+  }
+
+  excludePatterns.forEach(p => { if (!ignorePatterns.includes(p)) ignorePatterns.push(p); });
+
+  let files = [];
+  try {
+    files = fg.sync(includePatterns, {
+      cwd: PROJECT_ROOT,
+      dot: true,
+      onlyFiles: true,
+      ignore: ignorePatterns,
+      unique: true,
+      followSymbolicLinks: true,
+      ignoreBasename: ignorePatterns.map(p => path.basename(p))
+    });
+  } catch (e) {
+    log(`fast-glob error: ${e.message}`, 'error');
+    return [];
+  }
+
+  const normalized = files.map(f => f.replace(/\\/g, '/'));
+  log(`Found ${normalized.length} files to analyze`, 'verbose');
+  return normalized;
 }
 
-// ====================
-// JSON専用処理
-// ====================
 function analyzeJSONFile(filePath) {
   const fullPath = path.join(PROJECT_ROOT, filePath);
   const stats = fs.statSync(fullPath);
@@ -231,20 +223,15 @@ function analyzeJSONFile(filePath) {
   try {
     const parsed = JSON.parse(content);
     const keys = Object.keys(parsed);
-    jsonMeta = {
-      ...jsonMeta,
+    jsonMeta = Object.assign(jsonMeta, {
       keys_count: keys.length,
       has_array: Array.isArray(parsed),
       sample_keys: keys.slice(0, 5),
-      is_critical: filePath.includes('refactor_policy.json') || 
-                  filePath.includes('baseline_summary.json')
-    };
+      is_critical: filePath.includes('refactor_policy.json') || filePath.includes('baseline_summary.json')
+    });
   } catch (e) {
-    jsonMeta = {
-      ...jsonMeta,
-      type: 'invalid_json',
-      parse_error: e.message.substring(0, 100)
-    };
+    jsonMeta.type = 'invalid_json';
+    jsonMeta.parse_error = e.message.substring(0, 100);
   }
 
   return {
@@ -260,9 +247,6 @@ function analyzeJSONFile(filePath) {
   };
 }
 
-// ====================
-// SQLite初期化
-// ====================
 function initDatabase() {
   ensureDir(path.dirname(DB_PATH));
   const db = new Database(DB_PATH);
@@ -272,6 +256,7 @@ function initDatabase() {
   db.pragma('busy_timeout = 5000');
 
   db.exec(`
+
     CREATE TABLE IF NOT EXISTS file_index (
       path TEXT PRIMARY KEY,
       file_hash TEXT NOT NULL,
@@ -317,17 +302,14 @@ function initDatabase() {
     CREATE INDEX IF NOT EXISTS idx_category ON file_index(category);
   `);
 
-  log('SQLiteデータベース初期化完了', 'debug');
+  log('SQLite DB initialized', 'debug');
   return db;
 }
 
-// ====================
-// AST解析
-// ====================
 function analyzeFile(filePath) {
   const fullPath = path.join(PROJECT_ROOT, filePath);
   if (!fs.existsSync(fullPath)) {
-    throw new Error(`ファイルが存在しません: ${filePath}`);
+    throw new Error(`File not found: ${filePath}`);
   }
 
   const code = fs.readFileSync(fullPath, 'utf8');
@@ -341,7 +323,7 @@ function analyzeFile(filePath) {
       plugins: ['jsx', 'typescript', 'classProperties', 'decorators-legacy']
     });
   } catch (err) {
-    throw new Error(`パース失敗: ${err.message}`);
+    throw new Error(`Parse failed: ${err.message}`);
   }
 
   const symbols = [];
@@ -351,12 +333,12 @@ function analyzeFile(filePath) {
   const instances = [];
   const lines = code.split('\n');
 
-  // ★ Phase 1: ビルトインクラスのSetを事前作成（高速化）
-  const builtinSet = new Set(BUILTIN_CLASSES);
+  const builtinSet = new Set(BUILTIN_CLASSES || []);
 
   traverse(ast, {
     ImportDeclaration(p) {
-      const source = p.node.source.value;
+      const source = p.node.source && p.node.source.value;
+      if (!source) return;
       const specifiers = p.node.specifiers.map(spec => {
         if (spec.type === 'ImportDefaultSpecifier') {
           return { type: 'default', name: spec.local.name };
@@ -374,7 +356,7 @@ function analyzeFile(filePath) {
     },
 
     CallExpression(p) {
-      if (p.node.callee.name === 'require' && p.node.arguments.length > 0 && p.node.arguments[0].type === 'StringLiteral') {
+      if (p.node.callee && p.node.callee.name === 'require' && p.node.arguments.length > 0 && p.node.arguments[0].type === 'StringLiteral') {
         const moduleName = p.node.arguments[0].value;
         if (!imports.some(imp => imp.module === moduleName)) {
           imports.push({ module: moduleName, specifiers: [{ type: 'require', name: null }] });
@@ -383,17 +365,19 @@ function analyzeFile(filePath) {
     },
 
     ExportAllDeclaration(p) {
-      const source = p.node.source.value;
-      reexports.push({
-        type: 'all',
-        module: source,
-        exported_name: p.node.exported ? p.node.exported.name : null
-      });
-      imports.push({
-        module: source,
-        specifiers: [{ type: 'reexport-all', name: '*' }],
-        is_reexport: true
-      });
+      const source = p.node.source && p.node.source.value;
+      if (source) {
+        reexports.push({
+          type: 'all',
+          module: source,
+          exported_name: p.node.exported ? p.node.exported.name : null
+        });
+        imports.push({
+          module: source,
+          specifiers: [{ type: 'reexport-all', name: '*' }],
+          is_reexport: true
+        });
+      }
     },
 
     ExportNamedDeclaration(p) {
@@ -425,7 +409,7 @@ function analyzeFile(filePath) {
             }
           });
         }
-      } else if (p.node.specifiers.length > 0) {
+      } else if (p.node.specifiers && p.node.specifiers.length > 0) {
         p.node.specifiers.forEach(spec => {
           exports.push({
             name: spec.exported.name,
@@ -488,14 +472,12 @@ function analyzeFile(filePath) {
 
       if (!className) return;
 
-      // ★ Phase 1: ノイズ除去 - ビルトインクラスをスキップ
       if (builtinSet.has(className)) {
         return;
       }
 
-      // ★ さらに高度な判定: 大文字始まりでないクラス名は疑わしい
       if (!className.match(/^[A-Z]/)) {
-        log(`疑わしいクラス名をスキップ: ${className} in ${filePath}`, 'debug');
+        log(`Skipping suspicious class name: ${className} in ${filePath}`, 'debug');
         return;
       }
 
@@ -504,14 +486,12 @@ function analyzeFile(filePath) {
           return {
             type: 'object',
             properties: arg.properties.map(prop => {
-              const key = prop.key ? prop.key.name : null;
+              const key = prop.key ? (prop.key.name || (prop.key.value ? prop.key.value : null)) : null;
               const valueType = prop.value ? prop.value.type : 'unknown';
               let value = null;
-
               if (prop.value && prop.value.type === 'Literal') {
                 value = prop.value.value;
               }
-
               return { key, valueType, value };
             })
           };
@@ -550,50 +530,35 @@ function analyzeFile(filePath) {
   };
 }
 
-// ====================
-// JSONLローテーション
-// ====================
 function checkRotation() {
   if (!fs.existsSync(JSONL_PATH)) return;
-
   const stats = fs.statSync(JSONL_PATH);
   const sizeMB = stats.size / (1024 * 1024);
-
-  log(`static_index.jsonl サイズ: ${sizeMB.toFixed(2)}MB`, 'verbose');
-
+  log(`static_index.jsonl size: ${sizeMB.toFixed(2)}MB`, 'verbose');
   if (sizeMB > MAX_JSONL_SIZE_MB) {
     const timestamp = new Date().toISOString().split('T')[0].replace(/-/g, '');
     const archivePath = path.join(ARCHIVE_DIR, `static_index_${timestamp}.jsonl.gz`);
-
-    log(`⚠ JSONLが${MAX_JSONL_SIZE_MB}MB超過 → ローテーション開始`, 'warn');
-
     try {
       execSync(`gzip -c "${JSONL_PATH}" > "${archivePath}"`, { cwd: PROJECT_ROOT });
       fs.writeFileSync(JSONL_PATH, '');
-      log(`アーカイブ完了: ${path.basename(archivePath)}`, 'info');
+      log(`Archived: ${path.basename(archivePath)}`, 'info');
     } catch (err) {
-      log(`ローテーション失敗: ${err.message}`, 'error');
+      log(`Rotation failed: ${err.message}`, 'error');
     }
   }
 }
 
-// ====================
-// メイン処理
-// ====================
 function main() {
   const startTime = Date.now();
-
-  log('=== Cognize Indexer v2.0 (GLIA準備版) 開始 ===');
-  log(`モード: ${DRY_RUN ? 'DRY-RUN（書き込みなし）' : '本番実行'}`);
-  log(`スキャン: config/shared_patterns.js に基づく一貫したフルスキャン`);
-
+  log('=== Cognize Indexer v2.1 ===');
+  log(`Mode: ${DRY_RUN ? 'DRY-RUN' : 'production'}`);
   if (FULL_SCAN && !DRY_RUN) {
     if (fs.existsSync(DB_PATH)) {
       try {
         fs.unlinkSync(DB_PATH);
-        log('⚠ フルスキャンモードのため既存DBを削除', 'warn');
+        log('Removed existing DB for full-scan', 'warn');
       } catch (err) {
-        log(`DB削除失敗: ${err.message}`, 'error');
+        log(`Failed to remove DB: ${err.message}`, 'error');
         process.exit(1);
       }
     }
@@ -607,12 +572,12 @@ function main() {
   const commitSha = getCurrentCommit();
 
   if (files.length === 0) {
-    log('⚠ 解析対象ファイルなし', 'warn');
+    log('No files to analyze', 'warn');
     db.close();
     return;
   }
 
-  log(`解析対象: ${files.length}ファイル`);
+  log(`Analyzing ${files.length} files`);
 
   let successCount = 0;
   let errorCount = 0;
@@ -625,31 +590,24 @@ function main() {
     ) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
-  const insertDep = db.prepare(`
-    INSERT INTO file_dependencies (source_path, target_module, import_type)
-    VALUES (?, ?, ?)
-  `);
+  const insertDep = db.prepare(`INSERT INTO file_dependencies (source_path, target_module, import_type) VALUES (?, ?, ?)`);
 
-  const deleteDeps = db.prepare(`
-    DELETE FROM file_dependencies WHERE source_path = ?
-  `);
+  const deleteDeps = db.prepare(`DELETE FROM file_dependencies WHERE source_path = ?`);
 
   const insertInstance = db.prepare(`
     INSERT INTO class_instances (
-      class_name, file_path, line_number, code_snippet, 
+      class_name, file_path, line_number, code_snippet,
       arguments_json, created_at, commit_sha
     ) VALUES (?, ?, ?, ?, ?, datetime('now'), ?)
   `);
 
-  const deleteInstances = db.prepare(`
-    DELETE FROM class_instances WHERE file_path = ?
-  `);
+  const deleteInstances = db.prepare(`DELETE FROM class_instances WHERE file_path = ?`);
 
   for (const relPath of files) {
     try {
       const fullPath = path.join(PROJECT_ROOT, relPath);
       if (!fs.existsSync(fullPath)) {
-        throw new Error(`ファイルが存在しません: ${relPath}`);
+        throw new Error(`File not found: ${relPath}`);
       }
 
       const fileHash = getFileHash(fullPath);
@@ -673,7 +631,6 @@ function main() {
         };
       }
 
-      // ★ Phase 1: 自作コード判定
       const classification = classifyFile(relPath);
 
       const stats = fs.statSync(fullPath);
@@ -681,12 +638,8 @@ function main() {
 
       const record = {
         record_id: crypto.randomUUID(),
-        schema_version: '2.0',
-        provider: {
-          name: 'cognize-indexer',
-          version: '2.0',
-          mode: DRY_RUN ? 'dry-run' : 'production'
-        },
+        schema_version: '2.1',
+        provider: { name: 'cognize-indexer', version: '2.1', mode: DRY_RUN ? 'dry-run' : 'production' },
         commit: commitSha,
         generated_at: new Date().toISOString(),
         type: 'file_info',
@@ -710,7 +663,6 @@ function main() {
           },
           json_meta: analysis.json_meta,
           is_critical: analysis.is_critical || classification.is_critical,
-          // ★ Phase 1: 新しい判定結果
           classification: {
             is_self_made: classification.is_self_made,
             confidence: classification.confidence,
@@ -765,13 +717,13 @@ function main() {
       successCount++;
       const typeLog = relPath.endsWith('.json') ? 'JSON' : 'JS/TS/TSX';
       const instCount = analysis.instances ? analysis.instances.length : 0;
-      const instLog = instCount > 0 ? `, ${instCount}インスタンス` : '';
-      const classLog = classification.is_self_made ? ` [自作: ${classification.category}]` : '';
-      log(`処理完了: ${relPath} (${typeLog}${instLog}${classLog})`, 'verbose');
+      const instLog = instCount > 0 ? `, ${instCount} instances` : '';
+      const classLog = classification.is_self_made ? ` [self-made: ${classification.category}]` : '';
+      log(`Processed: ${relPath} (${typeLog}${instLog}${classLog})`, 'verbose');
 
     } catch (err) {
       errorCount++;
-      log(`処理失敗: ${relPath} - ${err.message}`, 'error');
+      log(`Processing failed: ${relPath} - ${err.message}`, 'error');
     }
   }
 
@@ -782,16 +734,16 @@ function main() {
   db.close();
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
-  log('=== 処理完了 ===');
-  log(`成功: ${successCount}ファイル`);
-  log(`失敗: ${errorCount}ファイル`);
-  log(`実行時間: ${elapsed}秒`);
+  log('=== Done ===');
+  log(`Success: ${successCount} files`);
+  log(`Failed: ${errorCount} files`);
+  log(`Elapsed: ${elapsed} sec`);
 }
 
 try {
   main();
 } catch (err) {
-  log(`致命的エラー: ${err.message}`, 'error');
+  log(`Fatal error: ${err.message}`, 'error');
   console.error(err.stack);
   process.exit(1);
 }
