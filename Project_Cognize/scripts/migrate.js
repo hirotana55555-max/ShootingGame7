@@ -27,6 +27,7 @@ function openDB(readonly = false) {
   }
 }
 
+// 最終修正: 001.sqlと完全に一致させる
 function ensureMigrationsTable(db) {
   try {
     db.exec(`
@@ -51,7 +52,9 @@ function getAppliedMigrations(db) {
     const rows = stmt.all();
     const applied = new Map();
     for (const row of rows) {
-      applied.set(row.version, row.file_hash);
+      // file_hash が NULL の可能性を考慮し、version のみで判断
+      const version = row.version.split('_')[0]; 
+      applied.set(version, row.file_hash);
     }
     return applied;
   } catch (err) {
@@ -64,7 +67,7 @@ function getAppliedMigrations(db) {
 }
 
 function run(options = {}) {
-  console.log('=== Cognize Migration Manager ===\n');
+  console.log('=== Cognize Migration Manager ===\\n');
   const { dryRun = false } = options;
 
   if (dryRun) {
@@ -83,29 +86,29 @@ function run(options = {}) {
       .filter(f => f.endsWith('.sql'))
       .sort();
 
-    console.log(`• マイグレーションファイル: ${migrationFiles.length}個\n`);
+    console.log('• マイグレーションファイル: ${migrationFiles.length}個\\n');
     let appliedCount = 0;
 
     for (const file of migrationFiles) {
-      // ★★★★★ 修正箇所 ★★★★★
-      const version = file.split('_')[0]; // 配列ではなく、最初の要素のみを取得
-      // ★★★★★★★★★★★★★★★
+      // 厳密な連番形式 (001, 002...) のみを取得
+      const version = file.split('_')[0];
 
       const filePath = path.join(MIGRATIONS_DIR, file);
       const fileHash = getFileHash(filePath);
       const description = file.substring(version.length + 1, file.length - 4).replace(/_/g, ' ');
-
+      
+      // 既に適用済み、かつハッシュが一致すればスキップ
       if (appliedMigrations.has(version)) {
         const storedHash = appliedMigrations.get(version);
         if (storedHash !== fileHash) {
-          console.warn(`⚠️  警告: ${file} は適用済みですが、ハッシュが異なります！`);
-          console.warn(`   - DB記録: ${storedHash}`);
-          console.warn(`   - ファイル: ${fileHash}`);
+          console.warn('⚠️  警告: ${file} は適用済みですが、ハッシュが異なります！');
+          console.warn('   - DB記録: ${storedHash}');
+          console.warn('   - ファイル: ${fileHash}');
         }
         continue;
       }
 
-      console.log(`✓ 適用中: ${file}`);
+      console.log('✓ 適用中: ${file}');
       appliedCount++;
 
       if (dryRun) {
@@ -117,20 +120,21 @@ function run(options = {}) {
       } else {
         const sql = fs.readFileSync(filePath, 'utf8');
         db.exec(sql);
+        // 最終修正: 3つの列に3つの値を正しく挿入
         const stmt = db.prepare('INSERT INTO schema_migrations (version, description, file_hash) VALUES (?, ?, ?)');
         stmt.run(version, description, fileHash);
-        console.log(`  -> 完了`);
+        console.log('  -> 完了');
       }
     }
 
     if (appliedCount === 0) {
       console.log('✓ データベースは最新の状態です。適用する新しいマイグレーションはありません。');
     } else {
-      console.log(`\n✨ ${appliedCount}個のマイグレーションが正常に適用されました。`);
+      console.log('\\n✨ ${appliedCount}個のマイグレーションが正常に適用されました。');
     }
 
   } catch (err) {
-    console.error('\n❌ マイグレーション中にエラーが発生しました:', err.message);
+    console.error('\\n❌ マイグレーション中にエラーが発生しました:', err.message);
     if (!dryRun) {
       console.error('データベースが不整合な状態にある可能性があります。確認してください。');
     }

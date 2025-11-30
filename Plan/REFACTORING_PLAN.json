@@ -1,112 +1,48 @@
 {
-  "manifest_version": "1.0",
-  "last_updated": "2025-11-29",
-  "system_name": "Dynamic Error Monitor (DEM) - Integrated Server Edition",
-  "description": "ゲームクライアントで発生したエラーを自動収集・分析し、開発者に通知するための統合エラー監視システム。旧スタンドアロンサーバーの機能を、Next.jsの本番ビルドに対応した、TypeScriptベースの、内部ライブラリとして、再設計したものである。",
-  "philosophy": "エラーは、単に、修正されるべき、『バグ』では、なく、システムの、健全性を、測り、未来の、アーキテクチャを、改善するための、貴重な、『データ』である。",
-  "architecture": {
-    "description": "このシステムの、コンポーネントは、複数の、ディレクトリに、またがって、存在している。",
-    "components": [
-      {
-        "id": "endpoint",
-        "name": "【司令塔】APIエンドポイント",
-        "path": "app/api/collect/route.ts",
-        "role": "クライアントからの、全エラー報告を受信する、唯一の、窓口。各内部ライブラリを、呼び出し、エラー処理の、フロー全体を、制御する。"
-      },
-      {
-        "id": "internal_libs",
-        "name": "【兵器庫】内部ライブラリ",
-        "path": "app/api/_lib/",
-        "role": "APIルートの、ロジックを、実現するための、TypeScriptモジュール群。Next.jsの、ルーティング対象外 (`_lib`) となっている。",
-        "modules": [
-          {
-            "file": "parser.ts",
-            "role": "スタックトレースの、解析官"
-          },
-          {
-            "file": "resolver.ts",
-            "role": "エラー発生源の、特定官"
-          },
-          {
-            "file": "db.ts",
-            "role": "データベースへの、記録官"
-          }
-        ]
-      },
-      {
-        "id": "primary_db",
-        "name": "【心臓部】エラーデータベース",
-        "path": "DynamicErrorMonitor/database/errors.db",
-        "role": "収集・解析された、全エラー情報を、格納する、SQLiteデータベース。"
-      },
-      {
-        "id": "knowledge_source",
-        "name": "【知識源】静的インデックス",
-        "path": "Project_Cognize/database/static_index.db",
-        "role": "resolver.tsが、エラー発生箇所を、特定するために、参照する、ソースコードの、インデックス。"
-      },
-      {
-        "id": "visualization",
-        "name": "【監視モニター】エラー可視化",
-        "tool": "GlitchTip (Sentry互換)",
-        "config_files": [
-          "sentry.client.config.ts",
-          "sentry.server.config.ts",
-          "sentry.edge.config.ts",
-          "next.config.js"
-        ]
-      }
-    ]
-  },
-  "technical_debt": {
-    "id": "cleanup_targets",
-    "description": "以下の、ファイルは、現在、使用されておらず、新システムへの、完全移行後に、削除されるべき、旧コンポーネントである。",
-    "files": [
-      "DynamicErrorMonitor/src/collector/parser.js",
-      "DynamicErrorMonitor/src/reverse-lookup/resolver.js",
-      "DynamicErrorMonitor/src/collector/db.js",
-      "public/error-snippet.js",
-      "DynamicErrorMonitor/client/error-snippet.js"
-    ]
-  },
-  "quick_start": {
-    "environment": "開発環境",
-    "steps": [
-      {
-        "step": 1,
-        "name": "依存インストール",
-        "commands": [
-          "npm install",
-          "npm install better-sqlite3 @types/better-sqlite3"
-        ]
-      },
-      {
-        "step": 2,
-        "name": "環境変数設定",
-        "description": ".envファイルに、以下の、変数が、設定されていることを、確認する。",
-        "variables": [
-          "ERRORS_DB_PATH",
-          "STATIC_INDEX_DB_PATH",
-          "ENABLE_GLITCHTIP",
-          "GLITCHTIP_DSN"
-        ]
-      },
-      {
-        "step": 3,
-        "name": "開発サーバー起動",
-        "command": "npm run dev"
-      },
-      {
-        "step": 4,
-        "name": "本番ビルド＆起動",
-        "commands": [
-          "npm run build",
-          "npm run start"
-        ]
-      }
-    ]
-  },
   "phases": [
+    {
+      "phase_id": 1,
+      "name": "【CRITICAL: DB管理機能の復旧】マイグレーションシステムの確立",
+      "priority": 0,
+      "status": "IN_PROGRESS",
+      "objective": "`query_index.js schema`でテーブルが存在しないと指摘された管理テーブル（indexer_runs, schema_migrations）を生成し、Cognizeのデータベース管理機能を完全に回復させる。",
+      "action_plan": [
+        {
+          "step": 1.1,
+          "description": "【次作業】`Project_Cognize/scripts/migrate.js`を実行し、管理テーブル（schema_migrations, indexer_runs）が生成されたことを確認する。",
+          "status": "PENDING"
+        },
+        {
+          "step": 1.2,
+          "description": "管理テーブル生成後、`indexer.js`を再実行し、`indexer_runs`テーブルに実行ログが記録されることを確認する。",
+          "status": "PENDING"
+        }
+      ]
+    },
+    {
+      "phase_id": 2,
+      "name": "【DEMクリーンアップ】旧エラーモニターコンポーネントの安全な削除",
+      "priority": 1,
+      "status": "PENDING",
+      "objective": "旧Dynamic Error Monitorの未使用ファイルが依存されていないことを実証し、プロジェクトから完全に削除することで技術的負債を解消する。",
+      "action_plan": [
+        {
+          "step": 2.1,
+          "description": "【完了】`parser.js`, `resolver.js`, `db.js`の3ファイルについて、`query_index.js deps`コマンドで依存関係ゼロを実証した。",
+          "status": "COMPLETED"
+        },
+        {
+          "step": 2.2,
+          "description": "旧コンポーネントの残り2ファイル（public/error-snippet.js, DynamicErrorMonitor/client/error-snippet.js）の依存関係ゼロを実証する。",
+          "status": "PENDING"
+        },
+        {
+          "step": 2.3,
+          "description": "依存ゼロが確認された全ファイルを、ユーザー承認の下で削除する。",
+          "status": "PENDING"
+        }
+      ]
+    },
     {
       "phase_id": 8,
       "name": "【コネクテッド・ワールド - 連携システムの、完全統合】",
@@ -127,26 +63,25 @@
       ]
     }
   ],
-  "automation": {
-    "id": "github_actions",
-    "file_path": ".github/workflows/cognize_indexer.yml",
-    "main_description": "この、エコシステムは、GitHub Actionsによって、自動化されている。`main`ブランチへの、変更を、トリガーに、`indexer.js`が、自動実行され、データベースが、常に、最新に、保たれる。",
-    "llm_instruction": {
-      "level": "CRITICAL",
-      "summary": "【最重要】`Project_Cognize`配下の、スクリプトの、ファイル名や、コマンドオプションを、変更する際は、必ず、この、自動化ワークフロー (`cognize_indexer.yml`) も、同時に、修正しなければ、CI/CDパイプラインが、完全に、破綻する。"
-    }
+  "governance": {
+    "id": "GOV-01",
+    "title": "統治原則：LLMエージェントが、遵守すべき、絶対的、ルール",
+    "prohibitions": [
+      {
+        "rule": "AGENT_MODE_PROHIBITED",
+        "description": "このファイルは、分析と、理解のための、情報共有であり、タスク実行の、直接的な、指示ではない。性急な、エージェントモードへの、切り替えを、禁止する。"
+      },
+      {
+        "rule": "NO_DESTRUCTIVE_CHANGES",
+        "description": "破壊的改変は、厳禁とする。提案の、前に、必ず、現状を、徹底的に、分析し、仮説を、実証すること。"
+      }
+    ]
   },
   "tool_reference": {
     "id": "TOOL-REF-01",
     "tool_name": "query_index.js",
     "description": "静的解析データベースを照会するためのCLIツール。LLMは、プロジェクトに関する情報を得るために、これらのコマンドを積極的に使用すべきである。",
     "commands": [
-      {
-        "name": "schema",
-        "description": "データベースの現在のテーブル構造とマイグレーション履歴を表示する。",
-        "usage": "node Project_Cognize/scripts/query_index.js schema",
-        "purpose": "DBの状態やスキーマ変更の確認に使用する。"
-      },
       {
         "name": "list",
         "description": "プロジェクト内のファイルを一覧表示する。",
@@ -157,51 +92,9 @@
             "description": "shared_patterns.jsの定義に基づき、『自作コード』と判定されたファイルのみを表示する。"
           }
         ],
-        "purpose": "特定の種類のファイル群をリストアップする際に使用する。まず厳密検索を試し、見つからなければ--fuzzyを検討する。"
-      },
-      {
-        "name": "search",
-        "description": "ファイルパスに対してパターン検索を実行する。",
-        "usage": "node Project_Cognize/scripts/query_index.js search <パターン> [オプション]",
-        "options": [
-          {
-            "name": "--fuzzy",
-            "description": "部分一致による曖昧検索を有効にする。デフォルトは、より高速で正確な厳密検索。"
-          }
-        ],
-        "purpose": "特定のキーワードを含むファイルを探す際に使用する。まず厳密検索を試し、見つからなければ--fuzzyを検討する。"
-      },
-      {
-        "name": "stats",
-        "description": "プロジェクト全体の包括的な統計情報を表示する。",
-        "usage": "node Project_Cognize/scripts/query_index.js stats [オプション]",
-        "options": [
-          {
-            "name": "--by-category",
-            "description": "自作コードを『component』『game-core』などのカテゴリ別に集計した、より詳細な統計を表示する。"
-          }
-        ],
-        "purpose": "プロジェクトの全体像（規模、言語構成、自作コード率など）を素早く把握するために使用する。"
-      },
-      {
-        "name": "deps",
-        "description": "指定されたファイルが、どのファイルに依存し（import）、どのファイルから依存されているか（imported by）を表示する。",
-        "usage": "node Project_Cognize/scripts/query_index.js deps <ファイルパス>",
-        "options": [],
-        "purpose": "コード変更時の影響範囲を調査するために不可欠なコマンド。"
-      },
-      {
-        "name": "instances",
-        "description": "指定されたクラスが、プロジェクト内のどこでインスタンス化（`new`）されているかを検索する。",
-        "usage": "node Project_Cognize/scripts/query_index.js instances <クラス名> [オプション]",
-        "options": [
-          {
-            "name": "--show-builtins",
-            "description": "デフォルトで除外されているJavaScriptのビルトインクラス（RegExp, Date等）も検索対象に含める。"
-          }
-        ],
-        "purpose": "特定のクラスの使われ方を調査したり、リファクタリングの影響範囲を特定したりする際に使用する。"
+        "purpose": "特定の種類のファイル群をリストアップする際に使用する。"
       }
     ]
-  }
+  },
+  "last_updated": "2025-11-30"
 }

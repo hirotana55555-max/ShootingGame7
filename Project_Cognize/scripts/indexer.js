@@ -254,58 +254,10 @@ function initDatabase() {
   db.pragma('journal_mode = WAL');
   db.pragma('synchronous = NORMAL');
   db.pragma('busy_timeout = 5000');
-
-  db.exec(`
-
-    CREATE TABLE IF NOT EXISTS file_index (
-      path TEXT PRIMARY KEY,
-      file_hash TEXT NOT NULL,
-      language TEXT NOT NULL,
-      symbols_json TEXT,
-      imports_json TEXT,
-      exports_json TEXT,
-      loc INTEGER,
-      updated_at TEXT NOT NULL,
-      commit_sha TEXT,
-      json_meta TEXT,
-      is_critical BOOLEAN DEFAULT 0,
-      last_accessed REAL DEFAULT 0,
-      is_self_made BOOLEAN DEFAULT 0,
-      confidence REAL DEFAULT 0.0,
-      classification_reason TEXT,
-      category TEXT
-    );
-
-    CREATE TABLE IF NOT EXISTS file_dependencies (
-      source_path TEXT NOT NULL,
-      target_module TEXT NOT NULL,
-      import_type TEXT,
-      FOREIGN KEY (source_path) REFERENCES file_index(path)
-    );
-
-    CREATE TABLE IF NOT EXISTS class_instances (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      class_name TEXT NOT NULL,
-      file_path TEXT NOT NULL,
-      line_number INTEGER NOT NULL,
-      code_snippet TEXT NOT NULL,
-      arguments_json TEXT,
-      created_at TEXT NOT NULL,
-      commit_sha TEXT
-    );
-
-    CREATE INDEX IF NOT EXISTS idx_file_hash ON file_index(file_hash);
-    CREATE INDEX IF NOT EXISTS idx_updated_at ON file_index(updated_at DESC);
-    CREATE INDEX IF NOT EXISTS idx_critical ON file_index(is_critical);
-    CREATE INDEX IF NOT EXISTS idx_last_accessed ON file_index(last_accessed);
-    CREATE INDEX IF NOT EXISTS idx_self_made ON file_index(is_self_made);
-    CREATE INDEX IF NOT EXISTS idx_category ON file_index(category);
-  `);
-
-  log('SQLite DB initialized', 'debug');
+  
+  log('SQLite DB opened (Schema management delegated to migrate.js)', 'debug');
   return db;
 }
-
 function analyzeFile(filePath) {
   const fullPath = path.join(PROJECT_ROOT, filePath);
   if (!fs.existsSync(fullPath)) {
