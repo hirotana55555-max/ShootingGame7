@@ -1,4 +1,3 @@
-// /home/hiro/development/shooting_game/ShootingGame7/tsconfig.json
 {
   "compilerOptions": {
     "target": "es5",
@@ -18,16 +17,20 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "downlevelIteration": true, // ★ 重複をなくし、ここに一本化します
+    "downlevelIteration": true,
     "plugins": [
       {
         "name": "next"
       }
     ],
+    "baseUrl": ".",  // ★修正1: ルートをベースにする
     "paths": {
       "@/*": [
         "./*"
-      ]
+      ],
+      // ★修正2: Cognizeのパスエイリアスを追加し、深い相対パスを解消
+      "@cognize/config": ["Project_Cognize/config/shared_patterns.js"],
+      "@cognize/*": ["Project_Cognize/*"]
     }
   },
   "include": [

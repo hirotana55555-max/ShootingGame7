@@ -206,6 +206,11 @@ const SYSTEM_METADATA = {
   authors: ['ひろし', 'Manus', 'Claude', 'ChatGPT']
 };
 
+const DB_PATHS = {
+  ERRORS_DB: 'DynamicErrorMonitor/database/errors.db',
+};
+
+
 //
 // ===========================
 // エクスポート
@@ -215,5 +220,6 @@ module.exports = {
   SOURCE_CODE_RULES,
   BUILTIN_CLASSES,
   CRITICAL_FILES,
-  SYSTEM_METADATA
+  SYSTEM_METADATA,
+  DB_PATHS // DBパスを憲法としてエクスポート
 };

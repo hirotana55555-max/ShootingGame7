@@ -5,6 +5,8 @@
 
 import Database from 'better-sqlite3';
 import path from 'path';
+import { DB_PATHS } from '@cognize/config';
+import { readFileSync } from 'fs'; // インデクサーの実行時エラー回避のため念のため追加
 
 export interface ErrorRecord {
   id?: number;
@@ -23,7 +25,8 @@ let dbInstance: Database.Database | null = null;
 
 export function getErrorsDb(): Database.Database {
   if (!dbInstance) {
-    const dbPath = process.env.ERRORS_DB_PATH || './DynamicErrorMonitor/database/errors.db';
+    // ★★★ 修正2: ハードコードされたパスを DB_PATHS.ERRORS_DB に置き換え ★★★
+    const dbPath = process.env.ERRORS_DB_PATH || DB_PATHS.ERRORS_DB;
     const fullPath = path.join(process.cwd(), dbPath);
     
     try {
