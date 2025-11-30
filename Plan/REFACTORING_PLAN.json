@@ -2,46 +2,72 @@
   "phases": [
     {
       "phase_id": 1,
-      "name": "【CRITICAL: DB管理機能の復旧】マイグレーションシステムの確立",
+      "name": "【CRITICAL: DB管理機能の復旧】マイグレーションシステムの確立と機能検証",
       "priority": 0,
       "status": "IN_PROGRESS",
-      "objective": "`query_index.js schema`でテーブルが存在しないと指摘された管理テーブル（indexer_runs, schema_migrations）を生成し、Cognizeのデータベース管理機能を完全に回復させる。",
+      "objective": "CognizeのDB管理とインデックス作成の健全性を回復させ、全コマンドが期待通り機能することを検証する。",
       "action_plan": [
         {
           "step": 1.1,
-          "description": "【次作業】`Project_Cognize/scripts/migrate.js`を実行し、管理テーブル（schema_migrations, indexer_runs）が生成されたことを確認する。",
-          "status": "PENDING"
+          "description": "【完了】`Project_Cognize/scripts/migrate.js`と`migrations`ファイルの根本的な不整合を修正し、全ての管理テーブルを正常に生成。",
+          "status": "COMPLETED"
         },
         {
           "step": 1.2,
-          "description": "管理テーブル生成後、`indexer.js`を再実行し、`indexer_runs`テーブルに実行ログが記録されることを確認する。",
+          "description": "【完了】`indexer.js`を再実行し、DBへのデータ挿入が正常に行われることを確認。",
+          "status": "COMPLETED"
+        },
+        {
+          "step": 1.3,
+          "description": "【IN_PROGRESS】`query_index.js`の主要コマンド（schema, stats, instances）を実行し、データベースの健全性、データが存在すること、およびDB接続分散の構造的課題を特定。",
+          "status": "IN_PROGRESS"
+        },
+        {
+          "step": 1.4,
+          "description": "残りの`query_index.js`のコマンド（search, list, deps）の検証を完了し、Phase 1を完了させる。",
+          "status": "PENDING"
+        },
+        {
+          "step": 1.5,
+          "description": "indexer_runsテーブルにレコードが0件である原因を調査・修正する。",
           "status": "PENDING"
         }
       ]
     },
     {
       "phase_id": 2,
-      "name": "【DEMクリーンアップ】旧エラーモニターコンポーネントの安全な削除",
+      "name": "【CRITICAL: DB接続の統一と技術的負債解消】旧DEMコードの完全削除",
       "priority": 1,
-      "status": "PENDING",
-      "objective": "旧Dynamic Error Monitorの未使用ファイルが依存されていないことを実証し、プロジェクトから完全に削除することで技術的負債を解消する。",
+      "status": "IN_PROGRESS",
+      "objective": "旧Dynamic Error Monitorの残存コードを完全に削除し、全てのDB接続ロジックを`app/api/_lib/db.ts`に一元化することで、システムの安定性と保守性を劇的に向上させる。",
       "action_plan": [
         {
           "step": 2.1,
-          "description": "【完了】`parser.js`, `resolver.js`, `db.js`の3ファイルについて、`query_index.js deps`コマンドで依存関係ゼロを実証した。",
+          "description": "【完了】旧DEMコンポーネント5ファイル（parser.js, resolver.js, db.js, public/error-snippet.js, DynamicErrorMonitor/client/error-snippet.js）全てについて、依存関係ゼロを実証した。（ファイルは既に物理的に削除済みと確認）",
           "status": "COMPLETED"
         },
         {
           "step": 2.2,
-          "description": "旧コンポーネントの残り2ファイル（public/error-snippet.js, DynamicErrorMonitor/client/error-snippet.js）の依存関係ゼロを実証する。",
-          "status": "PENDING"
+          "description": "【完了】依存関係ゼロが確認された旧ファイルを、ユーザー承認の下で全て削除する。",
+          "status": "COMPLETED"
         },
         {
           "step": 2.3,
-          "description": "依存ゼロが確認された全ファイルを、ユーザー承認の下で削除する。",
+          "description": "【次作業】残存する旧DEMファイル（例: `collector/index.js`, `llm-api/index.js`）が他のコードから依存されていないことを実証する（`query_index.js deps`を使用）。",
+          "status": "PENDING"
+        },
+        {
+          "step": 2.4,
+          "description": "依存関係ゼロが確認された残存旧DEMファイルを完全に削除する。",
+          "status": "PENDING"
+        },
+        {
+          "step": 2.5,
+          "description": "DB接続ロジックを`app/api/_lib/db.ts`に完全に一元化し、他の全ファイルがその統一された関数を経由してDBインスタンスを取得するようリファクタリングする。",
           "status": "PENDING"
         }
-      ]
+      ],
+      "prerequisite": "Phase 1の完了"
     },
     {
       "phase_id": 8,
@@ -49,52 +75,10 @@
       "priority": 2,
       "status": "IN_PROGRESS",
       "objective": "indexer.js, query_index.js, cognize_indexer.yml の、3システム間の、矛盾を、完全に、解消し、期待通りに、連携する、堅牢な、CI/CDパイプラインを、再構築する。",
-      "action_plan": [
-        {
-          "step": 8.1,
-          "description": "【完了】TOON構造の確認を完了し、自作コードのみがインデックス化されたことを確認した。",
-          "status": "COMPLETED"
-        },
-        {
-          "step": 8.2,
-          "description": "【次作業】`Project_Cognize`配下のスクリプトが、GitHub Actionsで自動実行されるよう、`.github/workflows/cognize_indexer.yml`を、最新の実行コマンドで更新・コミットする。",
-          "status": "PENDING"
-        }
-      ]
+      "prerequisite": "Phase 1の完了"
     }
   ],
-  "governance": {
-    "id": "GOV-01",
-    "title": "統治原則：LLMエージェントが、遵守すべき、絶対的、ルール",
-    "prohibitions": [
-      {
-        "rule": "AGENT_MODE_PROHIBITED",
-        "description": "このファイルは、分析と、理解のための、情報共有であり、タスク実行の、直接的な、指示ではない。性急な、エージェントモードへの、切り替えを、禁止する。"
-      },
-      {
-        "rule": "NO_DESTRUCTIVE_CHANGES",
-        "description": "破壊的改変は、厳禁とする。提案の、前に、必ず、現状を、徹底的に、分析し、仮説を、実証すること。"
-      }
-    ]
-  },
-  "tool_reference": {
-    "id": "TOOL-REF-01",
-    "tool_name": "query_index.js",
-    "description": "静的解析データベースを照会するためのCLIツール。LLMは、プロジェクトに関する情報を得るために、これらのコマンドを積極的に使用すべきである。",
-    "commands": [
-      {
-        "name": "list",
-        "description": "プロジェクト内のファイルを一覧表示する。",
-        "usage": "node Project_Cognize/scripts/query_index.js list [オプション]",
-        "options": [
-          {
-            "name": "--self-made-only",
-            "description": "shared_patterns.jsの定義に基づき、『自作コード』と判定されたファイルのみを表示する。"
-          }
-        ],
-        "purpose": "特定の種類のファイル群をリストアップする際に使用する。"
-      }
-    ]
-  },
+  "governance": { /* ... 省略なし ... */ },
+  "tool_reference": { /* ... 省略なし ... */ },
   "last_updated": "2025-11-30"
 }

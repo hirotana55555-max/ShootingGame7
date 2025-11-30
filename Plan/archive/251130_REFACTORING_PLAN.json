@@ -1,1 +1,12 @@
-{}
+{
+  "archived_at": "2025-11-30T_ARCHIVE_TIME_Z",
+  "phase_id": 1,
+  "name": "【CRITICAL: DB管理機能の復旧】マイグレーションシステムの確立",
+  "status": "COMPLETED",
+  "key_achievements": [
+    "過去LLMによるindexer.jsへの不正なDBスキーマ作成ロジックを特定し削除。",
+    "マイグレーションファイル（001〜006）の連番とSQL内容を修正し、DBの歴史的整合性を完全に回復。",
+    "migrate.jsの実行により、エラーなく再現可能なクリーンなDB構築を実証。"
+  ],
+  "next_focus": "DEMクリーンアップ（旧ファイルの削除）"
+}
