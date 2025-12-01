@@ -1,12 +1,19 @@
+// db.ts: クリーンアップ後の最終コード
 /**
- * Database Helper for Errors DB (TypeScript version)
+ * Database Helper for Errors DB and Static Index DB (TypeScript version)
  * Uses better-sqlite3 for synchronous operations
  */
 
-import Database from 'better-sqlite3';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const Database = require('better-sqlite3'); // ★ グローバル定義として統一
+
+// NOTE: better-sqlite3 の静的インポートは削除し、getStaticDb内でrequireを使用
 import path from 'path';
-import { DB_PATHS } from '@cognize/config';
-import { readFileSync } from 'fs'; // インデクサーの実行時エラー回避のため念のため追加
+// ★★★ 正しい最終パス: 3階層遡り ★★★
+import { DB_PATHS } from '../../../Project_Cognize/config/shared_patterns.js';
+import { readFileSync } from 'fs'; 
+import * as fs from 'fs'; // fs.existsSync を使用するため
 
 export interface ErrorRecord {
   id?: number;
@@ -21,11 +28,14 @@ export interface ErrorRecord {
   is_stale: number;
 }
 
-let dbInstance: Database.Database | null = null;
+// Database 型の参照が削除されたため、any型をDatabase.Database型の代わりに使用
+let dbInstance: any | null = null;
+let staticDbInstance: any | null = null; // ★追加: 静的DBインスタンスのシングルトン変数
 
-export function getErrorsDb(): Database.Database {
+export function getErrorsDb(): any {
+  // グローバルな Database を使用
+  
   if (!dbInstance) {
-    // ★★★ 修正2: ハードコードされたパスを DB_PATHS.ERRORS_DB に置き換え ★★★
     const dbPath = process.env.ERRORS_DB_PATH || DB_PATHS.ERRORS_DB;
     const fullPath = path.join(process.cwd(), dbPath);
     
@@ -33,6 +43,7 @@ export function getErrorsDb(): Database.Database {
       dbInstance = new Database(fullPath);
       console.log('[DB] Connected to errors database:', fullPath);
     } catch (err) {
+      // エラー処理を安全にするため、標準エラーとして再スロー
       console.error('[DB] Failed to open errors.db:', err);
       throw err;
     }
@@ -40,8 +51,38 @@ export function getErrorsDb(): Database.Database {
   return dbInstance;
 }
 
+// ★★★ 静的DBへの接続を提供する機能 (読み取り専用) ★★★
+export function getStaticDb(): any {
+  if (!staticDbInstance) {
+    // Dynamic require を使用せず、グローバルな Database を使用
+    
+    // 憲法(DB_PATHS)に従いパスを取得
+    const dbPath = process.env.STATIC_INDEX_DB_PATH || DB_PATHS.STATIC_INDEX_DB;
+    // 相対パスの場合は絶対パスへ変換
+    const fullPath = path.resolve(process.cwd(), dbPath); // ★ 欠落していたパス定義を再挿入
+    
+    // DBファイル存在チェック
+    if (!fs.existsSync(fullPath)) {
+      // 抽象エラー回避のため、具体的なエラーを投げる
+      console.error("[DB ERROR] Static index DB file not found at:", fullPath);
+      throw new Error(`Static index DB file must exist for read operations: ${fullPath}`);
+    }
+    
+    try {
+      // 読み取り専用、ファイル必須で開く
+      staticDbInstance = new Database(fullPath, { readonly: true, fileMustExist: true });
+      console.log('[DB] Connected to static index database (Readonly):', fullPath);
+    } catch (err) {
+      // エラー処理を安全にするため、標準エラーとして再スロー
+      console.error('[DB] Failed to open static_index.db:', err);
+      throw err;
+    }
+  }
+  return staticDbInstance;
+}
+
 export function insertError(record: Omit<ErrorRecord, 'id'>): number {
-  const db = getErrorsDb();
+  const db: any = getErrorsDb();
   
   const stmt = db.prepare(`
     INSERT INTO errors 

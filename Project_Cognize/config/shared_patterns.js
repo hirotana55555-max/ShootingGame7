@@ -187,7 +187,7 @@ const CRITICAL_FILES = [
 const SYSTEM_METADATA = {
   project: 'ShootingGame7',
   owner: 'Project_Cognize',
-  framework: 'Next.js 16 + React 19',
+  framework: 'Next.js 14',
 
   architecture: {
     core: 'ECS',
@@ -207,6 +207,7 @@ const SYSTEM_METADATA = {
 };
 
 const DB_PATHS = {
+  STATIC_INDEX_DB: './Project_Cognize/database/static_index.db',
   ERRORS_DB: 'DynamicErrorMonitor/database/errors.db',
 };
 
@@ -215,7 +216,7 @@ const DB_PATHS = {
 // ===========================
 // エクスポート
 // ===========================
-module.exports = {
+export {
   IGNORE_PATTERNS,
   SOURCE_CODE_RULES,
   BUILTIN_CLASSES,

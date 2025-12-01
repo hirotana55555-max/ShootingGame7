@@ -68,3 +68,4 @@ DynamicErrorMonitor/node_modules/
 Project_Cognize/workspace/outputs/
 Project_Cognize/database/
 Project_Cognize/lib/*.js
+*.bak

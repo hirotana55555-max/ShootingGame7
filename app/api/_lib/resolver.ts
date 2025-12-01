@@ -3,8 +3,9 @@
  * Converted from DynamicErrorMonitor/src/reverse-lookup/resolver.js
  */
 
-import Database from 'better-sqlite3';
 import path from 'path';
+import type { Database } from 'better-sqlite3'; // 型定義のみ使用
+import { getStaticDb } from './db'; // ★追加: 新しく作ったDBハブからインスタンスを取得する
 
 export interface ResolvedError {
   path: string;
@@ -14,19 +15,12 @@ export interface ResolvedError {
 }
 
 export class ReverseLookupResolver {
-  private db: Database.Database;
+  private db: Database;
 
-  constructor(staticDbPath: string) {
-    if (!staticDbPath) {
-      throw new Error('STATIC_INDEX_DB_PATH not configured');
-    }
-    
-    try {
-      this.db = new Database(staticDbPath, { readonly: true, fileMustExist: true });
-    } catch (err) {
-      console.error('[Resolver] Failed to open static_index.db:', err);
-      throw err;
-    }
+  // コンストラクタを修正: DBパスではなく、接続済みインスタンスを受け取る
+  constructor(dbInstance: Database) {
+    // 従来のパスチェックとDB初期化ロジックを削除
+    this.db = dbInstance;
   }
 
   resolve(filePath: string, lineNum: number): ResolvedError | null {
@@ -125,8 +119,10 @@ export class ReverseLookupResolver {
     return Math.min(score, 1.0);
   }
 
+  // close()メソッドは、接続管理がdb.tsに移行したため、不要になったが、
+  // 外部からの呼び出しを防ぐため、空の関数として残す。
   close(): void {
-    this.db.close();
+    // 接続はgetStaticDbが管理しているため、ここでは何もしない
   }
 }
 
@@ -134,11 +130,9 @@ let resolverInstance: ReverseLookupResolver | null = null;
 
 export function getResolver(): ReverseLookupResolver {
   if (!resolverInstance) {
-    const dbPath = process.env.STATIC_INDEX_DB_PATH;
-    if (!dbPath) {
-      throw new Error('STATIC_INDEX_DB_PATH environment variable not set');
-    }
-    resolverInstance = new ReverseLookupResolver(dbPath);
+    // ★修正: db.tsからDBインスタンスを取得し、コンストラクタに注入する
+    const db = getStaticDb(); 
+    resolverInstance = new ReverseLookupResolver(db);
   }
   return resolverInstance;
 }

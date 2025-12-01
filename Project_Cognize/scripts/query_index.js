@@ -1,17 +1,20 @@
 #!/usr/bin/env node
-const Database = require('better-sqlite3');
-const path = require('path');
+// ★ 修正: 拡張子.tsを明示的に指定
+import { getStaticDb } from '../../app/api/_lib/db.ts'; 
+import path from 'path';
 
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
-const DB_PATH = path.join(PROJECT_ROOT, 'Project_Cognize/database/static_index.db');
 
 function openDB() {
   try {
-    return new Database(DB_PATH, { readonly: true });
+    return getStaticDb();
   } catch (err) {
-    console.error(`\n❌ データベースを開けません: ${DB_PATH}`);
+    console.error('\n❌ データベース接続エラー');
+import { fileURLToPath } from 'url';
     console.error(`エラー: ${err.message}\n`);
-    console.error('ヒント: 先に indexer.js を実行してください');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+    console.error('ヒント: static_index.db が存在しないか、indexer.js が実行されていません');
     process.exit(1);
   }
 }
@@ -43,20 +46,20 @@ function safeNumber(value, defaultValue = 0) {
 }
 
 function formatFileInfo(row, columns) {
-  const parts = [`📄 ${row.path}`, `  言語: ${row.language} | LOC: ${row.loc}`];
+  const parts = [`📄 ${row.path}`, `  言語: ${row.language} | LOC: ${row.loc}`];
   
   if (columns.has('is_self_made') && row.is_self_made) {
     const conf = row.confidence ? ` (${(row.confidence * 100).toFixed(0)}%)` : '';
     const cat = row.category ? ` [${row.category}]` : '';
-    parts.push(`  自作コード${conf}${cat}`);
+    parts.push(`  自作コード${conf}${cat}`);
   }
   
   if (columns.has('is_critical') && row.is_critical) {
-    parts.push(`  🔴 クリティカルファイル`);
+    parts.push(`  🔴 クリティカルファイル`);
   }
   
   if (row.updated_at) {
-    parts.push(`  最終更新: ${row.updated_at}`);
+    parts.push(`  最終更新: ${row.updated_at}`);
   }
   
   return parts.join('\n');
@@ -77,7 +80,7 @@ function showSchema() {
           const pk = col.pk ? ' [PK]' : '';
           const nn = col.notnull ? ' NOT NULL' : '';
           const def = col.dflt_value ? ` DEFAULT ${col.dflt_value}` : '';
-          console.log(`  - ${col.name}: ${col.type}${pk}${nn}${def}`);
+          console.log(`  - ${col.name}: ${col.type}${pk}${nn}${def}`);
         });
         console.log('');
       } catch (e) {
@@ -98,11 +101,11 @@ function showSchema() {
         ORDER BY id DESC
       `).all();
       migrations.forEach(m => {
-        console.log(`  ${m.version} - ${m.applied_at.substring(0, 19)}: ${m.description}`);
+        console.log(`  ${m.version} - ${m.applied_at.substring(0, 19)}: ${m.description}`);
       });
     }
   } finally {
-    db.close();
+    // db.close();
   }
 }
 
@@ -131,7 +134,7 @@ function listAll(options = {}) {
       console.log('');
     });
   } finally {
-    db.close();
+    // db.close();
   }
 }
 
@@ -166,14 +169,14 @@ function search(pattern, options = {}) {
           if (symbols.length > 0) {
             const names = symbols.slice(0, 5).map(s => s.name).join(', ');
             const more = symbols.length > 5 ? ` ... (+${symbols.length - 5})` : '';
-            console.log(`  シンボル: ${names}${more}`);
+            console.log(`  シンボル: ${names}${more}`);
           }
         } catch (e) {}
       }
       console.log('');
     });
   } finally {
-    db.close();
+    // db.close();
   }
 }
 
@@ -219,7 +222,7 @@ function stats(options = {}) {
     
     byLang.forEach(row => {
       const loc = safeNumber(row.total_loc);
-      console.log(`  ${row.language}: ${row.count}ファイル (${loc.toLocaleString()}行)`);
+      console.log(`  ${row.language}: ${row.count}ファイル (${loc.toLocaleString()}行)`);
     });
     
     if (options.byCategory && columns.has('category')) {
@@ -234,7 +237,7 @@ function stats(options = {}) {
       
       byCategory.forEach(row => {
         const loc = safeNumber(row.total_loc);
-        console.log(`  ${row.category}: ${row.count}ファイル (${loc.toLocaleString()}行)`);
+        console.log(`  ${row.category}: ${row.count}ファイル (${loc.toLocaleString()}行)`);
       });
     }
     
@@ -247,7 +250,7 @@ function stats(options = {}) {
     `).all();
     
     topFiles.forEach((row, idx) => {
-      console.log(`  ${idx + 1}. ${row.path} (${row.loc}行)`);
+      console.log(`  ${idx + 1}. ${row.path} (${row.loc}行)`);
     });
     
     const instanceStats = db.prepare('SELECT COUNT(*) as total FROM class_instances').get();
@@ -264,13 +267,13 @@ function stats(options = {}) {
     if (topClasses.length > 0) {
       console.log('\n頻繁にインスタンス化されるクラスTOP10:');
       topClasses.forEach((row, idx) => {
-        console.log(`  ${idx + 1}. ${row.class_name} (${row.count}箇所)`);
+        console.log(`  ${idx + 1}. ${row.class_name} (${row.count}箇所)`);
       });
     }
     
     console.log('');
   } finally {
-    db.close();
+    // db.close();
   }
 }
 
@@ -310,29 +313,29 @@ function showDependencies(file, options = {}) {
     
     console.log(`📥 このファイルが使用しているモジュール (${dependencies.length}個):`);
     if (dependencies.length === 0) {
-      console.log('  (なし)');
+      console.log('  (なし)');
     } else {
       dependencies.forEach(dep => {
-        console.log(`  - ${dep.target_module} [${dep.import_type}]`);
+        console.log(`  - ${dep.target_module} [${dep.import_type}]`);
       });
     }
     
     console.log(`\n📤 このファイルを使用しているファイル (${dependents.length}個):`);
     if (dependents.length === 0) {
-      console.log('  (なし)');
+      console.log('  (なし)');
     } else {
       dependents.forEach(dep => {
-        console.log(`  - ${dep.source_path}`);
+        console.log(`  - ${dep.source_path}`);
       });
     }
     
     if (options.fuzzy && dependents.length > 0) {
-      console.log('\nℹ️  --fuzzy オプションにより部分一致で検索しています');
+      console.log('\nℹ️  --fuzzy オプションにより部分一致で検索しています');
     }
     
     console.log('');
   } finally {
-    db.close();
+    // db.close();
   }
 }
 
@@ -364,7 +367,7 @@ function showInstances(className, options = {}) {
     const instances = db.prepare(sql).all(`%${escapeLikePattern(className)}%`);
     
     if (instances.length === 0) {
-      console.log(`\n⚠️  クラス "${className}" のインスタンスは見つかりませんでした。\n`);
+      console.log(`\n⚠️  クラス "${className}" のインスタンスは見つかりませんでした。\n`);
       return;
     }
     
@@ -372,44 +375,44 @@ function showInstances(className, options = {}) {
     
     instances.forEach((inst, idx) => {
       console.log(`【${idx + 1}】 ${inst.class_name}`);
-      console.log(`  📄 ファイル: ${inst.file_path}`);
-      console.log(`  📍 行番号: ${inst.line_number}`);
-      console.log(`  📅 記録日時: ${inst.created_at}`);
+      console.log(`  📄 ファイル: ${inst.file_path}`);
+      console.log(`  📍 行番号: ${inst.line_number}`);
+      console.log(`  📅 記録日時: ${inst.created_at}`);
       
       if (columns.has('is_builtin') && inst.is_builtin) {
-        console.log(`  🔧 ビルトインクラス`);
+        console.log(`  🔧 ビルトインクラス`);
       }
       
       if (columns.has('inferred_module') && inst.inferred_module) {
-        console.log(`  📦 モジュール: ${inst.inferred_module}`);
+        console.log(`  📦 モジュール: ${inst.inferred_module}`);
       }
       
       const args = JSON.parse(inst.arguments_json || '[]');
       if (args.length > 0) {
-        console.log(`  🔧 引数:`);
+        console.log(`  🔧 引数:`);
         args.forEach((arg, argIdx) => {
           if (arg.type === 'object' && arg.properties) {
-            console.log(`    [${argIdx}] オブジェクト:`);
+            console.log(`    [${argIdx}] オブジェクト:`);
             arg.properties.forEach(prop => {
               const valueStr = prop.value !== null ? ` = ${prop.value}` : '';
-              console.log(`      - ${prop.key}: ${prop.valueType}${valueStr}`);
+              console.log(`      - ${prop.key}: ${prop.valueType}${valueStr}`);
             });
           } else if (arg.type === 'literal') {
-            console.log(`    [${argIdx}] リテラル: ${arg.value}`);
+            console.log(`    [${argIdx}] リテラル: ${arg.value}`);
           } else if (arg.type === 'identifier') {
-            console.log(`    [${argIdx}] 変数: ${arg.name}`);
+            console.log(`    [${argIdx}] 変数: ${arg.name}`);
           } else {
-            console.log(`    [${argIdx}] ${arg.type}`);
+            console.log(`    [${argIdx}] ${arg.type}`);
           }
         });
       } else {
-        console.log(`  🔧 引数: なし`);
+        console.log(`  🔧 引数: なし`);
       }
       
-      console.log(`  💻 コード:`);
+      console.log(`  💻 コード:`);
       const snippet = inst.code_snippet.replace(/\r\n?/g, '\n');
       snippet.split('\n').forEach(line => {
-        console.log(`      ${line}`);
+        console.log(`      ${line}`);
       });
       console.log('');
     });
@@ -423,12 +426,12 @@ function showInstances(className, options = {}) {
     Object.entries(fileGroups)
       .sort((a, b) => b[1] - a[1])
       .forEach(([file, count]) => {
-        console.log(`  ${file}: ${count}箇所`);
+        console.log(`  ${file}: ${count}箇所`);
       });
     
     console.log('');
   } finally {
-    db.close();
+    // db.close();
   }
 }
 
@@ -479,11 +482,11 @@ switch (command) {
 Cognize Query Tool v2.0
 
 コマンド:
-  schema                            スキーマ情報
-  list [--self-made-only]           ファイル一覧
-  search <pattern> [--fuzzy]        検索
-  stats [--by-category]             統計
-  deps <file> [--fuzzy]             依存関係
-  instances <class> [--show-builtins]  インスタンス検索
-    `);
+  schema                            スキーマ情報
+  list [--self-made-only]           ファイル一覧
+  search <pattern> [--fuzzy]        検索
+  stats [--by-category]             統計
+  deps <file> [--fuzzy]             依存関係
+  instances <class> [--show-builtins]  インスタンス検索
+    `);
 }

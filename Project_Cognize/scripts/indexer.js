@@ -1,36 +1,79 @@
 #!/usr/bin/env node
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
+import crypto from 'crypto';
+import fg from 'fast-glob';
+import Database from 'better-sqlite3';
+import { parse } from '@babel/parser';
+import micromatch from 'micromatch';
+
 /**
  * Cognize Indexer v2.1 - GLIA preparation (fast-glob + micromatch)
  *
  * @version 2.1
- * @description Project_Cognize static analysis and indexer
+ * @description Project_Cognize static analysis and indexer (ESM完全準拠版)
  *
  * Notes:
  * - Uses fast-glob to apply ignore patterns at collection time
  * - Uses micromatch for robust include/exclude matching
+ * - Full ESM compatibility with __dirname replacement
+ * - Enhanced error handling for parse failures
  *
  * Usage:
  *   node Project_Cognize/scripts/indexer.js [--dry-run] [--full-scan] [--verbose]
  */
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
-const crypto = require('crypto');
-const fg = require('fast-glob');
-const Database = require('better-sqlite3');
-const { parse } = require('@babel/parser');
-const traverse = require('@babel/traverse').default;
-const micromatch = require('micromatch');
+// ESM環境で__dirnameを再現
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const {
+import {
   IGNORE_PATTERNS,
   SOURCE_CODE_RULES,
   BUILTIN_CLASSES,
   CRITICAL_FILES
-} = require('../config/shared_patterns.js');
+} from "../config/shared_patterns.js";
 
-const PROJECT_ROOT = path.resolve(__dirname, '../..');
+// ESM環境で__dirnameを再現
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// @babel/traverse のインポート（複数のフォールバック）
+const babelTraverseModule = await import('@babel/traverse');
+let traverse = babelTraverseModule.default;
+
+// フォールバック1: .default.default (二重ラップされている場合)
+if (typeof traverse !== 'function' && traverse && typeof traverse.default === 'function') {
+  traverse = traverse.default;
+}
+
+// フォールバック2: モジュール自体が関数の場合
+if (typeof traverse !== 'function' && typeof babelTraverseModule === 'function') {
+  traverse = babelTraverseModule;
+}
+
+// 最終チェック
+if (typeof traverse !== 'function') {
+  console.error('Error: @babel/traverse could not be loaded as a function');
+  console.error('Module structure:', Object.keys(babelTraverseModule));
+  console.error('Default export type:', typeof babelTraverseModule.default);
+  
+  // デバッグ用に詳細を表示
+  if (babelTraverseModule.default && typeof babelTraverseModule.default === 'object') {
+    console.error('Default export keys:', Object.keys(babelTraverseModule.default));
+  }
+  
+  process.exit(1);
+}
+
+import {
+  IGNORE_PATTERNS,
+  SOURCE_CODE_RULES,
+  BUILTIN_CLASSES,
+  CRITICAL_FILES
+} from "../config/shared_patterns.js";
 const COGNIZE_ROOT = path.join(PROJECT_ROOT, 'Project_Cognize');
 const JSONL_PATH = path.join(COGNIZE_ROOT, 'workspace/outputs/static_index.jsonl');
 const DB_PATH = path.join(COGNIZE_ROOT, 'database/static_index.db');
@@ -82,15 +125,13 @@ function getCurrentCommit() {
   }
 }
 
-// indexer.js の classifyFile 関数内を以下の内容に置き換えるイメージです
 function classifyFile(filePath) {
   const normalizedPath = filePath.replace(/\\/g, '/').replace(/^\.\//, '');
 
-  // ★★★ 以下のチェックを最優先に追加（これが解決の鍵です） ★★★
+  // node_modules を最優先で除外
   if (normalizedPath.startsWith('node_modules/') || normalizedPath.startsWith('DynamicErrorMonitor/node_modules/')) {
     return { is_self_made: false, confidence: 1.0, reason: 'explicitly excluded node_modules', category: 'external' };
   }
-  // ★★★ ここまで ★★★
 
   const isCritical = Array.isArray(CRITICAL_FILES) && CRITICAL_FILES.some(critPath =>
     normalizedPath.includes(critPath.replace(/\\/g, '/'))
@@ -114,10 +155,6 @@ function classifyFile(filePath) {
     isIncluded = false;
     isExcluded = false;
   }
-
-  const isConfig = Array.isArray(SOURCE_CODE_RULES.config_files) && SOURCE_CODE_RULES.config_files.some(configFile =>
-    normalizedPath.endsWith(configFile)
-  );
 
   let isSelfMade = false;
   let confidence = 0.0;
@@ -255,9 +292,10 @@ function initDatabase() {
   db.pragma('synchronous = NORMAL');
   db.pragma('busy_timeout = 5000');
   
-  log('SQLite DB opened (Schema management delegated to migrate.js)', 'debug');
+  log('SQLite DB opened (Direct access for write operations)', 'debug');
   return db;
 }
+
 function analyzeFile(filePath) {
   const fullPath = path.join(PROJECT_ROOT, filePath);
   if (!fs.existsSync(fullPath)) {
@@ -270,12 +308,28 @@ function analyzeFile(filePath) {
 
   let ast;
   try {
+    // 拡張プラグインセットでパース試行
+    const plugins = ['jsx', 'typescript', 'classProperties', 'decorators-legacy'];
+    
+    // TypeScriptファイルの場合は追加プラグイン
+    if (ext.match(/\.tsx?$/)) {
+      plugins.push('optionalChaining', 'nullishCoalescingOperator');
+    }
+
     ast = parse(code, {
-      sourceType: 'module',
-      plugins: ['jsx', 'typescript', 'classProperties', 'decorators-legacy']
+      sourceType: 'unambiguous', // 'module'から'unambiguous'に変更
+      plugins,
+      errorRecovery: true, // エラーリカバリーを有効化
+      allowImportExportEverywhere: true,
+      allowAwaitOutsideFunction: true,
+      allowReturnOutsideFunction: true,
+      allowSuperOutsideMethod: true,
+      allowUndeclaredExports: true
     });
   } catch (err) {
-    throw new Error(`Parse failed: ${err.message}`);
+    // パースエラー時は構文エラー情報のみを記録
+    log(`Parse failed for ${filePath}: ${err.message}`, 'warn');
+    throw new Error(`Parse failed: ${err.message.substring(0, 200)}`);
   }
 
   const symbols = [];
@@ -287,189 +341,229 @@ function analyzeFile(filePath) {
 
   const builtinSet = new Set(BUILTIN_CLASSES || []);
 
-  traverse(ast, {
-    ImportDeclaration(p) {
-      const source = p.node.source && p.node.source.value;
-      if (!source) return;
-      const specifiers = p.node.specifiers.map(spec => {
-        if (spec.type === 'ImportDefaultSpecifier') {
-          return { type: 'default', name: spec.local.name };
-        } else if (spec.type === 'ImportNamespaceSpecifier') {
-          return { type: 'namespace', name: spec.local.name };
-        } else {
-          return {
-            type: 'named',
-            name: spec.local.name,
-            imported: spec.imported ? spec.imported.name : spec.local.name
-          };
-        }
-      });
-      imports.push({ module: source, specifiers });
-    },
-
-    CallExpression(p) {
-      if (p.node.callee && p.node.callee.name === 'require' && p.node.arguments.length > 0 && p.node.arguments[0].type === 'StringLiteral') {
-        const moduleName = p.node.arguments[0].value;
-        if (!imports.some(imp => imp.module === moduleName)) {
-          imports.push({ module: moduleName, specifiers: [{ type: 'require', name: null }] });
-        }
-      }
-    },
-
-    ExportAllDeclaration(p) {
-      const source = p.node.source && p.node.source.value;
-      if (source) {
-        reexports.push({
-          type: 'all',
-          module: source,
-          exported_name: p.node.exported ? p.node.exported.name : null
-        });
-        imports.push({
-          module: source,
-          specifiers: [{ type: 'reexport-all', name: '*' }],
-          is_reexport: true
-        });
-      }
-    },
-
-    ExportNamedDeclaration(p) {
-      if (p.node.source) {
-        const source = p.node.source.value;
-        const specifiers = p.node.specifiers.map(spec => ({
-          type: 'reexport-named',
-          exported: spec.exported.name,
-          imported: spec.local.name
-        }));
-        reexports.push({
-          type: 'named',
-          module: source,
-          specifiers
-        });
-        imports.push({
-          module: source,
-          specifiers,
-          is_reexport: true
-        });
-      }
-      if (p.node.declaration) {
-        if (p.node.declaration.id) {
-          exports.push({ name: p.node.declaration.id.name, type: 'named' });
-        } else if (p.node.declaration.declarations) {
-          p.node.declaration.declarations.forEach(d => {
-            if (d.id && d.id.name) {
-              exports.push({ name: d.id.name, type: 'named' });
+  try {
+    traverse(ast, {
+      ImportDeclaration(p) {
+        try {
+          const source = p.node.source && p.node.source.value;
+          if (!source) return;
+          const specifiers = p.node.specifiers.map(spec => {
+            if (spec.type === 'ImportDefaultSpecifier') {
+              return { type: 'default', name: spec.local.name };
+            } else if (spec.type === 'ImportNamespaceSpecifier') {
+              return { type: 'namespace', name: spec.local.name };
+            } else {
+              return {
+                type: 'named',
+                name: spec.local.name,
+                imported: spec.imported ? spec.imported.name : spec.local.name
+              };
             }
           });
+          imports.push({ module: source, specifiers });
+        } catch (e) {
+          log(`ImportDeclaration error in ${filePath}: ${e.message}`, 'debug');
         }
-      } else if (p.node.specifiers && p.node.specifiers.length > 0) {
-        p.node.specifiers.forEach(spec => {
-          exports.push({
-            name: spec.exported.name,
-            type: 'named',
-            local: spec.local.name
+      },
+
+      CallExpression(p) {
+        try {
+          if (p.node.callee && p.node.callee.name === 'require' && 
+              p.node.arguments.length > 0 && 
+              p.node.arguments[0].type === 'StringLiteral') {
+            const moduleName = p.node.arguments[0].value;
+            if (!imports.some(imp => imp.module === moduleName)) {
+              imports.push({ module: moduleName, specifiers: [{ type: 'require', name: null }] });
+            }
+          }
+        } catch (e) {
+          log(`CallExpression error in ${filePath}: ${e.message}`, 'debug');
+        }
+      },
+
+      ExportAllDeclaration(p) {
+        try {
+          const source = p.node.source && p.node.source.value;
+          if (source) {
+            reexports.push({
+              type: 'all',
+              module: source,
+              exported_name: p.node.exported ? p.node.exported.name : null
+            });
+            imports.push({
+              module: source,
+              specifiers: [{ type: 'reexport-all', name: '*' }],
+              is_reexport: true
+            });
+          }
+        } catch (e) {
+          log(`ExportAllDeclaration error in ${filePath}: ${e.message}`, 'debug');
+        }
+      },
+
+      ExportNamedDeclaration(p) {
+        try {
+          if (p.node.source) {
+            const source = p.node.source.value;
+            const specifiers = p.node.specifiers.map(spec => ({
+              type: 'reexport-named',
+              exported: spec.exported.name,
+              imported: spec.local.name
+            }));
+            reexports.push({
+              type: 'named',
+              module: source,
+              specifiers
+            });
+            imports.push({
+              module: source,
+              specifiers,
+              is_reexport: true
+            });
+          }
+          if (p.node.declaration) {
+            if (p.node.declaration.id) {
+              exports.push({ name: p.node.declaration.id.name, type: 'named' });
+            } else if (p.node.declaration.declarations) {
+              p.node.declaration.declarations.forEach(d => {
+                if (d.id && d.id.name) {
+                  exports.push({ name: d.id.name, type: 'named' });
+                }
+              });
+            }
+          } else if (p.node.specifiers && p.node.specifiers.length > 0) {
+            p.node.specifiers.forEach(spec => {
+              exports.push({
+                name: spec.exported.name,
+                type: 'named',
+                local: spec.local.name
+              });
+            });
+          }
+        } catch (e) {
+          log(`ExportNamedDeclaration error in ${filePath}: ${e.message}`, 'debug');
+        }
+      },
+
+      ExportDefaultDeclaration(p) {
+        try {
+          let name = 'default';
+          if (p.node.declaration && p.node.declaration.id) {
+            name = p.node.declaration.id.name;
+          }
+          exports.push({ name, type: 'default' });
+        } catch (e) {
+          log(`ExportDefaultDeclaration error in ${filePath}: ${e.message}`, 'debug');
+        }
+      },
+
+      FunctionDeclaration(p) {
+        try {
+          if (p.node.id) {
+            symbols.push({
+              name: p.node.id.name,
+              type: 'function',
+              line: p.node.loc ? p.node.loc.start.line : 0
+            });
+          }
+        } catch (e) {
+          log(`FunctionDeclaration error in ${filePath}: ${e.message}`, 'debug');
+        }
+      },
+
+      ClassDeclaration(p) {
+        try {
+          if (p.node.id) {
+            symbols.push({
+              name: p.node.id.name,
+              type: 'class',
+              line: p.node.loc ? p.node.loc.start.line : 0
+            });
+          }
+        } catch (e) {
+          log(`ClassDeclaration error in ${filePath}: ${e.message}`, 'debug');
+        }
+      },
+
+      VariableDeclarator(p) {
+        try {
+          if (p.node.id && p.node.id.name) {
+            symbols.push({
+              name: p.node.id.name,
+              type: 'variable',
+              line: p.node.loc ? p.node.loc.start.line : 0
+            });
+          }
+        } catch (e) {
+          log(`VariableDeclarator error in ${filePath}: ${e.message}`, 'debug');
+        }
+      },
+
+      NewExpression(p) {
+        try {
+          const node = p.node;
+          let className = null;
+
+          if (node.callee.type === 'Identifier') {
+            className = node.callee.name;
+          } else if (node.callee.type === 'MemberExpression') {
+            if (node.callee.property && node.callee.property.name) {
+              className = node.callee.property.name;
+            }
+          }
+
+          if (!className) return;
+          if (builtinSet.has(className)) return;
+          if (!className.match(/^[A-Z]/)) {
+            log(`Skipping suspicious class name: ${className} in ${filePath}`, 'debug');
+            return;
+          }
+
+          const args = node.arguments.map(arg => {
+            if (arg.type === 'ObjectExpression') {
+              return {
+                type: 'object',
+                properties: arg.properties.map(prop => {
+                  const key = prop.key ? (prop.key.name || (prop.key.value ? prop.key.value : null)) : null;
+                  const valueType = prop.value ? prop.value.type : 'unknown';
+                  let value = null;
+                  if (prop.value && prop.value.type === 'Literal') {
+                    value = prop.value.value;
+                  }
+                  return { key, valueType, value };
+                })
+              };
+            } else if (arg.type === 'Literal') {
+              return { type: 'literal', value: arg.value };
+            } else if (arg.type === 'Identifier') {
+              return { type: 'identifier', name: arg.name };
+            } else {
+              return { type: arg.type };
+            }
           });
-        });
-      }
-    },
 
-    ExportDefaultDeclaration(p) {
-      let name = 'default';
-      if (p.node.declaration && p.node.declaration.id) {
-        name = p.node.declaration.id.name;
-      }
-      exports.push({ name, type: 'default' });
-    },
+          if (node.loc) {
+            const lineIndex = node.loc.start.line - 1;
+            const startLine = Math.max(0, lineIndex - 1);
+            const endLine = Math.min(lines.length - 1, node.loc.end.line);
+            const snippet = lines.slice(startLine, endLine).join('\n').trim();
 
-    FunctionDeclaration(p) {
-      if (p.node.id) {
-        symbols.push({
-          name: p.node.id.name,
-          type: 'function',
-          line: p.node.loc.start.line
-        });
-      }
-    },
-
-    ClassDeclaration(p) {
-      if (p.node.id) {
-        symbols.push({
-          name: p.node.id.name,
-          type: 'class',
-          line: p.node.loc.start.line
-        });
-      }
-    },
-
-    VariableDeclarator(p) {
-      if (p.node.id && p.node.id.name) {
-        symbols.push({
-          name: p.node.id.name,
-          type: 'variable',
-          line: p.node.loc.start.line
-        });
-      }
-    },
-
-    NewExpression(p) {
-      const node = p.node;
-      let className = null;
-
-      if (node.callee.type === 'Identifier') {
-        className = node.callee.name;
-      } else if (node.callee.type === 'MemberExpression') {
-        if (node.callee.property && node.callee.property.name) {
-          className = node.callee.property.name;
+            instances.push({
+              class_name: className,
+              line: node.loc.start.line,
+              column: node.loc.start.column,
+              snippet,
+              arguments: args
+            });
+          }
+        } catch (e) {
+          log(`NewExpression error in ${filePath}: ${e.message}`, 'debug');
         }
       }
-
-      if (!className) return;
-
-      if (builtinSet.has(className)) {
-        return;
-      }
-
-      if (!className.match(/^[A-Z]/)) {
-        log(`Skipping suspicious class name: ${className} in ${filePath}`, 'debug');
-        return;
-      }
-
-      const args = node.arguments.map(arg => {
-        if (arg.type === 'ObjectExpression') {
-          return {
-            type: 'object',
-            properties: arg.properties.map(prop => {
-              const key = prop.key ? (prop.key.name || (prop.key.value ? prop.key.value : null)) : null;
-              const valueType = prop.value ? prop.value.type : 'unknown';
-              let value = null;
-              if (prop.value && prop.value.type === 'Literal') {
-                value = prop.value.value;
-              }
-              return { key, valueType, value };
-            })
-          };
-        } else if (arg.type === 'Literal') {
-          return { type: 'literal', value: arg.value };
-        } else if (arg.type === 'Identifier') {
-          return { type: 'identifier', name: arg.name };
-        } else {
-          return { type: arg.type };
-        }
-      });
-
-      const lineIndex = node.loc.start.line - 1;
-      const startLine = Math.max(0, lineIndex - 1);
-      const endLine = Math.min(lines.length - 1, node.loc.end.line);
-      const snippet = lines.slice(startLine, endLine).join('\n').trim();
-
-      instances.push({
-        class_name: className,
-        line: node.loc.start.line,
-        column: node.loc.start.column,
-        snippet,
-        arguments: args
-      });
-    }
-  });
+    });
+  } catch (traverseErr) {
+    log(`Traverse error for ${filePath}: ${traverseErr.message}`, 'warn');
+  }
 
   return {
     language,
@@ -500,10 +594,11 @@ function checkRotation() {
   }
 }
 
-function main() {
+async function main() {
   const startTime = Date.now();
-  log('=== Cognize Indexer v2.1 ===');
+  log('=== Cognize Indexer v2.1 (ESM) ===');
   log(`Mode: ${DRY_RUN ? 'DRY-RUN' : 'production'}`);
+  
   if (FULL_SCAN && !DRY_RUN) {
     if (fs.existsSync(DB_PATH)) {
       try {
@@ -533,6 +628,7 @@ function main() {
 
   let successCount = 0;
   let errorCount = 0;
+  let parseErrorCount = 0;
 
   const insertFile = db.prepare(`
     INSERT OR REPLACE INTO file_index (
@@ -543,16 +639,13 @@ function main() {
   `);
 
   const insertDep = db.prepare(`INSERT INTO file_dependencies (source_path, target_module, import_type) VALUES (?, ?, ?)`);
-
   const deleteDeps = db.prepare(`DELETE FROM file_dependencies WHERE source_path = ?`);
-
   const insertInstance = db.prepare(`
     INSERT INTO class_instances (
       class_name, file_path, line_number, code_snippet,
       arguments_json, created_at, commit_sha
     ) VALUES (?, ?, ?, ?, ?, datetime('now'), ?)
   `);
-
   const deleteInstances = db.prepare(`DELETE FROM class_instances WHERE file_path = ?`);
 
   for (const relPath of files) {
@@ -568,7 +661,31 @@ function main() {
       if (relPath.endsWith('.json')) {
         analysis = analyzeJSONFile(relPath);
       } else if (relPath.endsWith('.js') || relPath.endsWith('.ts') || relPath.endsWith('.tsx')) {
-        analysis = analyzeFile(relPath);
+        try {
+          analysis = analyzeFile(relPath);
+        } catch (parseErr) {
+          parseErrorCount++;
+          // パースエラーでも基本情報は記録
+          const stats = fs.statSync(fullPath);
+          analysis = {
+            language: path.extname(relPath).replace('.', '') || 'unknown',
+            symbols: [], 
+            imports: [], 
+            exports: [], 
+            reexports: [], 
+            instances: [], 
+            loc: 0,
+            json_meta: JSON.stringify({
+              file_size: stats.size,
+              last_accessed: stats.atimeMs,
+              last_modified: stats.mtimeMs,
+              parse_error: parseErr.message.substring(0, 200)
+            }),
+            is_critical: false,
+            parse_failed: true
+          };
+          log(`Parse error (continuing): ${relPath}`, 'warn');
+        }
       } else {
         const stats = fs.statSync(fullPath);
         analysis = {
@@ -584,7 +701,6 @@ function main() {
       }
 
       const classification = classifyFile(relPath);
-
       const stats = fs.statSync(fullPath);
       const lastAccessed = stats.atimeMs;
 
@@ -615,6 +731,7 @@ function main() {
           },
           json_meta: analysis.json_meta,
           is_critical: analysis.is_critical || classification.is_critical,
+          parse_failed: analysis.parse_failed || false,
           classification: {
             is_self_made: classification.is_self_made,
             confidence: classification.confidence,
@@ -651,7 +768,18 @@ function main() {
           insertDep.run(relPath, imp.module, importType);
         }
 
-        if (analysis.instances) {
+        // Populate normalized symbols table (if available)
+        if (symbolsTableExists && insertSymbol && deleteSymbols && analysis.symbols) {
+          deleteSymbols.run(relPath);
+          for (const sym of analysis.symbols) {
+            if (sym.name && sym.type) {
+              const isExported = (analysis.exports || []).some(exp => exp.name === sym.name);
+              insertSymbol.run(relPath, sym.name, sym.type, sym.line || null, isExported ? 1 : 0);
+            }
+          }
+        }
+
+        if (analysis.instances && !analysis.parse_failed) {
           deleteInstances.run(relPath);
           for (const inst of analysis.instances) {
             insertInstance.run(
@@ -671,7 +799,8 @@ function main() {
       const instCount = analysis.instances ? analysis.instances.length : 0;
       const instLog = instCount > 0 ? `, ${instCount} instances` : '';
       const classLog = classification.is_self_made ? ` [self-made: ${classification.category}]` : '';
-      log(`Processed: ${relPath} (${typeLog}${instLog}${classLog})`, 'verbose');
+      const parseLog = analysis.parse_failed ? ' [parse-error]' : '';
+      log(`Processed: ${relPath} (${typeLog}${instLog}${classLog}${parseLog})`, 'verbose');
 
     } catch (err) {
       errorCount++;
@@ -688,12 +817,13 @@ function main() {
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
   log('=== Done ===');
   log(`Success: ${successCount} files`);
+  log(`Parse errors: ${parseErrorCount} files (continued processing)`);
   log(`Failed: ${errorCount} files`);
   log(`Elapsed: ${elapsed} sec`);
 }
 
 try {
-  main();
+  await main();
 } catch (err) {
   log(`Fatal error: ${err.message}`, 'error');
   console.error(err.stack);
