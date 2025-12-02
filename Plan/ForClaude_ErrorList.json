@@ -1,0 +1,59 @@
+{
+  "error_list": [
+    {
+      "error_id": "ERR-001",
+      "detection_date": "2025-12-01",
+      "affected_component": "Project_Cognize/scripts/query_index.js",
+      "impact_scope": "all query_index.js commands (schema, list, search, stats, deps, instances)",
+      "reproduction_steps": [
+        "node Project_Cognize/scripts/query_index.js schema"
+      ],
+      "error_message": "file:///home/els/Shooting-Game/ShootingGame7/Project_Cognize/scripts/query_index.js:13\nimport { fileURLToPath } from 'url';\n       ^\n\nSyntaxError: Unexpected token '{'\n    at compileSourceTextModule (node:internal/modules/esm/utils:346:16)\n    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:146:18)\n    at #translate (node:internal/modules/esm/loader:497:12)\n    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:544:27)\n    at async ModuleJob._link (node:internal/modules/esm/module_job:148:19)\n\nNode.js v20.19.6",
+      "root_cause_analysis": "query_index.js is not ESM compatible while package.json has \"type\": \"module\". Other scripts (indexer.js, generate_toon.js) were converted to ESM but query_index.js was missed.",
+      "fix_requirements": [
+        "Convert to ESM syntax (import/export)",
+        "Implement __filename and __dirname alternatives using import.meta.url",
+        "Ensure better-sqlite3 works in ESM context",
+        "Maintain all existing command functionality (schema, list, search, stats, deps, instances)"
+      ],
+      "priority": "CRITICAL",
+      "blocking_progress": true
+    }
+  ],
+  "context_info": {
+    "project_structure": {
+      "database_path": "Project_Cognize/database/static_index.db",
+      "toon_output": "Project_Cognize/workspace/outputs/project_structure_toon.json"
+    },
+    "reference_documents": [
+      "Plan/COMMAND_CHECKLIST.md",
+      "Project_Cognize/config/shared_patterns.js"
+    ],
+    "governance_notes": "Follow constitutional compliance - no hardcoded paths, use shared_patterns.js for all path definitions"
+  },
+  "handover_instructions": "Please fix all ESM compatibility issues in query_index.js. After fix, all 11 commands in COMMAND_CHECKLIST.md should work. Keep the same command interface and output format."
+
+
+
+}
+
+,
+{
+  "error_id": "ERR-002",
+  "detection_date": "2025-12-01",
+  "affected_component": "Project_Cognize/config/manifest.json",
+  "impact_scope": "all LLM-generated code and documentation",
+  "description": "Design-document drift: Manifest documentation is outdated and does not reflect the addition of migrate.js or ESM migration",
+  "root_cause": "Documentation was not updated after architectural changes (migrate.js addition, ESM migration)",
+  "fix_requirements": [
+    "Update workflow_overview to include migrate.js as step 0",
+    "Update all script references to ESM-compatible syntax",
+    "Add database initialization sequence documentation",
+    "Ensure constitutional compliance across all documentation"
+  ],
+  "priority": "HIGH",
+  "blocking_progress": false
+
+
+
+}

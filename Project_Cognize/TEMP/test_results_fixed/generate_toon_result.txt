@@ -1,0 +1,29 @@
+=== Project Cognize: TOON Generator v2.0 ===
+📜 Constitutional Compliance Mode: ENABLED
+=== Project Cognize: TOON Generator v2.0 ===
+📜 Constitutional Compliance Mode: ENABLED
+⚠  Note: Using direct DB access (db.ts unavailable in ESM)
+✓ Database connection established
+   Path: Project_Cognize/database/static_index.db
+📊 Retrieving project data from static_index.db...
+✓ Retrieved 0 files
+✓ Symbols table found - will include symbol information
+🌳 Building TOON structure with symbols...
+✓ Processed: 0/0 files
+✓ Statistics calculated:
+   - Files: 0 (0 self-made)
+   - Directories: 1
+   - Symbols: 0
+   - Total LOC: 0
+
+✓ TOON file successfully generated:
+   → /home/els/Shooting-Game/ShootingGame7/Project_Cognize/workspace/outputs/project_structure_toon.json
+
+📊 Summary:
+   - Schema: TOON_SCHEMA_INVARIANT (child nodes use 'p')
+   - Constitutional Compliance: ✓
+   - Symbol Integration: ✓ (0 symbols)
+   - Self-Made Code: 0/0 files
+
+✓ Database connection closed
+✓ TOON generation completed

@@ -2,7 +2,7 @@
   "TOON_HEADER": {
     "version": "2.0-constitutional-compliant",
     "schema_version": "TOON_SCHEMA_INVARIANT",
-    "generated_at": "2025-12-01T02:59:46.047Z",
+    "generated_at": "2025-12-01T23:38:56.883Z",
     "source": "Project_Cognize (Constitutional Mode)",
     "generator": "generate_toon.js v2.0",
     "constitutional_compliance": {
@@ -17,31 +17,32 @@
     }
   },
   "statistics": {
-    "totalFiles": 114,
-    "totalDirs": 34,
-    "totalSymbols": 906,
-    "selfMadeFiles": 114,
+    "totalFiles": 126,
+    "totalDirs": 36,
+    "totalSymbols": 823,
+    "selfMadeFiles": 126,
     "criticalFiles": 4,
-    "totalLOC": 13633,
+    "totalLOC": 13634,
     "languageBreakdown": {
       "unknown": 2,
       "example": 1,
-      "json": 11,
+      "json": 13,
       "db": 1,
       "sql": 7,
       "yml": 1,
-      "javascript": 34,
-      "md": 12,
+      "javascript": 33,
+      "md": 13,
       "sh": 6,
       "html": 1,
-      "bak": 7,
+      "log": 1,
+      "txt": 10,
+      "bak": 8,
       "typescript": 27,
-      "txt": 2,
       "ico": 1,
       "css": 1
     },
     "categoryBreakdown": {
-      "self-made": 71,
+      "self-made": 83,
       "critical": 4,
       "app": 10,
       "component": 1,
@@ -68,7 +69,7 @@
               "path": "/DynamicErrorMonitor/.env",
               "ext": "",
               "sz": 0,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "unknown",
               "cat": "self-made",
@@ -86,7 +87,7 @@
               "path": "/DynamicErrorMonitor/.env.example",
               "ext": ".example",
               "sz": 0,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "example",
               "cat": "self-made",
@@ -104,7 +105,7 @@
               "path": "/DynamicErrorMonitor/.gitignore",
               "ext": "",
               "sz": 0,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "unknown",
               "cat": "self-made",
@@ -122,7 +123,7 @@
               "path": "/DynamicErrorMonitor/ReadmeForLLM.json",
               "ext": ".json",
               "sz": 104,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "json",
               "cat": "self-made",
@@ -144,7 +145,7 @@
                   "path": "/DynamicErrorMonitor/database/errors.db",
                   "ext": ".db",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "db",
                   "cat": "self-made",
@@ -162,7 +163,7 @@
                   "path": "/DynamicErrorMonitor/database/schema.sql",
                   "ext": ".sql",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "sql",
                   "cat": "self-made",
@@ -194,7 +195,7 @@
                       "path": "/DynamicErrorMonitor/infra/glitchtip/docker-compose.yml",
                       "ext": ".yml",
                       "sz": 0,
-                      "mdf": "2025-11-30 08:18:44",
+                      "mdf": "2025-12-01 23:38:56",
                       "dbi": false,
                       "lang": "yml",
                       "cat": "self-made",
@@ -224,7 +225,7 @@
               "path": "/DynamicErrorMonitor/package-lock.json",
               "ext": ".json",
               "sz": 6930,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "json",
               "cat": "self-made",
@@ -242,7 +243,7 @@
               "path": "/DynamicErrorMonitor/package.json",
               "ext": ".json",
               "sz": 32,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "json",
               "cat": "self-made",
@@ -259,289 +260,6 @@
                 "n": "collector",
                 "t": "directory",
                 "p": [
-                  {
-                    "n": "index.js",
-                    "t": "file",
-                    "p": [
-                      {
-                        "n": "express",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 7,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "sqlite3",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 8,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "path",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 9,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "Sentry",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 10,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "ReverseLookupResolver",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 12,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "SyncManager",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 13,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "app",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 15,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "STATIC_DB_PATH",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 19,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "ERRORS_DB_PATH",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 20,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "GLITCHTIP_DSN",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 21,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "errorsDb",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 29,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "staticDb",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 30,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "resolver",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 33,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "syncManager",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 34,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "receivedAt",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 51,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "frames",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 54,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "firstFrame",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 55,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "resolved",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 57,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "isStale",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 58,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "sql",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 71,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "errorId",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 91,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "errorObj",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 95,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "since",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 127,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "PORT",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 149,
-                          "parent_file": "DynamicErrorMonitor/src/collector/index.js",
-                          "is_symbol": true
-                        }
-                      }
-                    ],
-                    "lvl": 4,
-                    "meta": {
-                      "path": "/DynamicErrorMonitor/src/collector/index.js",
-                      "ext": ".js",
-                      "sz": 166,
-                      "mdf": "2025-11-30 02:46:58",
-                      "dbi": false,
-                      "lang": "javascript",
-                      "cat": "self-made",
-                      "self": true,
-                      "conf": 0.95,
-                      "sym_count": 24
-                    }
-                  },
                   {
                     "n": "sync.js",
                     "t": "file",
@@ -640,7 +358,7 @@
                       "path": "/DynamicErrorMonitor/src/collector/sync.js",
                       "ext": ".js",
                       "sz": 122,
-                      "mdf": "2025-11-30 08:18:44",
+                      "mdf": "2025-12-01 23:38:56",
                       "dbi": false,
                       "lang": "javascript",
                       "cat": "self-made",
@@ -653,288 +371,6 @@
                 "lvl": 3,
                 "meta": {
                   "path": "/DynamicErrorMonitor/src/collector"
-                }
-              },
-              {
-                "n": "llm-api",
-                "t": "directory",
-                "p": [
-                  {
-                    "n": "index.js",
-                    "t": "file",
-                    "p": [
-                      {
-                        "n": "express",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 6,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "sqlite3",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 7,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "router",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 9,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "errorsDb",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 10,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "hours",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 14,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "since",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 15,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "byType",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 23,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "byFile",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 24,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "bySymbol",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 25,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "type",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 28,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "id",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 63,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "deps",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 68,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "metadata",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 69,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "generateHints",
-                        "t": "function",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 103,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "hints",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 104,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "msg",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 105,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "sql",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 131,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "params",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 132,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "lowerQuery",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 134,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "fileMatch",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 137,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "weekAgo",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 145,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "today",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 149,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "summary",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 168,
-                          "parent_file": "DynamicErrorMonitor/src/llm-api/index.js",
-                          "is_symbol": true
-                        }
-                      }
-                    ],
-                    "lvl": 4,
-                    "meta": {
-                      "path": "/DynamicErrorMonitor/src/llm-api/index.js",
-                      "ext": ".js",
-                      "sz": 187,
-                      "mdf": "2025-11-30 02:46:58",
-                      "dbi": false,
-                      "lang": "javascript",
-                      "cat": "self-made",
-                      "self": true,
-                      "conf": 0.95,
-                      "sym_count": 23
-                    }
-                  }
-                ],
-                "lvl": 3,
-                "meta": {
-                  "path": "/DynamicErrorMonitor/src/llm-api"
                 }
               }
             ],
@@ -954,6 +390,24 @@
         "t": "directory",
         "p": [
           {
+            "n": "COMMAND_CHECKLIST.md",
+            "t": "file",
+            "p": [],
+            "lvl": 2,
+            "meta": {
+              "path": "/Plan/COMMAND_CHECKLIST.md",
+              "ext": ".md",
+              "sz": 0,
+              "mdf": "2025-12-01 23:38:56",
+              "dbi": false,
+              "lang": "md",
+              "cat": "self-made",
+              "self": true,
+              "conf": 0.95,
+              "sym_count": 0
+            }
+          },
+          {
             "n": "DEBUGGING_POLICY2.md",
             "t": "file",
             "p": [],
@@ -962,7 +416,7 @@
               "path": "/Plan/DEBUGGING_POLICY2.md",
               "ext": ".md",
               "sz": 0,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "md",
               "cat": "self-made",
@@ -980,7 +434,7 @@
               "path": "/Plan/DESIGN_DOCUMENT.md",
               "ext": ".md",
               "sz": 0,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "md",
               "cat": "self-made",
@@ -998,7 +452,7 @@
               "path": "/Plan/DESIGN_DOCUMENT_ENEMY.md",
               "ext": ".md",
               "sz": 0,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "md",
               "cat": "self-made",
@@ -1016,7 +470,7 @@
               "path": "/Plan/DESIGN_DOCUMENT_ENEMY2.md",
               "ext": ".md",
               "sz": 0,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "md",
               "cat": "self-made",
@@ -1034,9 +488,27 @@
               "path": "/Plan/DIRECTORY_STRUCTURE.md",
               "ext": ".md",
               "sz": 0,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "md",
+              "cat": "self-made",
+              "self": true,
+              "conf": 0.95,
+              "sym_count": 0
+            }
+          },
+          {
+            "n": "ForClaude_ErrorList.json",
+            "t": "file",
+            "p": [],
+            "lvl": 2,
+            "meta": {
+              "path": "/Plan/ForClaude_ErrorList.json",
+              "ext": ".json",
+              "sz": 60,
+              "mdf": "2025-12-01 23:38:56",
+              "dbi": false,
+              "lang": "json",
               "cat": "self-made",
               "self": true,
               "conf": 0.95,
@@ -1052,7 +524,7 @@
               "path": "/Plan/README.md",
               "ext": ".md",
               "sz": 0,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "md",
               "cat": "self-made",
@@ -1070,7 +542,7 @@
               "path": "/Plan/REFACTORING_MANUALFORLLM.json",
               "ext": ".json",
               "sz": 61,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "json",
               "cat": "self-made",
@@ -1087,8 +559,8 @@
             "meta": {
               "path": "/Plan/REFACTORING_PLAN.json",
               "ext": ".json",
-              "sz": 95,
-              "mdf": "2025-11-30 08:18:44",
+              "sz": 199,
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "json",
               "cat": "self-made",
@@ -1106,7 +578,7 @@
               "path": "/Plan/REFACTORING_PLAN3.md",
               "ext": ".md",
               "sz": 0,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "md",
               "cat": "self-made",
@@ -1128,7 +600,7 @@
                   "path": "/Plan/archive/251123_REFACTORING_PLAN.json",
                   "ext": ".json",
                   "sz": 99,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "json",
                   "cat": "self-made",
@@ -1146,7 +618,7 @@
                   "path": "/Plan/archive/251125_REFACTORING_PLAN.json",
                   "ext": ".json",
                   "sz": 31,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "json",
                   "cat": "self-made",
@@ -1164,7 +636,7 @@
                   "path": "/Plan/archive/251129_REFACTORING_PLAN.json",
                   "ext": ".json",
                   "sz": 23,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "json",
                   "cat": "self-made",
@@ -1181,8 +653,26 @@
                 "meta": {
                   "path": "/Plan/archive/251130_REFACTORING_PLAN.json",
                   "ext": ".json",
-                  "sz": 12,
-                  "mdf": "2025-11-30 08:18:44",
+                  "sz": 49,
+                  "mdf": "2025-12-01 23:38:56",
+                  "dbi": false,
+                  "lang": "json",
+                  "cat": "self-made",
+                  "self": true,
+                  "conf": 0.95,
+                  "sym_count": 0
+                }
+              },
+              {
+                "n": "251201_REFACTORING_PLAN.json",
+                "t": "file",
+                "p": [],
+                "lvl": 3,
+                "meta": {
+                  "path": "/Plan/archive/251201_REFACTORING_PLAN.json",
+                  "ext": ".json",
+                  "sz": 1,
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "json",
                   "cat": "self-made",
@@ -1216,7 +706,7 @@
               "path": "/Project_Cognize/99_USER_MANUAL.md",
               "ext": ".md",
               "sz": 0,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "md",
               "cat": "self-made",
@@ -1238,7 +728,7 @@
                   "path": "/Project_Cognize/REFACTORING/README.md",
                   "ext": ".md",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "md",
                   "cat": "self-made",
@@ -1256,7 +746,7 @@
                   "path": "/Project_Cognize/REFACTORING/ai_workflow.sh",
                   "ext": ".sh",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "sh",
                   "cat": "self-made",
@@ -1274,7 +764,7 @@
                   "path": "/Project_Cognize/REFACTORING/auto_prompt.md",
                   "ext": ".md",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "md",
                   "cat": "self-made",
@@ -1292,7 +782,7 @@
                   "path": "/Project_Cognize/REFACTORING/auto_scanner.sh",
                   "ext": ".sh",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "sh",
                   "cat": "self-made",
@@ -1310,7 +800,7 @@
                   "path": "/Project_Cognize/REFACTORING/dashboard.html",
                   "ext": ".html",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "html",
                   "cat": "self-made",
@@ -1334,13 +824,205 @@
               "path": "/Project_Cognize/ReadmeForLLM.json",
               "ext": ".json",
               "sz": 163,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "json",
               "cat": "self-made",
               "self": true,
               "conf": 0.95,
               "sym_count": 0
+            }
+          },
+          {
+            "n": "TEMP",
+            "t": "directory",
+            "p": [
+              {
+                "n": "game_server_test.log",
+                "t": "file",
+                "p": [],
+                "lvl": 3,
+                "meta": {
+                  "path": "/Project_Cognize/TEMP/game_server_test.log",
+                  "ext": ".log",
+                  "sz": 0,
+                  "mdf": "2025-12-01 23:38:56",
+                  "dbi": false,
+                  "lang": "log",
+                  "cat": "self-made",
+                  "self": true,
+                  "conf": 0.95,
+                  "sym_count": 0
+                }
+              },
+              {
+                "n": "test_results",
+                "t": "directory",
+                "p": [
+                  {
+                    "n": "db_verify_result.txt",
+                    "t": "file",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "path": "/Project_Cognize/TEMP/test_results/db_verify_result.txt",
+                      "ext": ".txt",
+                      "sz": 0,
+                      "mdf": "2025-12-01 23:38:56",
+                      "dbi": false,
+                      "lang": "txt",
+                      "cat": "self-made",
+                      "self": true,
+                      "conf": 0.95,
+                      "sym_count": 0
+                    }
+                  },
+                  {
+                    "n": "generate_toon_result.txt",
+                    "t": "file",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "path": "/Project_Cognize/TEMP/test_results/generate_toon_result.txt",
+                      "ext": ".txt",
+                      "sz": 0,
+                      "mdf": "2025-12-01 23:38:56",
+                      "dbi": false,
+                      "lang": "txt",
+                      "cat": "self-made",
+                      "self": true,
+                      "conf": 0.95,
+                      "sym_count": 0
+                    }
+                  },
+                  {
+                    "n": "indexer_result.txt",
+                    "t": "file",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "path": "/Project_Cognize/TEMP/test_results/indexer_result.txt",
+                      "ext": ".txt",
+                      "sz": 0,
+                      "mdf": "2025-12-01 23:38:56",
+                      "dbi": false,
+                      "lang": "txt",
+                      "cat": "self-made",
+                      "self": true,
+                      "conf": 0.95,
+                      "sym_count": 0
+                    }
+                  },
+                  {
+                    "n": "migrate_result.txt",
+                    "t": "file",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "path": "/Project_Cognize/TEMP/test_results/migrate_result.txt",
+                      "ext": ".txt",
+                      "sz": 0,
+                      "mdf": "2025-12-01 23:38:56",
+                      "dbi": false,
+                      "lang": "txt",
+                      "cat": "self-made",
+                      "self": true,
+                      "conf": 0.95,
+                      "sym_count": 0
+                    }
+                  }
+                ],
+                "lvl": 3,
+                "meta": {
+                  "path": "/Project_Cognize/TEMP/test_results"
+                }
+              },
+              {
+                "n": "test_results_fixed",
+                "t": "directory",
+                "p": [
+                  {
+                    "n": "db_verify_result.txt",
+                    "t": "file",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "path": "/Project_Cognize/TEMP/test_results_fixed/db_verify_result.txt",
+                      "ext": ".txt",
+                      "sz": 0,
+                      "mdf": "2025-12-01 23:38:56",
+                      "dbi": false,
+                      "lang": "txt",
+                      "cat": "self-made",
+                      "self": true,
+                      "conf": 0.95,
+                      "sym_count": 0
+                    }
+                  },
+                  {
+                    "n": "generate_toon_result.txt",
+                    "t": "file",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "path": "/Project_Cognize/TEMP/test_results_fixed/generate_toon_result.txt",
+                      "ext": ".txt",
+                      "sz": 0,
+                      "mdf": "2025-12-01 23:38:56",
+                      "dbi": false,
+                      "lang": "txt",
+                      "cat": "self-made",
+                      "self": true,
+                      "conf": 0.95,
+                      "sym_count": 0
+                    }
+                  },
+                  {
+                    "n": "indexer_result.txt",
+                    "t": "file",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "path": "/Project_Cognize/TEMP/test_results_fixed/indexer_result.txt",
+                      "ext": ".txt",
+                      "sz": 0,
+                      "mdf": "2025-12-01 23:38:56",
+                      "dbi": false,
+                      "lang": "txt",
+                      "cat": "self-made",
+                      "self": true,
+                      "conf": 0.95,
+                      "sym_count": 0
+                    }
+                  },
+                  {
+                    "n": "migrate_result.txt",
+                    "t": "file",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "path": "/Project_Cognize/TEMP/test_results_fixed/migrate_result.txt",
+                      "ext": ".txt",
+                      "sz": 0,
+                      "mdf": "2025-12-01 23:38:56",
+                      "dbi": false,
+                      "lang": "txt",
+                      "cat": "self-made",
+                      "self": true,
+                      "conf": 0.95,
+                      "sym_count": 0
+                    }
+                  }
+                ],
+                "lvl": 3,
+                "meta": {
+                  "path": "/Project_Cognize/TEMP/test_results_fixed"
+                }
+              }
+            ],
+            "lvl": 2,
+            "meta": {
+              "path": "/Project_Cognize/TEMP"
             }
           },
           {
@@ -1423,7 +1105,7 @@
                   "path": "/Project_Cognize/config/shared_patterns.js",
                   "ext": ".js",
                   "sz": 226,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "self-made",
@@ -1441,7 +1123,7 @@
                   "path": "/Project_Cognize/config/shared_patterns.js.bak",
                   "ext": ".bak",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "bak",
                   "cat": "self-made",
@@ -1459,7 +1141,7 @@
                   "path": "/Project_Cognize/config/shared_patterns.js251130.bak",
                   "ext": ".bak",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "bak",
                   "cat": "self-made",
@@ -1521,7 +1203,7 @@
                   "path": "/Project_Cognize/lib/config.js",
                   "ext": ".js",
                   "sz": 23,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "self-made",
@@ -1573,7 +1255,7 @@
                   "path": "/Project_Cognize/lib/config.ts",
                   "ext": ".ts",
                   "sz": 27,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "self-made",
@@ -1591,7 +1273,7 @@
                   "path": "/Project_Cognize/lib/contracts.js",
                   "ext": ".js",
                   "sz": 4,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "self-made",
@@ -1609,7 +1291,7 @@
                   "path": "/Project_Cognize/lib/contracts.ts",
                   "ext": ".ts",
                   "sz": 49,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "self-made",
@@ -2398,7 +2080,7 @@
                   "path": "/Project_Cognize/lib/information_provider.js",
                   "ext": ".js",
                   "sz": 264,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "self-made",
@@ -2945,7 +2627,7 @@
                   "path": "/Project_Cognize/lib/information_provider.ts",
                   "ext": ".ts",
                   "sz": 208,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "self-made",
@@ -3239,7 +2921,7 @@
                   "path": "/Project_Cognize/lib/main.js",
                   "ext": ".js",
                   "sz": 67,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "self-made",
@@ -3302,7 +2984,7 @@
                   "path": "/Project_Cognize/lib/main.ts",
                   "ext": ".ts",
                   "sz": 25,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "self-made",
@@ -3684,7 +3366,7 @@
                   "path": "/Project_Cognize/lib/prompt_strategist.js",
                   "ext": ".js",
                   "sz": 84,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "self-made",
@@ -3901,7 +3583,7 @@
                   "path": "/Project_Cognize/lib/prompt_strategist.ts",
                   "ext": ".ts",
                   "sz": 77,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "self-made",
@@ -4041,7 +3723,7 @@
                   "path": "/Project_Cognize/lib/system_interface.js",
                   "ext": ".js",
                   "sz": 45,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "self-made",
@@ -4071,7 +3753,7 @@
                   "path": "/Project_Cognize/lib/system_interface.ts",
                   "ext": ".ts",
                   "sz": 33,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "self-made",
@@ -4099,7 +3781,7 @@
                   "path": "/Project_Cognize/migrations/001_create_core_tables.sql",
                   "ext": ".sql",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "sql",
                   "cat": "self-made",
@@ -4117,7 +3799,7 @@
                   "path": "/Project_Cognize/migrations/002_extend_file_index.sql",
                   "ext": ".sql",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "sql",
                   "cat": "self-made",
@@ -4135,7 +3817,7 @@
                   "path": "/Project_Cognize/migrations/003_extend_class_instances.sql",
                   "ext": ".sql",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "sql",
                   "cat": "self-made",
@@ -4153,7 +3835,7 @@
                   "path": "/Project_Cognize/migrations/004_extend_file_dependencies.sql",
                   "ext": ".sql",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "sql",
                   "cat": "self-made",
@@ -4171,7 +3853,7 @@
                   "path": "/Project_Cognize/migrations/005_create_indexer_runs.sql",
                   "ext": ".sql",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "sql",
                   "cat": "self-made",
@@ -4189,7 +3871,7 @@
                   "path": "/Project_Cognize/migrations/006_finalize_migration.sql",
                   "ext": ".sql",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "sql",
                   "cat": "self-made",
@@ -4233,7 +3915,7 @@
                       "path": "/Project_Cognize/pages/api/status.js",
                       "ext": ".js",
                       "sz": 10,
-                      "mdf": "2025-11-30 08:18:44",
+                      "mdf": "2025-12-01 23:38:56",
                       "dbi": false,
                       "lang": "javascript",
                       "cat": "self-made",
@@ -4263,7 +3945,7 @@
               "path": "/Project_Cognize/refactor_policy.json",
               "ext": ".json",
               "sz": 102,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": true,
               "lang": "json",
               "cat": "critical",
@@ -4276,6 +3958,146 @@
             "n": "scripts",
             "t": "directory",
             "p": [
+              {
+                "n": "db_verify.js",
+                "t": "file",
+                "p": [
+                  {
+                    "n": "__filename",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 11,
+                      "parent_file": "Project_Cognize/scripts/db_verify.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "__dirname",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 12,
+                      "parent_file": "Project_Cognize/scripts/db_verify.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "DB_PATH",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 13,
+                      "parent_file": "Project_Cognize/scripts/db_verify.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "db",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 19,
+                      "parent_file": "Project_Cognize/scripts/db_verify.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "tables",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 23,
+                      "parent_file": "Project_Cognize/scripts/db_verify.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "hasSymbols",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 28,
+                      "parent_file": "Project_Cognize/scripts/db_verify.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "symbolCount",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 32,
+                      "parent_file": "Project_Cognize/scripts/db_verify.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "sample",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 37,
+                      "parent_file": "Project_Cognize/scripts/db_verify.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "fileCount",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 54,
+                      "parent_file": "Project_Cognize/scripts/db_verify.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "withSymbols",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 57,
+                      "parent_file": "Project_Cognize/scripts/db_verify.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "migrations",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 66,
+                      "parent_file": "Project_Cognize/scripts/db_verify.js",
+                      "is_symbol": true
+                    }
+                  }
+                ],
+                "lvl": 3,
+                "meta": {
+                  "path": "/Project_Cognize/scripts/db_verify.js",
+                  "ext": ".js",
+                  "sz": 80,
+                  "mdf": "2025-12-01 23:38:56",
+                  "dbi": false,
+                  "lang": "javascript",
+                  "cat": "self-made",
+                  "self": true,
+                  "conf": 0.95,
+                  "sym_count": 11
+                }
+              },
               {
                 "n": "generate_prompt.ts",
                 "t": "file",
@@ -5694,7 +5516,7 @@
                   "path": "/Project_Cognize/scripts/generate_prompt.ts",
                   "ext": ".ts",
                   "sz": 595,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "self-made",
@@ -5712,7 +5534,7 @@
                   "path": "/Project_Cognize/scripts/generate_prompt.ts.bak",
                   "ext": ".bak",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "bak",
                   "cat": "self-made",
@@ -5731,7 +5553,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 16,
+                      "line": 18,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5742,13 +5564,24 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 17,
+                      "line": 19,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
                   },
                   {
                     "n": "PROJECT_ROOT",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 24,
+                      "parent_file": "Project_Cognize/scripts/generate_toon.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "DB_PATH",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
@@ -5786,7 +5619,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 33,
+                      "line": 37,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5797,7 +5630,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 48,
+                      "line": 59,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5808,18 +5641,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 61,
-                      "parent_file": "Project_Cognize/scripts/generate_toon.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "symbolQuery",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 65,
+                      "line": 72,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5830,7 +5652,40 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 75,
+                      "line": 76,
+                      "parent_file": "Project_Cognize/scripts/generate_toon.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "symbolsAvailable",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 77,
+                      "parent_file": "Project_Cognize/scripts/generate_toon.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "tables",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 81,
+                      "parent_file": "Project_Cognize/scripts/generate_toon.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "symbolQuery",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 84,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5841,7 +5696,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 80,
+                      "line": 109,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5852,7 +5707,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 95,
+                      "line": 124,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5863,7 +5718,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 96,
+                      "line": 125,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5874,7 +5729,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 97,
+                      "line": 126,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5885,7 +5740,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 98,
+                      "line": 127,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5896,7 +5751,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 99,
+                      "line": 128,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5907,7 +5762,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 101,
+                      "line": 130,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5918,7 +5773,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 102,
+                      "line": 131,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5929,7 +5784,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 104,
+                      "line": 133,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5940,7 +5795,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 107,
+                      "line": 136,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5951,7 +5806,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 134,
+                      "line": 164,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5962,7 +5817,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 139,
+                      "line": 169,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5973,7 +5828,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 173,
+                      "line": 207,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5984,7 +5839,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 175,
+                      "line": 209,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -5995,7 +5850,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 189,
+                      "line": 223,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -6006,7 +5861,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 190,
+                      "line": 224,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -6017,7 +5872,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 201,
+                      "line": 235,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -6028,7 +5883,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 210,
+                      "line": 244,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -6039,7 +5894,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 230,
+                      "line": 264,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -6050,7 +5905,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 238,
+                      "line": 272,
                       "parent_file": "Project_Cognize/scripts/generate_toon.js",
                       "is_symbol": true
                     }
@@ -6060,14 +5915,14 @@
                 "meta": {
                   "path": "/Project_Cognize/scripts/generate_toon.js",
                   "ext": ".js",
-                  "sz": 285,
-                  "mdf": "2025-11-30 08:18:44",
+                  "sz": 322,
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "self-made",
                   "self": true,
                   "conf": 0.95,
-                  "sym_count": 30
+                  "sym_count": 33
                 }
               },
               {
@@ -6079,7 +5934,7 @@
                   "path": "/Project_Cognize/scripts/generate_toon.js.bak",
                   "ext": ".bak",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "bak",
                   "cat": "self-made",
@@ -7138,18 +6993,18 @@
                     }
                   },
                   {
-                    "n": "relPath",
+                    "n": "insertSymbol",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 642,
+                      "line": 643,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "fullPath",
+                    "n": "deleteSymbols",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
@@ -7160,12 +7015,56 @@
                     }
                   },
                   {
+                    "n": "symbolsTableExists",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 645,
+                      "parent_file": "Project_Cognize/scripts/indexer.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "tableCheck",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 648,
+                      "parent_file": "Project_Cognize/scripts/indexer.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "relPath",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 664,
+                      "parent_file": "Project_Cognize/scripts/indexer.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "fullPath",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 666,
+                      "parent_file": "Project_Cognize/scripts/indexer.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
                     "n": "fileHash",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 649,
+                      "line": 671,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
@@ -7176,7 +7075,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 650,
+                      "line": 672,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
@@ -7187,7 +7086,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 660,
+                      "line": 682,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
@@ -7198,7 +7097,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 681,
+                      "line": 703,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
@@ -7209,7 +7108,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 694,
+                      "line": 716,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
@@ -7220,7 +7119,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 695,
+                      "line": 717,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
@@ -7231,7 +7130,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 696,
+                      "line": 718,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
@@ -7242,7 +7141,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 698,
+                      "line": 720,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
@@ -7253,7 +7152,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 757,
+                      "line": 779,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
@@ -7264,7 +7163,29 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 758,
+                      "line": 780,
+                      "parent_file": "Project_Cognize/scripts/indexer.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "sym",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 787,
+                      "parent_file": "Project_Cognize/scripts/indexer.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "isExported",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 789,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
@@ -7275,7 +7196,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 764,
+                      "line": 797,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
@@ -7286,7 +7207,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 778,
+                      "line": 811,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
@@ -7297,7 +7218,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 779,
+                      "line": 812,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
@@ -7308,7 +7229,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 780,
+                      "line": 813,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
@@ -7319,7 +7240,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 781,
+                      "line": 814,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
@@ -7330,7 +7251,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 782,
+                      "line": 815,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
@@ -7341,7 +7262,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 797,
+                      "line": 830,
                       "parent_file": "Project_Cognize/scripts/indexer.js",
                       "is_symbol": true
                     }
@@ -7351,14 +7272,14 @@
                 "meta": {
                   "path": "/Project_Cognize/scripts/indexer.js",
                   "ext": ".js",
-                  "sz": 811,
-                  "mdf": "2025-11-30 08:18:44",
+                  "sz": 844,
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "self-made",
                   "self": true,
                   "conf": 0.95,
-                  "sym_count": 114
+                  "sym_count": 120
                 }
               },
               {
@@ -7370,7 +7291,7 @@
                   "path": "/Project_Cognize/scripts/indexer.js251130.bak",
                   "ext": ".bak",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "bak",
                   "cat": "self-made",
@@ -7388,7 +7309,7 @@
                   "path": "/Project_Cognize/scripts/indexer.js251130_2.bak",
                   "ext": ".bak",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "bak",
                   "cat": "self-made",
@@ -7402,428 +7323,13 @@
                 "t": "file",
                 "p": [
                   {
-                    "n": "Database",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 2,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "fs",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 3,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "path",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 4,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "crypto",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 5,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "PROJECT_ROOT",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 7,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "DB_PATH",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 8,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "MIGRATIONS_DIR",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 9,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "getFileHash",
-                    "t": "function",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 11,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "fileBuffer",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 12,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "openDB",
-                    "t": "function",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 16,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "options",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 17,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "ensureMigrationsTable",
-                    "t": "function",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 31,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "getAppliedMigrations",
-                    "t": "function",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 49,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "stmt",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 51,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "rows",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 52,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "applied",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 53,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "row",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 54,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "version",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 56,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "run",
-                    "t": "function",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 69,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "db",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 77,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "appliedMigrations",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 84,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "migrationFiles",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 85,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "appliedCount",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 90,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "file",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 92,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "version",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 94,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "filePath",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 96,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "fileHash",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 97,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "description",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 98,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "storedHash",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 102,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "sql",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 116,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "sql",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 121,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "stmt",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 124,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "args",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 146,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "options",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 147,
-                      "parent_file": "Project_Cognize/scripts/migrate.js",
-                      "is_symbol": true
-                    }
-                  }
-                ],
-                "lvl": 3,
-                "meta": {
-                  "path": "/Project_Cognize/scripts/migrate.js",
-                  "ext": ".js",
-                  "sz": 151,
-                  "mdf": "2025-11-30 08:18:44",
-                  "dbi": false,
-                  "lang": "javascript",
-                  "cat": "self-made",
-                  "self": true,
-                  "conf": 0.95,
-                  "sym_count": 34
-                }
-              },
-              {
-                "n": "query_index.js",
-                "t": "file",
-                "p": [
-                  {
-                    "n": "PROJECT_ROOT",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 6,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "openDB",
-                    "t": "function",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 8,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
                     "n": "__filename",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
                       "line": 15,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
                       "is_symbol": true
                     }
                   },
@@ -7834,128 +7340,40 @@
                     "lvl": 4,
                     "meta": {
                       "line": 16,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "getTableColumns",
-                    "t": "function",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 22,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "rows",
+                    "n": "PROJECT_ROOT",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 24,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "line": 18,
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "escapeLikePattern",
-                    "t": "function",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 31,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "normalizePath",
-                    "t": "function",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 35,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "normalized",
+                    "n": "DB_PATH",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 37,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "line": 19,
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "safeNumber",
-                    "t": "function",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 44,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "formatFileInfo",
-                    "t": "function",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 48,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "parts",
+                    "n": "dbDir",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 49,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "conf",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 52,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "cat",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 53,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "showSchema",
-                    "t": "function",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 68,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "line": 25,
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
                       "is_symbol": true
                     }
                   },
@@ -7965,7 +7383,246 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 69,
+                      "line": 32,
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "runMigration",
+                    "t": "function",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 50,
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "existing",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 51,
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "columns",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 95,
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "columnNames",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 96,
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "files",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 163,
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "totalSymbols",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 165,
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "insertSymbol",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 166,
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "symbols",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 173,
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "tables",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 193,
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "columns",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 195,
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "stats",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 205,
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "history",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 221,
+                      "parent_file": "Project_Cognize/scripts/migrate.js",
+                      "is_symbol": true
+                    }
+                  }
+                ],
+                "lvl": 3,
+                "meta": {
+                  "path": "/Project_Cognize/scripts/migrate.js",
+                  "ext": ".js",
+                  "sz": 231,
+                  "mdf": "2025-12-01 23:38:56",
+                  "dbi": false,
+                  "lang": "javascript",
+                  "cat": "self-made",
+                  "self": true,
+                  "conf": 0.95,
+                  "sym_count": 18
+                }
+              },
+              {
+                "n": "query_index.js",
+                "t": "file",
+                "p": [
+                  {
+                    "n": "__filename",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 28,
+                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "__dirname",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 29,
+                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "PROJECT_ROOT",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 31,
+                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "DB_PATH",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 32,
+                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "colors",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 35,
+                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "log",
+                    "t": "function",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 47,
+                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "openDatabase",
+                    "t": "function",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 51,
+                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "cmdSchema",
+                    "t": "function",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 61,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
@@ -7976,18 +7633,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 72,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "count",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 76,
+                      "line": 65,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
@@ -7998,7 +7644,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 78,
+                      "line": 69,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
@@ -8009,7 +7655,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 80,
+                      "line": 72,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
@@ -8020,29 +7666,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 81,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "def",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 82,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "schemaMigrations",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 91,
+                      "line": 73,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
@@ -8053,227 +7677,62 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 98,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "listAll",
-                    "t": "function",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 112,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "db",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 113,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "columns",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 114,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "sql",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 117,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "conditions",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 118,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "rows",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 129,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "search",
-                    "t": "function",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 141,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "db",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 142,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "columns",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 143,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "escapedPattern",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 146,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "rows",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 150,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "symbols",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 168,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "names",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 170,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "more",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 171,
+                      "line": 81,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
                     "n": "stats",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 99,
+                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "cmdList",
                     "t": "function",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 183,
+                      "line": 119,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "db",
+                    "n": "selfMadeOnly",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 184,
+                      "line": 120,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "columns",
+                    "n": "query",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 185,
+                      "line": 122,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "total",
+                    "n": "files",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 188,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "totalFiles",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 189,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "totalLoc",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 190,
+                      "line": 128,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
@@ -8284,73 +7743,95 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 197,
+                      "line": 134,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "selfMadeFiles",
+                    "n": "category",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 202,
+                      "line": 135,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "selfMadeLoc",
-                    "t": "variable",
+                    "n": "cmdSearch",
+                    "t": "function",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 203,
+                      "line": 142,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "percentage",
+                    "n": "fuzzy",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 204,
+                      "line": 143,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "critical",
+                    "n": "params",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 211,
+                      "line": 151,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "byLang",
+                    "n": "query",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 216,
+                      "line": 151,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "loc",
+                    "n": "files",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 224,
+                      "line": 160,
+                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "category",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 171,
+                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "cmdStats",
+                    "t": "function",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 178,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
@@ -8361,172 +7842,172 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 230,
+                      "line": 179,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "loc",
+                    "n": "overall",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 239,
+                      "line": 184,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "topFiles",
+                    "n": "languages",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 245,
+                      "line": 200,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "instanceStats",
+                    "n": "categories",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 256,
+                      "line": 214,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "topClasses",
+                    "n": "symbolStats",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 259,
+                      "line": 232,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "showDependencies",
+                    "n": "totalSymbols",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 241,
+                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "cmdDeps",
                     "t": "function",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 280,
+                      "line": 253,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "db",
+                    "n": "normalizedPath",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 281,
+                      "line": 261,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "normalizedFile",
+                    "n": "file",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 284,
+                      "line": 264,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "dependencies",
+                    "n": "imports",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 286,
+                      "line": 273,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "dependents",
+                    "n": "type",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 293,
+                      "line": 283,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "basename",
+                    "n": "importedBy",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 295,
+                      "line": 291,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "withoutExt",
+                    "n": "type",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 303,
+                      "line": 301,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "showInstances",
+                    "n": "cmdInstances",
                     "t": "function",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 342,
+                      "line": 310,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "db",
+                    "n": "showBuiltins",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 343,
+                      "line": 317,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
                   },
                   {
-                    "n": "columns",
+                    "n": "hasTable",
                     "t": "variable",
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 344,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "sql",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 347,
+                      "line": 320,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
@@ -8537,7 +8018,29 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 367,
+                      "line": 328,
+                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "lines",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 350,
+                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "main",
+                    "t": "function",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 360,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
@@ -8548,40 +8051,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 390,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "valueStr",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 397,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "snippet",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 413,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "fileGroups",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 420,
+                      "line": 361,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
@@ -8592,29 +8062,7 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 438,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "arg",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 439,
-                      "parent_file": "Project_Cognize/scripts/query_index.js",
-                      "is_symbol": true
-                    }
-                  },
-                  {
-                    "n": "flags",
-                    "t": "variable",
-                    "p": [],
-                    "lvl": 4,
-                    "meta": {
-                      "line": 440,
+                      "line": 380,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
@@ -8625,7 +8073,18 @@
                     "p": [],
                     "lvl": 4,
                     "meta": {
-                      "line": 442,
+                      "line": 381,
+                      "parent_file": "Project_Cognize/scripts/query_index.js",
+                      "is_symbol": true
+                    }
+                  },
+                  {
+                    "n": "db",
+                    "t": "variable",
+                    "p": [],
+                    "lvl": 4,
+                    "meta": {
+                      "line": 383,
                       "parent_file": "Project_Cognize/scripts/query_index.js",
                       "is_symbol": true
                     }
@@ -8635,14 +8094,32 @@
                 "meta": {
                   "path": "/Project_Cognize/scripts/query_index.js",
                   "ext": ".js",
-                  "sz": 493,
-                  "mdf": "2025-11-30 08:18:44",
+                  "sz": 415,
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "self-made",
                   "self": true,
                   "conf": 0.95,
-                  "sym_count": 76
+                  "sym_count": 50
+                }
+              },
+              {
+                "n": "query_index.js251201.bak",
+                "t": "file",
+                "p": [],
+                "lvl": 3,
+                "meta": {
+                  "path": "/Project_Cognize/scripts/query_index.js251201.bak",
+                  "ext": ".bak",
+                  "sz": 0,
+                  "mdf": "2025-12-01 23:38:56",
+                  "dbi": false,
+                  "lang": "bak",
+                  "cat": "self-made",
+                  "self": true,
+                  "conf": 0.95,
+                  "sym_count": 0
                 }
               },
               {
@@ -8654,7 +8131,7 @@
                   "path": "/Project_Cognize/scripts/rotate_jsonl.sh",
                   "ext": ".sh",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "sh",
                   "cat": "self-made",
@@ -8678,7 +8155,7 @@
               "path": "/Project_Cognize/setup_env.sh",
               "ext": ".sh",
               "sz": 0,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "sh",
               "cat": "self-made",
@@ -8700,7 +8177,7 @@
                   "path": "/Project_Cognize/templates/system_prompt_template.txt",
                   "ext": ".txt",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "txt",
                   "cat": "self-made",
@@ -8718,7 +8195,7 @@
                   "path": "/Project_Cognize/templates/task_prompt_template.txt",
                   "ext": ".txt",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "txt",
                   "cat": "self-made",
@@ -8750,7 +8227,7 @@
                       "path": "/Project_Cognize/workspace/inputs/context_template.md",
                       "ext": ".md",
                       "sz": 0,
-                      "mdf": "2025-11-30 08:18:44",
+                      "mdf": "2025-12-01 23:38:56",
                       "dbi": false,
                       "lang": "md",
                       "cat": "self-made",
@@ -8774,7 +8251,7 @@
                   "path": "/Project_Cognize/workspace/refactor_position_memo.md",
                   "ext": ".md",
                   "sz": 0,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "md",
                   "cat": "self-made",
@@ -8810,174 +8287,19 @@
                   {
                     "n": "db.ts",
                     "t": "file",
-                    "p": [
-                      {
-                        "n": "require",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 8,
-                          "parent_file": "app/api/_lib/db.ts",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "Database",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 9,
-                          "parent_file": "app/api/_lib/db.ts",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "dbInstance",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 32,
-                          "parent_file": "app/api/_lib/db.ts",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "staticDbInstance",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 33,
-                          "parent_file": "app/api/_lib/db.ts",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "getErrorsDb",
-                        "t": "function",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 35,
-                          "parent_file": "app/api/_lib/db.ts",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "dbPath",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 39,
-                          "parent_file": "app/api/_lib/db.ts",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "fullPath",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 40,
-                          "parent_file": "app/api/_lib/db.ts",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "getStaticDb",
-                        "t": "function",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 55,
-                          "parent_file": "app/api/_lib/db.ts",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "dbPath",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 60,
-                          "parent_file": "app/api/_lib/db.ts",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "fullPath",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 62,
-                          "parent_file": "app/api/_lib/db.ts",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "insertError",
-                        "t": "function",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 84,
-                          "parent_file": "app/api/_lib/db.ts",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "db",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 85,
-                          "parent_file": "app/api/_lib/db.ts",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "stmt",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 87,
-                          "parent_file": "app/api/_lib/db.ts",
-                          "is_symbol": true
-                        }
-                      },
-                      {
-                        "n": "info",
-                        "t": "variable",
-                        "p": [],
-                        "lvl": 5,
-                        "meta": {
-                          "line": 93,
-                          "parent_file": "app/api/_lib/db.ts",
-                          "is_symbol": true
-                        }
-                      }
-                    ],
+                    "p": [],
                     "lvl": 4,
                     "meta": {
                       "path": "/app/api/_lib/db.ts",
                       "ext": ".ts",
                       "sz": 106,
-                      "mdf": "2025-11-30 08:18:44",
+                      "mdf": "2025-12-01 23:38:56",
                       "dbi": false,
                       "lang": "typescript",
                       "cat": "app",
                       "self": true,
                       "conf": 0.95,
-                      "sym_count": 14
+                      "sym_count": 0
                     }
                   },
                   {
@@ -8989,7 +8311,7 @@
                       "path": "/app/api/_lib/db.ts.bak",
                       "ext": ".bak",
                       "sz": 0,
-                      "mdf": "2025-11-30 08:18:44",
+                      "mdf": "2025-12-01 23:38:56",
                       "dbi": false,
                       "lang": "bak",
                       "cat": "app",
@@ -9118,7 +8440,7 @@
                       "path": "/app/api/_lib/parser.ts",
                       "ext": ".ts",
                       "sz": 55,
-                      "mdf": "2025-11-30 08:18:44",
+                      "mdf": "2025-12-01 23:38:56",
                       "dbi": false,
                       "lang": "typescript",
                       "cat": "app",
@@ -9324,7 +8646,7 @@
                       "path": "/app/api/_lib/resolver.ts",
                       "ext": ".ts",
                       "sz": 139,
-                      "mdf": "2025-11-30 08:18:44",
+                      "mdf": "2025-12-01 23:38:56",
                       "dbi": false,
                       "lang": "typescript",
                       "cat": "app",
@@ -9463,7 +8785,7 @@
                       "path": "/app/api/collect/route.ts",
                       "ext": ".ts",
                       "sz": 104,
-                      "mdf": "2025-11-30 08:18:44",
+                      "mdf": "2025-12-01 23:38:56",
                       "dbi": false,
                       "lang": "typescript",
                       "cat": "app",
@@ -9493,7 +8815,7 @@
               "path": "/app/favicon.ico",
               "ext": ".ico",
               "sz": 0,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "ico",
               "cat": "app",
@@ -9523,7 +8845,7 @@
               "path": "/app/global-error.tsx",
               "ext": ".tsx",
               "sz": 23,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "typescript",
               "cat": "app",
@@ -9541,7 +8863,7 @@
               "path": "/app/globals.css",
               "ext": ".css",
               "sz": 0,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "css",
               "cat": "app",
@@ -9604,7 +8926,7 @@
               "path": "/app/layout.tsx",
               "ext": ".tsx",
               "sz": 80,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "typescript",
               "cat": "app",
@@ -9634,7 +8956,7 @@
               "path": "/app/page.tsx",
               "ext": ".tsx",
               "sz": 40,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "typescript",
               "cat": "app",
@@ -9707,7 +9029,7 @@
               "path": "/components/GameCanvas.tsx",
               "ext": ".tsx",
               "sz": 58,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "typescript",
               "cat": "component",
@@ -9751,7 +9073,7 @@
                   "path": "/game/components/Bullet.ts",
                   "ext": ".ts",
                   "sz": 9,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "game-component",
@@ -9781,7 +9103,7 @@
                   "path": "/game/components/Collidable.ts",
                   "ext": ".ts",
                   "sz": 42,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "game-component",
@@ -9811,7 +9133,7 @@
                   "path": "/game/components/Controllable.ts",
                   "ext": ".ts",
                   "sz": 13,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "game-component",
@@ -9841,7 +9163,7 @@
                   "path": "/game/components/Generator.ts",
                   "ext": ".ts",
                   "sz": 19,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "game-component",
@@ -9871,7 +9193,7 @@
                   "path": "/game/components/Health.ts",
                   "ext": ".ts",
                   "sz": 27,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "game-component",
@@ -9901,7 +9223,7 @@
                   "path": "/game/components/InputState.ts",
                   "ext": ".ts",
                   "sz": 21,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "game-component",
@@ -9931,7 +9253,7 @@
                   "path": "/game/components/Lifetime.ts",
                   "ext": ".ts",
                   "sz": 34,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "game-component",
@@ -9961,7 +9283,7 @@
                   "path": "/game/components/Position.ts",
                   "ext": ".ts",
                   "sz": 14,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "game-component",
@@ -9991,7 +9313,7 @@
                   "path": "/game/components/Renderable.ts",
                   "ext": ".ts",
                   "sz": 22,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "game-component",
@@ -10021,7 +9343,7 @@
                   "path": "/game/components/Rotation.ts",
                   "ext": ".ts",
                   "sz": 21,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "game-component",
@@ -10051,7 +9373,7 @@
                   "path": "/game/components/Team.ts",
                   "ext": ".ts",
                   "sz": 33,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "game-component",
@@ -10081,7 +9403,7 @@
                   "path": "/game/components/Velocity.ts",
                   "ext": ".ts",
                   "sz": 14,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "typescript",
                   "cat": "game-component",
@@ -10099,7 +9421,7 @@
                   "path": "/game/components/index.js",
                   "ext": ".js",
                   "sz": 14,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "game-component",
@@ -10271,7 +9593,7 @@
                   "path": "/game/core/World.js",
                   "ext": ".js",
                   "sz": 129,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": true,
                   "lang": "javascript",
                   "cat": "critical",
@@ -10411,7 +9733,7 @@
                   "path": "/game/core/entityFactory.js",
                   "ext": ".js",
                   "sz": 56,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": true,
                   "lang": "javascript",
                   "cat": "critical",
@@ -10573,7 +9895,7 @@
                   "path": "/game/core/main.js",
                   "ext": ".js",
                   "sz": 124,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": true,
                   "lang": "javascript",
                   "cat": "critical",
@@ -10613,7 +9935,7 @@
                   "path": "/game/debug/DebugConfig.js",
                   "ext": ".js",
                   "sz": 30,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "debug",
@@ -10647,7 +9969,7 @@
                       "path": "/game/debug/components/DebugVector.js",
                       "ext": ".js",
                       "sz": 23,
-                      "mdf": "2025-11-30 08:18:44",
+                      "mdf": "2025-12-01 23:38:56",
                       "dbi": false,
                       "lang": "javascript",
                       "cat": "debug",
@@ -10709,7 +10031,7 @@
                       "path": "/game/debug/systems/DebugControlSystem.js",
                       "ext": ".js",
                       "sz": 53,
-                      "mdf": "2025-11-30 08:18:44",
+                      "mdf": "2025-12-01 23:38:56",
                       "dbi": false,
                       "lang": "javascript",
                       "cat": "debug",
@@ -10959,7 +10281,7 @@
                       "path": "/game/debug/systems/DebugSystem.js",
                       "ext": ".js",
                       "sz": 167,
-                      "mdf": "2025-11-30 08:18:44",
+                      "mdf": "2025-12-01 23:38:56",
                       "dbi": false,
                       "lang": "javascript",
                       "cat": "debug",
@@ -11088,7 +10410,7 @@
                       "path": "/game/debug/systems/OffscreenCleanupSystem.js",
                       "ext": ".js",
                       "sz": 35,
-                      "mdf": "2025-11-30 08:18:44",
+                      "mdf": "2025-12-01 23:38:56",
                       "dbi": false,
                       "lang": "javascript",
                       "cat": "debug",
@@ -11288,7 +10610,7 @@
                   "path": "/game/systems/CollisionSystem.js",
                   "ext": ".js",
                   "sz": 52,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "game-system",
@@ -11351,7 +10673,7 @@
                   "path": "/game/systems/DamageSystem.js",
                   "ext": ".js",
                   "sz": 59,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "game-system",
@@ -11414,7 +10736,7 @@
                   "path": "/game/systems/DeathSystem.js",
                   "ext": ".js",
                   "sz": 24,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "game-system",
@@ -11521,7 +10843,7 @@
                   "path": "/game/systems/InputSystem.js",
                   "ext": ".js",
                   "sz": 71,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "game-system",
@@ -11584,7 +10906,7 @@
                   "path": "/game/systems/LifetimeSystem.js",
                   "ext": ".js",
                   "sz": 27,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "game-system",
@@ -11911,7 +11233,7 @@
                   "path": "/game/systems/MovementSystem.js",
                   "ext": ".js",
                   "sz": 95,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "game-system",
@@ -12018,7 +11340,7 @@
                   "path": "/game/systems/RenderSystem.js",
                   "ext": ".js",
                   "sz": 70,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "game-system",
@@ -12136,7 +11458,7 @@
                   "path": "/game/systems/RotationSystem.js",
                   "ext": ".js",
                   "sz": 40,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "game-system",
@@ -12298,7 +11620,7 @@
                   "path": "/game/systems/ShootingSystem.js",
                   "ext": ".js",
                   "sz": 53,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "game-system",
@@ -12394,7 +11716,7 @@
                   "path": "/game/systems/SpawningSystem.js",
                   "ext": ".js",
                   "sz": 33,
-                  "mdf": "2025-11-30 08:18:44",
+                  "mdf": "2025-12-01 23:38:56",
                   "dbi": false,
                   "lang": "javascript",
                   "cat": "game-system",
@@ -12428,7 +11750,7 @@
               "path": "/scripts/quick_start.sh",
               "ext": ".sh",
               "sz": 0,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "sh",
               "cat": "self-made",
@@ -12446,7 +11768,7 @@
               "path": "/scripts/start_all_systems.sh",
               "ext": ".sh",
               "sz": 0,
-              "mdf": "2025-11-30 08:18:44",
+              "mdf": "2025-12-01 23:38:56",
               "dbi": false,
               "lang": "sh",
               "cat": "self-made",

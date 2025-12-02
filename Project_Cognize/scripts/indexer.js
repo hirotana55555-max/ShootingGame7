@@ -29,17 +29,6 @@ import micromatch from 'micromatch';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-import {
-  IGNORE_PATTERNS,
-  SOURCE_CODE_RULES,
-  BUILTIN_CLASSES,
-  CRITICAL_FILES
-} from "../config/shared_patterns.js";
-
-// ESM環境で__dirnameを再現
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 // @babel/traverse のインポート（複数のフォールバック）
 const babelTraverseModule = await import('@babel/traverse');
 let traverse = babelTraverseModule.default;
@@ -74,6 +63,8 @@ import {
   BUILTIN_CLASSES,
   CRITICAL_FILES
 } from "../config/shared_patterns.js";
+
+const PROJECT_ROOT = path.resolve(__dirname, '../..');
 const COGNIZE_ROOT = path.join(PROJECT_ROOT, 'Project_Cognize');
 const JSONL_PATH = path.join(COGNIZE_ROOT, 'workspace/outputs/static_index.jsonl');
 const DB_PATH = path.join(COGNIZE_ROOT, 'database/static_index.db');
@@ -647,6 +638,28 @@ async function main() {
     ) VALUES (?, ?, ?, ?, ?, datetime('now'), ?)
   `);
   const deleteInstances = db.prepare(`DELETE FROM class_instances WHERE file_path = ?`);
+
+  // Symbol table statements (with existence check)
+  let insertSymbol = null;
+  let deleteSymbols = null;
+  let symbolsTableExists = false;
+
+  try {
+    const tableCheck = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='symbols'").get();
+    if (tableCheck) {
+      insertSymbol = db.prepare(`
+        INSERT OR IGNORE INTO symbols (file_path, symbol_name, symbol_type, line_number, is_exported)
+        VALUES (?, ?, ?, ?, ?)
+      `);
+      deleteSymbols = db.prepare(`DELETE FROM symbols WHERE file_path = ?`);
+      symbolsTableExists = true;
+      log('Symbols table found - will populate normalized symbol data', 'debug');
+    } else {
+      log('Symbols table not found - run migrate.js to enable symbol tracking', 'warn');
+    }
+  } catch (err) {
+    log(`Could not check for symbols table: ${err.message}`, 'warn');
+  }
 
   for (const relPath of files) {
     try {

@@ -1,0 +1,28 @@
+=== Database Verification Tool ===
+Database: /home/els/Shooting-Game/ShootingGame7/Project_Cognize/database/static_index.db
+
+📋 Tables:
+  - class_instances
+  - file_dependencies
+  - file_index
+  - migration_history
+  - sqlite_sequence
+  - symbols
+
+🔍 Symbols Table Check:
+  ✓ Symbols table exists
+  ✓ Symbol count: 0
+
+📊 File Index:
+  ✓ Files indexed: 0
+  ✓ Files with symbols_json: 0
+
+📜 Migrations:
+  ✓ 001_create_file_index (2025-12-01 11:07:10)
+  ✓ 002_add_classification_columns (2025-12-01 11:07:10)
+  ✓ 003_create_file_dependencies (2025-12-01 11:07:10)
+  ✓ 004_create_class_instances (2025-12-01 11:07:10)
+  ✓ 005_create_symbols_table (2025-12-01 11:07:10)
+  ✓ 006_populate_symbols_from_json (2025-12-01 11:07:10)
+
+✓ Verification complete

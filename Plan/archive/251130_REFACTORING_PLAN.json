@@ -1,12 +1,49 @@
 {
-  "archived_at": "2025-11-30T_ARCHIVE_TIME_Z",
+  "archived_at": "2025-12-01T15:30:00Z",
   "phase_id": 1,
-  "name": "【CRITICAL: DB管理機能の復旧】マイグレーションシステムの確立",
+  "name": "【CRITICAL: DB管理機能の復旧】マイグレーションシステムの確立と機能検証",
   "status": "COMPLETED",
+  "completion_date": "2025-11-30",
+  "objective": "CognizeのDB管理とインデックス作成の健全性を回復させ、全コマンドが期待通り機能することを検証する。",
   "key_achievements": [
-    "過去LLMによるindexer.jsへの不正なDBスキーマ作成ロジックを特定し削除。",
-    "マイグレーションファイル（001〜006）の連番とSQL内容を修正し、DBの歴史的整合性を完全に回復。",
-    "migrate.jsの実行により、エラーなく再現可能なクリーンなDB構築を実証。"
+    "DBスキーマ作成を `indexer.js` から `migrate.js` へ一元化し、DBマイグレーションシステムを構築",
+    "`Project_Cognize/migrations/` ディレクトリに初期スキーマ (`001_initial_schema.sql`) を追加",
+    "`migrate.js` を実行し、`static_index.db` が正常に作成され、初期スキーマが適用されたことを確認",
+    "`indexer.js` を実行し、データが正しくインデックス化され、`migrate.js` の変更によってインデックス機能が壊れていないことを検証",
+    "`query_index.js` コマンドを実行し、データ照会機能が正常に動作することを確認"
   ],
-  "next_focus": "DEMクリーンアップ（旧ファイルの削除）"
+  "detailed_action_plan": [
+    {
+      "step": 1.1,
+      "description": "DBスキーマ作成を `indexer.js` から `migrate.js` へ一元化し、DBマイグレーションシステムを構築する。",
+      "status": "COMPLETED",
+      "contributor": "Gemini"
+    },
+    {
+      "step": 1.2,
+      "description": "`Project_Cognize/migrations/` ディレクトリに初期スキーマ (`001_initial_schema.sql`) を追加する。",
+      "status": "COMPLETED",
+      "contributor": "Gemini"
+    },
+    {
+      "step": 1.3,
+      "description": "`migrate.js` を実行し、`static_index.db` が正常に作成され、初期スキーマが適用されたことを確認する。",
+      "status": "COMPLETED",
+      "contributor": "Gemini"
+    },
+    {
+      "step": 1.4,
+      "description": "`indexer.js` を実行し、データが正しくインデックス化され、`migrate.js` の変更によってインデックス機能が壊れていないことを検証する。",
+      "status": "COMPLETED",
+      "contributor": "Gemini + Claude（ESM修正）"
+    },
+    {
+      "step": 1.5,
+      "description": "`query_index.js` コマンドを実行し、データ照会機能が正常に動作することを確認する。",
+      "status": "COMPLETED",
+      "contributor": "Gemini"
+    }
+  ],
+  "gemini_contribution": "マイグレーションシステムの基盤を確立",
+  "next_focus": "DEMクリーンアップ（旧ファイルの削除）の実施と検証"
 }

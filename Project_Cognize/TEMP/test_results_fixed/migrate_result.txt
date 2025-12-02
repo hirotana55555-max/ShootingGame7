@@ -1,0 +1,98 @@
+=== Cognize Database Migration Tool v2.0 ===
+Database: /home/els/Shooting-Game/ShootingGame7/Project_Cognize/database/static_index.db
+✓ Created database directory: /home/els/Shooting-Game/ShootingGame7/Project_Cognize/database
+✓ Database connection established
+→ [APPLYING] 001_create_file_index
+✓ [SUCCESS] 001_create_file_index
+→ [APPLYING] 002_add_classification_columns
+✓ [SUCCESS] 002_add_classification_columns
+→ [APPLYING] 003_create_file_dependencies
+✓ [SUCCESS] 003_create_file_dependencies
+→ [APPLYING] 004_create_class_instances
+✓ [SUCCESS] 004_create_class_instances
+→ [APPLYING] 005_create_symbols_table
+✓ [SUCCESS] 005_create_symbols_table
+→ [APPLYING] 006_populate_symbols_from_json
+   → Migrated 0 symbols from 0 files
+✓ [SUCCESS] 006_populate_symbols_from_json
+
+📋 Current Schema:
+
+  Table: class_instances
+    - id (INTEGER PRIMARY KEY)
+    - class_name (TEXT NOT NULL)
+    - file_path (TEXT NOT NULL)
+    - line_number (INTEGER)
+    - code_snippet (TEXT)
+    - arguments_json (TEXT)
+    - created_at (TEXT)
+    - commit_sha (TEXT)
+
+  Table: file_dependencies
+    - id (INTEGER PRIMARY KEY)
+    - source_path (TEXT NOT NULL)
+    - target_module (TEXT NOT NULL)
+    - import_type (TEXT)
+    - created_at (TEXT)
+
+  Table: file_index
+    - id (INTEGER PRIMARY KEY)
+    - path (TEXT NOT NULL)
+    - file_hash (TEXT)
+    - language (TEXT)
+    - symbols_json (TEXT)
+    - imports_json (TEXT)
+    - exports_json (TEXT)
+    - loc (INTEGER)
+    - updated_at (TEXT)
+    - commit_sha (TEXT)
+    - json_meta (TEXT)
+    - is_critical (INTEGER)
+    - last_accessed (REAL)
+    - is_self_made (INTEGER)
+    - confidence (REAL)
+    - classification_reason (TEXT)
+    - category (TEXT)
+
+  Table: migration_history
+    - id (INTEGER PRIMARY KEY)
+    - migration_name (TEXT NOT NULL)
+    - applied_at (TEXT NOT NULL)
+    - description (TEXT)
+
+  Table: sqlite_sequence
+    - name ()
+    - seq ()
+
+  Table: symbols
+    - id (INTEGER PRIMARY KEY)
+    - file_path (TEXT NOT NULL)
+    - symbol_name (TEXT NOT NULL)
+    - symbol_type (TEXT NOT NULL)
+    - line_number (INTEGER)
+    - is_exported (INTEGER)
+    - created_at (TEXT)
+
+📊 Database Statistics:
+  Files indexed: 0
+  Symbols: 0
+  Dependencies: 0
+  Class instances: 0
+  Migrations applied: 6
+
+📜 Migration History:
+  2025-12-01 11:02:13 - 001_create_file_index
+    Initial file_index table
+  2025-12-01 11:02:13 - 002_add_classification_columns
+    Add self-made classification columns
+  2025-12-01 11:02:13 - 003_create_file_dependencies
+    Track file dependencies (imports)
+  2025-12-01 11:02:13 - 004_create_class_instances
+    Track class instantiation locations
+  2025-12-01 11:02:13 - 005_create_symbols_table
+    Normalized symbol storage for TOON integration
+  2025-12-01 11:02:13 - 006_populate_symbols_from_json
+    Migrate existing symbol data to normalized table
+
+✓ Migration completed successfully
+✓ Database ready for use

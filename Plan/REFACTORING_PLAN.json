@@ -1,240 +1,16 @@
 {
   "document_meta": {
     "title": "Project Cognize - Constitutional Compliance 回復完了報告",
-    "version": "2.0-FINAL",
+    "version": "2.1",
     "last_updated": "2025-12-01",
-    "status": "PHASE_0_COMPLETED",
-    "collaborators": ["Gemini AI", "Claude AI"],
+    "status": "ALL_PHASES_ARCHIVED",
+    "collaborators": [
+      "Gemini AI",
+      "Claude AI"
+    ],
     "achievement": "Constitutional Compliance 回復 + TOON v2.0 統合成功"
   },
-
-  "phases": [
-    {
-      "phase_id": 0,
-      "name": "【EMERGENCY RECOVERY】Constitutional Compliance 緊急回復作戦",
-      "priority": 0,
-      "status": "COMPLETED",
-      "completion_date": "2025-12-01",
-      "objective": "Geminiの成果を活かしつつ、Constitutional Compliance違反を解消し、シンボル統合TOONを生成する。",
-      "action_plan": [
-        {
-          "step": 0.1,
-          "description": "migrate.js の実行とsymbolsテーブルの作成",
-          "status": "COMPLETED",
-          "result": "✓ 906 symbols migrated from 114 files"
-        },
-        {
-          "step": 0.2,
-          "description": "generate_toon.js v2.0（Constitutional Compliant版）の適用",
-          "status": "COMPLETED",
-          "result": "✓ TOON_SCHEMA_INVARIANT準拠 ('p' 使用)"
-        },
-        {
-          "step": 0.3,
-          "description": "indexer.js ESM完全版の適用（@babel/traverse対応）",
-          "status": "COMPLETED",
-          "result": "✓ ESM環境で動作、traverse問題解決"
-        },
-        {
-          "step": 0.4,
-          "description": "TOON生成の実行とシンボル統合の検証",
-          "status": "COMPLETED",
-          "result": "✓ 906 symbols統合成功、Constitutional Compliance達成"
-        },
-        {
-          "step": 0.5,
-          "description": "Next.js ESM対応（next.config.js, postcss.config.js修正）",
-          "status": "COMPLETED",
-          "result": "✓ 開発サーバ起動成功、ゲーム動作確認"
-        }
-      ],
-      "key_achievements": [
-        "TOON v2.0生成成功（906 symbols統合）",
-        "TOON_SCHEMA_INVARIANT準拠（'p'配列使用）",
-        "Constitutional Compliance: 100%達成",
-        "Next.js ESM完全対応",
-        "ゲーム動作確認完了"
-      ]
-    },
-    {
-      "phase_id": 1,
-      "name": "【CRITICAL: DB管理機能の復旧】マイグレーションシステムの確立と機能検証",
-      "priority": 1,
-      "status": "COMPLETED",
-      "completion_date": "2025-11-30",
-      "objective": "CognizeのDB管理とインデックス作成の健全性を回復させ、全コマンドが期待通り機能することを検証する。",
-      "action_plan": [
-        {
-          "step": 1.1,
-          "description": "DBスキーマ作成を `indexer.js` から `migrate.js` へ一元化し、DBマイグレーションシステムを構築する。",
-          "status": "COMPLETED",
-          "contributor": "Gemini"
-        },
-        {
-          "step": 1.2,
-          "description": "`Project_Cognize/migrations/` ディレクトリに初期スキーマ (`001_initial_schema.sql`) を追加する。",
-          "status": "COMPLETED",
-          "contributor": "Gemini"
-        },
-        {
-          "step": 1.3,
-          "description": "`migrate.js` を実行し、`static_index.db` が正常に作成され、初期スキーマが適用されたことを確認する。",
-          "status": "COMPLETED",
-          "contributor": "Gemini"
-        },
-        {
-          "step": 1.4,
-          "description": "`indexer.js` を実行し、データが正しくインデックス化され、`migrate.js` の変更によってインデックス機能が壊れていないことを検証する。",
-          "status": "COMPLETED",
-          "contributor": "Gemini + Claude（ESM修正）"
-        },
-        {
-          "step": 1.5,
-          "description": "`query_index.js` コマンドを実行し、データ照会機能が正常に動作することを確認する。",
-          "status": "COMPLETED",
-          "contributor": "Gemini"
-        }
-      ],
-      "gemini_contribution": "マイグレーションシステムの基盤を確立"
-    },
-    {
-      "phase_id": 2,
-      "name": "【CRITICAL: DB接続の統一と技術的負債解消】旧DEMコードの完全削除",
-      "priority": 2,
-      "status": "COMPLETED",
-      "completion_date": "2025-11-30",
-      "objective": "旧Dynamic Error Monitorの残存コードを完全に削除し、全てのDB接続ロジックを`app/api/_lib/db.ts`に一元化することで、システムの安定性と保守性を劇的に向上させる。",
-      "action_plan": [
-        {
-          "step": 2.1,
-          "description": "DEM関連のファイル (`DynamicErrorMonitor/` 以下) を削除する。",
-          "status": "COMPLETED",
-          "contributor": "Gemini"
-        },
-        {
-          "step": 2.2,
-          "description": "`app/api/_lib/db.ts` に `getStaticDb()` 関数を追加し、静的インデックスDBへの接続を一元化する。",
-          "status": "COMPLETED",
-          "contributor": "Gemini"
-        },
-        {
-          "step": 2.3,
-          "description": "`generate_toon.js` のDB接続を最適化（Phase 0で完全実装）",
-          "status": "COMPLETED",
-          "note": "Phase 0でConstitutional Compliant版に置き換え",
-          "contributor": "Claude"
-        },
-        {
-          "step": 2.4,
-          "description": "`query_index.js` のDB接続を `db.ts` の `getStaticDb` に置き換える。",
-          "status": "DEFERRED",
-          "note": "query_index.jsは現在直接DB接続を使用（機能的に問題なし）"
-        },
-        {
-          "step": 2.5,
-          "description": "CLIスクリプトからのDB接続検証",
-          "status": "COMPLETED",
-          "result": "✓ generate_toon.js動作確認、906 symbols統合成功"
-        }
-      ]
-    },
-    {
-      "phase_id": 3,
-      "name": "【ARCHITECTURAL: モジュール解決の統一】CLIとAPI間の依存性解消",
-      "priority": 3,
-      "status": "COMPLETED",
-      "completion_date": "2025-12-01",
-      "objective": "CLIスクリプトがNext.js環境のライブラリをシームレスに利用できるよう、モジュール解決の仕組みを根本的に統一し、CJS/ESMの断絶を解消する。",
-      "action_plan": [
-        {
-          "step": 3.1,
-          "description": "ESM完全対応（indexer.js, generate_toon.js, migrate.js）",
-          "status": "COMPLETED",
-          "contributor": "Claude",
-          "details": [
-            "__filename, __dirname の再現",
-            "@babel/traverse の動的インポート",
-            "better-sqlite3 直接使用"
-          ]
-        },
-        {
-          "step": 3.2,
-          "description": "Next.js設定ファイルのESM対応",
-          "status": "COMPLETED",
-          "contributor": "Claude",
-          "files_modified": [
-            "next.config.js",
-            "postcss.config.js"
-          ],
-          "result": "✓ module.exports → export default に変換"
-        },
-        {
-          "step": 3.3,
-          "description": "開発サーバ起動とゲーム動作確認",
-          "status": "COMPLETED",
-          "result": "✓ Next.js起動成功、ゲーム期待通り動作"
-        }
-      ]
-    },
-    {
-      "phase_id": 4,
-      "name": "【RESOLVED】実行時エラーの解消",
-      "priority": 4,
-      "status": "RESOLVED",
-      "completion_date": "2025-12-01",
-      "objective": "Phase 0の緊急対応により、[Object: null prototype]エラーを回避し、Constitutional Complianceを達成。",
-      "resolution": {
-        "approach": "古いgenerate_toon.js（v1.1）を最新版（v2.0）に置き換え",
-        "root_cause": "Gemini Phase 4のエラーは、古いスクリプトが原因だった",
-        "outcome": "エラー完全解消、TOON生成成功"
-      }
-    },
-    {
-      "phase_id": 7,
-      "name": "【Project_Cognizeの、視野拡大手術】",
-      "status": "COMPLETED",
-      "completion_date": "2025-11-30",
-      "objective": "indexer.jsのスキャン範囲を、プロジェクトの、実態に合わせて、拡張し、真の、全体像を、把握できるようにする。",
-      "key_achievements": [
-        {
-          "id": "7-1",
-          "description": "スキャン範囲拡大: 46 → 111 → 114 files",
-          "contributor": "Gemini"
-        }
-      ]
-    },
-    {
-      "phase_id": 9,
-      "name": "【不滅化作戦】Project_Cognizeの、自己認識能力の、確立",
-      "status": "COMPLETED",
-      "completion_date": "2025-12-01",
-      "objective": "Project_Cognizeが、『自作コード』の、範囲を、完全に、自己認識し、その、定義を、未来の、LLMに、永続的に、伝達する、仕組みを、構築する。",
-      "key_achievements": [
-        {
-          "id": "9-1",
-          "description": "分類バグの原因特定と修正",
-          "contributor": "Gemini + Claude",
-          "result": "✓ shared_patterns.jsのルールを正しく解釈"
-        }
-      ]
-    },
-    {
-      "phase_id": 10,
-      "name": "【測量士の視力矯正】indexer.js 分類バグ修正と環境復旧",
-      "status": "COMPLETED",
-      "completion_date": "2025-12-01",
-      "objective": "indexer.jsがshared_patterns.jsのルールを正しく解釈できない致命的なバグを修正し、Project Cognizeの自己認識能力を完全に回復させる。",
-      "key_achievements": [
-        {
-          "id": "10-1",
-          "description": "node_modules強制除外ロジックの導入",
-          "contributor": "Gemini",
-          "result": "✓ 外部依存を完全に除外"
-        }
-      ]
-    }
-  ],
-
+  "phases": [],
   "final_status": {
     "constitutional_compliance": "100%",
     "toon_generation": {
@@ -271,7 +47,6 @@
       "game_functionality": "✓ WORKING AS EXPECTED"
     }
   },
-
   "collaborative_achievement": {
     "gemini_contributions": [
       "Phase 1: マイグレーションシステムの確立",
@@ -287,7 +62,6 @@
     ],
     "synergy": "Geminiの基盤構築 + Claudeの仕上げ = Constitutional Compliance達成"
   },
-
   "remaining_tasks": {
     "phase_1_typescript_build": {
       "priority": "MEDIUM",
@@ -305,9 +79,14 @@
       "priority": "HIGH",
       "description": "README.md更新、ワークフロー文書化",
       "status": "PENDING"
+    },
+    "archived_phases": {
+      "priority": "LOW",
+      "description": "完了したフェーズはPlan/archive/にアーカイブ済み",
+      "status": "ARCHIVED",
+      "archived_count": 8
     }
   },
-
   "governance": {
     "audit_trail": [
       {
@@ -350,7 +129,6 @@
     "revision_count": 20,
     "llm_collaboration": "SUCCESS"
   },
-
   "verification_evidence": {
     "db_verification": {
       "command": "node Project_Cognize/scripts/db_verify.js",
@@ -365,7 +143,6 @@
       "result": "✓ Server running, game working"
     }
   },
-
   "lessons_learned": {
     "gemini_phase_4_error": {
       "error": "[Object: null prototype]",
@@ -384,7 +161,6 @@
       "balance": "理想と実用性のバランスが重要"
     }
   },
-
   "success_metrics": {
     "technical": {
       "toon_quality": "✓ シンボル情報を含む完全なTOON生成",
@@ -399,7 +175,6 @@
       "synergy_achieved": "✓ 両LLMの強みを活用"
     }
   },
-
   "next_steps": {
     "immediate": [
       "README.md更新（新しいワークフロー記載）",
@@ -414,7 +189,6 @@
       "GLIA統合の準備"
     ]
   },
-
   "final_message": {
     "status": "🎉 Constitutional Compliance 完全回復達成！",
     "summary": "Geminiの基盤構築とClaudeの緊急回復により、Project Cognizeは自己認識能力を完全に取り戻しました。",
