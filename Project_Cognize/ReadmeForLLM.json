@@ -1,162 +1,354 @@
 {
-  "manifest_version": "2.0",
-  "last_updated": "2025-11-25",
-  "project_name": "Project Cognize",
-  "ultimate_goal": "GLIA構想の中核を担う、自己認識・自己記述システム",
-  "philosophy": "LLMは、記憶を持たず、プロジェクトの全体像や、設計思想を、暗黙的に、理解することはできない。故に、我々は、LLMが、タスクを実行する、その、瞬間に、参照すべき、『信頼できる、唯一の、情報源（Single Source of Truth）』を、構造化データとして、提供し続けなければならない。それが、この、Project Cognizeの、存在意義である。",
-  "governance": {
-    "id": "GOV-01",
-    "title": "統治原則：LLMエージェントが、遵守すべき、絶対的、ルール",
-    "prohibitions": [
-      {
-        "rule": "AGENT_MODE_PROHIBITED",
-        "description": "このファイルは、分析と、理解のための、情報共有であり、タスク実行の、直接的な、指示ではない。性急な、エージェントモードへの、切り替えを、禁止する。"
+  "document_meta": {
+    "title": "Project Cognize - 現状と課題の整理",
+    "purpose": "LLMエージェントが、プロジェクトの技術的負債と、解決すべき課題を、正確に理解するための、情報共有",
+    "created_at": "2025-11-30",
+    "status": "CRITICAL - 暫定対処が積み重なり、根本的な解決が必要",
+    "target_audience": "Future LLM agents (Claude, Gemini, etc.)"
+  },
+
+  "project_overview": {
+    "name": "Project Cognize",
+    "type": "Self-aware codebase analysis system",
+    "tech_stack": {
+      "runtime": "Node.js v20.19.6",
+      "module_system": "ES Modules (ESM) - package.json contains '\"type\": \"module\"'",
+      "typescript": "Present but not consistently compiled",
+      "database": "SQLite (better-sqlite3)",
+      "framework": "Next.js (for web interface)"
+    },
+    "primary_goal": "プロジェクトが、自分自身を、静的解析し、構造化データとして、LLMに提供する、自己認識システムの構築"
+  },
+
+  "core_architectural_principle": {
+    "id": "AP-01",
+    "name": "Single Source of Truth",
+    "description": "全ての設定は `/Project_Cognize/config/shared_patterns.js` に集約される。全てのツールは、この『憲法』に従う。",
+    "corollary": {
+      "central_hub_pattern": "データベース接続は、`/app/api/_lib/db.ts` で一元管理される。各スクリプトは、このCentral Hubを経由してDBにアクセスすべき。",
+      "violation_status": "現在、暫定対処により、この原則が破られている"
+    }
+  },
+
+  "critical_issues": {
+    "issue_1_typescript_esm_conflict": {
+      "severity": "CRITICAL",
+      "title": "TypeScript (.ts) と ESM環境の、インポート問題",
+      "description": "Node.jsのESM環境では、`.ts`ファイルを直接インポートできない。`import { X } from './file.ts'` は、通常、エラーになる。",
+      "current_situation": {
+        "problem_file": "/app/api/_lib/db.ts",
+        "status": "存在するが、`.js`としてインポートしようとするとエラーになる",
+        "error_message": "Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/els/Shooting-Game/ShootingGame7/app/api/_lib/db.js'",
+        "affected_scripts": [
+          "Project_Cognize/scripts/generate_toon.js",
+          "Project_Cognize/scripts/indexer.js (現在は直接DBアクセスに変更済み)"
+        ]
       },
-      {
-        "rule": "NO_DESTRUCTIVE_CHANGES",
-        "description": "破壊的改変は、厳禁とする。提案の、前に、必ず、現状を、徹底的に、分析し、仮説を、実証すること。"
+      "temporary_workaround": {
+        "description": "各スクリプトで、`better-sqlite3`を直接使用し、`db.ts`への依存を削除している",
+        "constitutional_violation": "YES - Central Hub パターンに違反している",
+        "why_bad": "DBパスのハードコード、シングルトンパターンの無視、設定の分散化"
+      },
+      "root_cause_analysis": {
+        "reason_1": "TypeScriptファイル (.ts) は、実行前に、JavaScriptにトランスパイルされる必要がある",
+        "reason_2": "Node.jsのESMローダーは、デフォルトでは、`.ts`ファイルを解決できない",
+        "reason_3": "`ts-node/esm`ローダーを使えば、`.ts`を直接実行できるが、全てのスクリプトに`--loader`オプションが必要になる"
+      },
+      "proposed_solutions": [
+        {
+          "solution_id": "SOL-1A",
+          "name": "TypeScriptビルドプロセスの確立",
+          "description": "`db.ts`を含む、全てのTypeScriptファイルを、`.js`にプリコンパイルする、ビルドステップを追加する",
+          "implementation": {
+            "step_1": "tsconfig.jsonの設定を確認・調整",
+            "step_2": "ビルドスクリプトの追加 (npm run build)",
+            "step_3": "コンパイル済み`.js`ファイルを、各スクリプトからインポート",
+            "step_4": ".gitignoreに、コンパイル済みファイルを追加"
+          },
+          "pros": [
+            "Constitutional Complianceを維持できる",
+            "実行時のオーバーヘッドがない",
+            "標準的なNode.js ESM環境で動作"
+          ],
+          "cons": [
+            "開発フローに、ビルドステップが追加される",
+            "ファイルの同期を管理する必要がある"
+          ],
+          "recommended": true
+        },
+        {
+          "solution_id": "SOL-1B",
+          "name": "全スクリプトに ts-node/esm ローダーを適用",
+          "description": "全てのスクリプト実行時に、`--loader ts-node/esm`を付与し、`.ts`を直接インポート可能にする",
+          "implementation": {
+            "step_1": "package.jsonのscriptsセクションに、ローダー付きコマンドを定義",
+            "step_2": "各スクリプトで、`import { X } from './file.ts'`形式でインポート",
+            "step_3": "GitHub Actionsのワークフローも、ローダー付きで実行"
+          },
+          "pros": [
+            "ビルドステップが不要",
+            "TypeScriptを直接実行できる"
+          ],
+          "cons": [
+            "実行時のオーバーヘッド",
+            "実験的機能への依存 (Node.jsの警告が出る)",
+            "全てのコマンドが長くなる"
+          ],
+          "recommended": false
+        },
+        {
+          "solution_id": "SOL-1C",
+          "name": "db.ts を db.js に書き換え (非推奨)",
+          "description": "TypeScriptを諦め、`db.ts`を`db.js`に変換する",
+          "pros": [
+            "即座に問題が解決"
+          ],
+          "cons": [
+            "型安全性の喪失",
+            "プロジェクトの一貫性が失われる",
+            "Next.jsとの統合に問題が生じる可能性"
+          ],
+          "recommended": false
+        }
+      ]
+    },
+
+    "issue_2_babel_traverse_esm": {
+      "severity": "HIGH",
+      "title": "@babel/traverse の、ESM環境での、インポート問題",
+      "description": "@babel/traverseは、CommonJSモジュールとして設計されており、ESM環境でのインポートが複雑",
+      "current_situation": {
+        "affected_file": "Project_Cognize/scripts/indexer.js",
+        "error_message": "traverse is not a function (または、objectが返される)",
+        "current_workaround": {
+          "description": "複数のフォールバックパターンを実装",
+          "code_snippet": "const babelTraverseModule = await import('@babel/traverse');\nlet traverse = babelTraverseModule.default;\nif (typeof traverse !== 'function' && traverse?.default) {\n  traverse = traverse.default;\n}"
+        }
+      },
+      "status": "WORKAROUND_IMPLEMENTED - 動作しているが、脆弱",
+      "long_term_solution": "@babel/traverse v8+ への更新、または、代替パーサーの検討"
+    },
+
+    "issue_3_migration_column_duplication": {
+      "severity": "MEDIUM",
+      "title": "マイグレーションスクリプトの、冪等性の欠如",
+      "description": "migrate.jsを複数回実行すると、'duplicate column name'エラーが発生していた",
+      "current_situation": {
+        "affected_file": "Project_Cognize/scripts/migrate.js",
+        "error_message": "SqliteError: duplicate column name: is_self_made"
+      },
+      "status": "RESOLVED - カラム存在チェックを追加",
+      "resolution": {
+        "description": "各ALTER TABLE実行前に、PRAGMA table_info()で、カラムの存在を確認するように修正",
+        "date": "2025-11-30"
       }
-    ],
-    "architectural_constitution": {
-      "id": "AP-01",
-      "principle": "Single Source of Truth for Project Scope",
-      "description": "プロジェクトの、『自作コード』の、範囲や、各ツールの、振る舞いを、定義する、全ての、設定は、ただ、一つの、ファイル `/Project_Cognize/config/shared_patterns.js` に、集約される。これを、当プロジェクトの、『憲法』と、定める。",
-      "llm_instruction": {
-        "level": "CRITICAL",
-        "summary": "【最重要警告】いかなる、理由があろうとも、この、『憲法』に、反する、ような、コード（例：スクリプト内への、パスの、ハードコード）を、生成してはならない。プロジェクトの、範囲を、変更したい場合は、まず、`shared_patterns.js`の、修正を、提案せよ。"
+    },
+
+    "issue_4_symbols_table_missing": {
+      "severity": "HIGH",
+      "title": "symbolsテーブルが、存在しない状態での、TOON生成",
+      "description": "generate_toon.jsが、symbolsテーブルを前提としているが、古いDBには存在しない",
+      "current_situation": {
+        "affected_file": "Project_Cognize/scripts/generate_toon.js",
+        "error_message": "no such table: symbols"
+      },
+      "status": "WORKAROUND_IMPLEMENTED - Graceful degradation",
+      "resolution": {
+        "description": "symbolsテーブルの存在をチェックし、ない場合は警告を出して、シンボル情報なしでTOONを生成",
+        "proper_fix": "migrate.jsを実行して、symbolsテーブルを作成する"
       }
     }
   },
-  "workflow_overview": {
-    "id": "WF-01",
-    "title": "データ駆動型・自己認識ワークフロー",
-    "description": "Project Cognizeは、個々の、ツールが、連携し、プロジェクト自身が、自分を、分析・記述する、エコシステムを、形成する。",
-    "data_flow": [
+
+  "current_script_status": {
+    "migrate_js": {
+      "path": "Project_Cognize/scripts/migrate.js",
+      "status": "FUNCTIONAL with fixes",
+      "module_system": "ESM (fully converted)",
+      "dependencies": ["better-sqlite3"],
+      "issues": "RESOLVED - カラム重複エラーを修正",
+      "execution": "node Project_Cognize/scripts/migrate.js"
+    },
+    "indexer_js": {
+      "path": "Project_Cognize/scripts/indexer.js",
+      "status": "FUNCTIONAL but violates AP-01",
+      "module_system": "ESM (fully converted)",
+      "dependencies": ["better-sqlite3", "@babel/parser", "@babel/traverse", "fast-glob", "micromatch"],
+      "constitutional_violation": {
+        "type": "Direct DB access instead of using db.ts",
+        "reason": "Temporary workaround for TypeScript import issue"
+      },
+      "execution": "node Project_Cognize/scripts/indexer.js"
+    },
+    "generate_toon_js": {
+      "path": "Project_Cognize/scripts/generate_toon.js",
+      "status": "FUNCTIONAL but violates AP-01",
+      "module_system": "ESM",
+      "dependencies": ["better-sqlite3 (should use db.ts)"],
+      "constitutional_violation": {
+        "type": "Direct DB access with hardcoded path",
+        "reason": "Temporary workaround for TypeScript import issue"
+      },
+      "current_workaround": {
+        "description": "動的インポートで、db.js → db.ts の順に試行",
+        "requires_loader": "db.tsを使う場合、--loader ts-node/esm が必要"
+      },
+      "execution_options": [
+        "node --loader ts-node/esm Project_Cognize/scripts/generate_toon.js (if using db.ts)",
+        "node Project_Cognize/scripts/generate_toon.js (if db.js exists)"
+      ]
+    },
+    "query_index_js": {
+      "path": "Project_Cognize/scripts/query_index.js",
+      "status": "UNKNOWN - Not yet tested in ESM environment",
+      "likely_issues": "Same TypeScript import problem"
+    }
+  },
+
+  "recommended_action_plan": {
+    "priority": "HIGH",
+    "goal": "Constitutional Complianceを回復し、技術的負債を解消する",
+    "phases": [
       {
-        "step": 1,
-        "actor": "indexer.js",
-        "action": "憲法(`shared_patterns.js`)に、基づき、全ファイルを、スキャンし、AST解析を実行する。",
-        "output": "ファイル構造、シンボル、依存関係、インスタンス等の、詳細な、メタデータ。",
-        "destination": "static_index.db (主データベース) / static_index.jsonl (ログ)"
+        "phase": 1,
+        "name": "TypeScriptビルド環境の整備",
+        "tasks": [
+          {
+            "task_id": "TASK-1.1",
+            "description": "tsconfig.jsonを、CLIスクリプト用に最適化",
+            "details": "outDir, module: esnext, target: es2020, moduleResolution: node を設定"
+          },
+          {
+            "task_id": "TASK-1.2",
+            "description": "ビルドスクリプトの追加",
+            "details": "npm run build:db で、app/api/_lib/db.ts → db.js をコンパイル"
+          },
+          {
+            "task_id": "TASK-1.3",
+            "description": ".gitignoreの更新",
+            "details": "app/api/_lib/*.js (ただし、手書きのファイルは除外) を追加"
+          }
+        ]
       },
       {
-        "step": 2,
-        "actor": "generate_toon.js",
-        "action": "最新の、`static_index.db`を、読み込み、プロジェクトの、完全な、階層構造を、生成する。",
-        "output": "TOON (Tree-Oriented Object Notation) 形式の、構造化データ。",
-        "destination": "project_structure_toon.json"
+        "phase": 2,
+        "name": "スクリプトの、Constitutional Compliance回復",
+        "tasks": [
+          {
+            "task_id": "TASK-2.1",
+            "description": "generate_toon.js を、db.js (コンパイル済み) をインポートするように修正",
+            "code_change": "import { getStaticDb } from '../../app/api/_lib/db.js';"
+          },
+          {
+            "task_id": "TASK-2.2",
+            "description": "indexer.js を検討",
+            "note": "indexerは書き込み操作が必要なため、直接DBアクセスも許容範囲かもしれない。ただし、DBパスは、shared_patterns.jsから取得すべき"
+          }
+        ]
       },
       {
-        "step": 3,
-        "actor": "generate_prompt.ts",
-        "action": "目的の、タスクと、最新の、`project_structure_toon.json`、及び、各種テンプレートを、組み合わせる。",
-        "output": "LLMの、思考を、正確に、ガイドするための、コンテキスト情報が、豊富に、埋め込まれた、実行プロンプト。",
-        "destination": "LLM Agent (e.g., GLIA)"
+        "phase": 3,
+        "name": "テストとドキュメント化",
+        "tasks": [
+          {
+            "task_id": "TASK-3.1",
+            "description": "全てのスクリプトを、--loaderなしで実行できることを確認"
+          },
+          {
+            "task_id": "TASK-3.2",
+            "description": "READMEに、ビルドプロセスを記載"
+          },
+          {
+            "task_id": "TASK-3.3",
+            "description": "GitHub Actionsのワークフローを更新"
+          }
+        ]
       }
     ]
   },
-  "core_components": [
+
+  "execution_summary": {
+    "current_working_commands": {
+      "description": "現時点で、動作する、コマンド群 (暫定対処込み)",
+      "commands": [
+        {
+          "step": 1,
+          "command": "node Project_Cognize/scripts/migrate.js",
+          "purpose": "DBスキーマのマイグレーション (symbolsテーブル作成)"
+        },
+        {
+          "step": 2,
+          "command": "node Project_Cognize/scripts/indexer.js",
+          "purpose": "全ファイルの静的解析と、DB投入"
+        },
+        {
+          "step": 3,
+          "command": "node --loader ts-node/esm Project_Cognize/scripts/generate_toon.js",
+          "purpose": "TOON構造の生成 (シンボル情報付き)",
+          "note": "db.tsを直接使用する場合、--loaderが必要"
+        }
+      ]
+    },
+    "ideal_future_commands": {
+      "description": "Constitutional Compliance回復後の、理想的なコマンド",
+      "prerequisite": "npm run build:db を実行済み",
+      "commands": [
+        {
+          "step": 1,
+          "command": "node Project_Cognize/scripts/migrate.js",
+          "purpose": "DBスキーマのマイグレーション"
+        },
+        {
+          "step": 2,
+          "command": "node Project_Cognize/scripts/indexer.js",
+          "purpose": "全ファイルの静的解析"
+        },
+        {
+          "step": 3,
+          "command": "node Project_Cognize/scripts/generate_toon.js",
+          "purpose": "TOON構造の生成",
+          "note": "--loader不要。db.jsを使用"
+        }
+      ]
+    }
+  },
+
+  "questions_for_llm": [
     {
-      "id": "config_file",
-      "file_name": "config/shared_patterns.js",
-      "main_description": "【憲法】プロジェクトの、範囲と、振る舞いを、定義する、唯一の、設定ファイル。全ての、ツールの、動作は、この、ファイルに、従う。"
+      "q_id": "Q1",
+      "question": "TypeScriptのビルドプロセスを、どのように、プロジェクトに統合すべきか？",
+      "context": "Next.jsは、独自のビルドシステムを持つが、CLIスクリプトは、Next.jsの外で動作する"
     },
     {
-      "id": "indexer",
-      "file_name": "scripts/indexer.js",
-      "main_description": "【測量士】プロジェクトの、静的解析を、行い、全ての、情報を、データベース化する、中核ツール。"
+      "q_id": "Q2",
+      "question": "indexer.jsは、本当に、db.tsを経由すべきか、それとも、直接DBアクセスを許容すべきか？",
+      "context": "書き込み操作が必要で、シングルトンパターンが、逆に、問題を引き起こす可能性"
     },
     {
-      "id": "toon_generator",
-      "file_name": "scripts/generate_toon.js",
-      "main_description": "【地図製作者】データベース情報に基づき、LLMが、解釈可能な、プロジェクトの、階層構造マップ（TOON）を、生成する。"
+      "q_id": "Q3",
+      "question": "@babel/traverseの、ESM問題を、根本的に解決する方法は？",
+      "context": "現在の、フォールバックパターンは、脆弱で、将来的に壊れる可能性"
     },
     {
-      "id": "prompt_generator",
-      "file_name": "scripts/generate_prompt.ts",
-      "main_description": "【作戦立案官】TOONマップと、テンプレートを、元に、LLMへの、具体的な、指示プロンプトを、生成する。"
-    },
-    {
-      "id": "query_tool",
-      "file_name": "scripts/query_index.js",
-      "main_description": "【司書】生成された、データベースの、内容を、人間が、照会・確認するための、CLIツール。"
+      "q_id": "Q4",
+      "question": "プロジェクト全体を、純粋なESMに移行すべきか、それとも、一部にCommonJSを残すべきか？",
+      "context": "package.jsonに '\"type\": \"module\"' があるため、既にESMがデフォルト"
     }
   ],
-  "automation": {
-    "id": "github_actions",
-    "file_path": ".github/workflows/cognize_indexer.yml",
-    "main_description": "この、エコシステムは、GitHub Actionsによって、自動化されている。`main`ブランチへの、変更を、トリガーに、`indexer.js`が、自動実行され、データベースが、常に、最新に、保たれる。",
-    "llm_instruction": {
-      "level": "CRITICAL",
-      "summary": "【最重要】`Project_Cognize`配下の、スクリプトの、ファイル名や、コマンドオプションを、変更する際は、必ず、この、自動化ワークフロー (`cognize_indexer.yml`) も、同時に、修正しなければ、CI/CDパイプラインが、完全に、破綻する。"
+
+  "constitutional_compliance_check": {
+    "ap_01_single_source_of_truth": {
+      "shared_patterns_js": "✓ COMPLIANT - 全てのツールが参照している",
+      "db_ts_central_hub": "✗ VIOLATED - 暫定対処により、直接DBアクセスが行われている"
+    },
+    "no_hardcoded_paths": {
+      "status": "⚠ PARTIAL - DBパスが、一部のスクリプトに、ハードコードされている"
     }
   },
-  "tool_reference": {
-    "id": "TOOL-REF-01",
-    "tool_name": "query_index.js",
-    "description": "静的解析データベースを照会するためのCLIツール。LLMは、プロジェクトに関する情報を得るために、これらのコマンドを積極的に使用すべきである。",
-    "commands": [
-      {
-        "name": "schema",
-        "description": "データベースの現在のテーブル構造とマイグレーション履歴を表示する。",
-        "usage": "node Project_Cognize/scripts/query_index.js schema",
-        "purpose": "DBの状態やスキーマ変更の確認に使用する。"
-      },
-      {
-        "name": "list",
-        "description": "プロジェクト内のファイルを一覧表示する。",
-        "usage": "node Project_Cognize/scripts/query_index.js list [オプション]",
-        "options": [
-          {
-            "name": "--self-made-only",
-            "description": "shared_patterns.jsの定義に基づき、『自作コード』と判定されたファイルのみを表示する。"
-          }
-        ],
-        "purpose": "特定の種類のファイル群をリストアップする際に使用する。"
-      },
-      {
-        "name": "search",
-        "description": "ファイルパスに対してパターン検索を実行する。",
-        "usage": "node Project_Cognize/scripts/query_index.js search <パターン> [オプション]",
-        "options": [
-          {
-            "name": "--fuzzy",
-            "description": "部分一致による曖昧検索を有効にする。デフォルトは、より高速で正確な厳密検索。"
-          }
-        ],
-        "purpose": "特定のキーワードを含むファイルを探す際に使用する。まず厳密検索を試し、見つからなければ--fuzzyを検討する。"
-      },
-      {
-        "name": "stats",
-        "description": "プロジェクト全体の包括的な統計情報を表示する。",
-        "usage": "node Project_Cognize/scripts/query_index.js stats [オプション]",
-        "options": [
-          {
-            "name": "--by-category",
-            "description": "自作コードを『component』『game-core』などのカテゴリ別に集計した、より詳細な統計を表示する。"
-          }
-        ],
-        "purpose": "プロジェクトの全体像（規模、言語構成、自作コード率など）を素早く把握するために使用する。"
-      },
-      {
-        "name": "deps",
-        "description": "指定されたファイルが、どのファイルに依存し（import）、どのファイルから依存されているか（imported by）を表示する。",
-        "usage": "node Project_Cognize/scripts/query_index.js deps <ファイルパス>",
-        "options": [],
-        "purpose": "コード変更時の影響範囲を調査するために不可欠なコマンド。"
-      },
-      {
-        "name": "instances",
-        "description": "指定されたクラスが、プロジェクト内のどこでインスタンス化（`new`）されているかを検索する。",
-        "usage": "node Project_Cognize/scripts/query_index.js instances <クラス名> [オプション]",
-        "options": [
-          {
-            "name": "--show-builtins",
-            "description": "デフォルトで除外されているJavaScriptのビルトインクラス（RegExp, Date等）も検索対象に含める。"
-          }
-        ],
-        "purpose": "特定のクラスの使われ方を調査したり、リファクタリングの影響範囲を特定したりする際に使用する。"
-      }
-    ]
+
+  "final_note_to_llm": {
+    "message": "このドキュメントは、プロジェクトの、現在の、混乱した状態を、正直に、記録したものである。LLMエージェントには、この状況を、『なかったこと』にせず、根本的な解決策を、提案することを、期待する。暫定対処は、一時的には、機能するが、長期的には、プロジェクトの、保守性を、著しく低下させる。",
+    "priority": "Constitutional Complianceの回復が、最優先事項である。",
+    "approach": "段階的なリファクタリングを推奨。一度に全てを変更せず、Phase 1 → Phase 2 → Phase 3 の順で進める。"
   }
 }
